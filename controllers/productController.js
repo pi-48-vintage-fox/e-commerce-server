@@ -2,21 +2,22 @@ const { Product, Category } = require('../models')
 
 class ProductController {
     static create(req, res, next) {
-        const newProduct = {
-            name: req.body.name,
-            image_url: req.body.image_url,
-            price: req.body.price,
-            stock: req.body.stock,
-            CategoryId: req.body.CategoryId
-        }
-        Product.create(newProduct)
-            .then(data => {
-                return res.status(201).json(data)
-            })
-            .catch(err => {
-                return next(err)
-            })
-    }
+		const productData = {
+			name: req.body.name,
+			image_url: req.body.image_url,
+			price: req.body.price,
+			stock: req.body.stock,
+			CategoryId: req.body.CategoryId,
+		};
+
+		Product.create(productData)
+			.then((data) => {
+				res.status(201).json(data);
+			})
+			.catch((err) => {
+				next(err);
+			});
+	}
 
     static read(req, res, next) {
         Product.findAll({
@@ -38,7 +39,7 @@ class ProductController {
     }
 
     static update(req, res, next) {
-        const productData = {
+        const newProduct = {
             name: req.body.name,
             image_url: req.body.image_url,
             price: +req.body.price,
@@ -46,7 +47,7 @@ class ProductController {
             CategoryId: +req.body.CategoryId
         };
 
-        Product.update(productData, { where: { id: req.params.id } })
+        Product.update(newProduct, { where: { id: req.params.id } })
             .then((result) => {
                 if (result[0]) {
                     return Product.findOne({
@@ -82,10 +83,10 @@ class ProductController {
             }
         })
             .then(result => {
-                if(result) {
-                    return res.status(201).json({ message: 'Product is sucessfully deleted' })
+                if (result) {
+                    return res.status(200).json({ message: 'Product is sucessfully deleted' })
                 } else {
-                    return next({name: 'Not Found', message: 'Product not found'})
+                    return next({ name: 'NotFound', message: 'Product is not Found' })
                 }
             })
             .catch(err => {

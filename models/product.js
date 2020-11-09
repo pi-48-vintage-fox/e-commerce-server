@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: "Price required"
         },
-        isNumeric: {
+        isInt: {
           msg: "Price must be number"
         },
         min: {
@@ -66,13 +66,20 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    category: {
+    CategoryId: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {
-          msg: "Category required"
-        }
+        notNull: {
+          msg: "Product Category is Required",
+        },
+        min: {
+          args: 1,
+          msg: "Category id must be greater than 0",
+        },
+        isNumeric: {
+          msg: "Category id must be number"
+        },
       }
     }
   }, {

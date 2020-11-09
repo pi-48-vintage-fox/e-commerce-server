@@ -8,10 +8,7 @@ const Authentication = (req, res, next) => {
         User.findByPk(req.userData.id)
             .then(user => {
                 if (!user) {
-                    let err = {
-                        msg: 'Not Authenticate'
-                    }
-                    throw err
+                    return res.status(401).json({ message: "Failed to Authenticate" });
                 } else {
                     return next()
                 }
@@ -20,7 +17,7 @@ const Authentication = (req, res, next) => {
                 return next(err)
             })
     } else {
-        return next(err)
+        return res.status(401).json({ message: "Failed to Authenticate" });
     }
 }
 

@@ -4,8 +4,8 @@ const Authentication = require('../middlewares/authentication')
 const Authorization = require('../middlewares/authorization')
 
 router.use(Authentication)
-router.post('/', ProductController.create)
-router.get('/', ProductController.read)
+router.post('/', Authorization, ProductController.create)
+router.get('/', Authorization, ProductController.read)
 router.put('/:id', Authorization, ProductController.update)
 router.delete('/:id', Authorization, ProductController.delete)
 
