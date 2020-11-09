@@ -14,12 +14,12 @@ class UserController {
       .then(data => {
         if(!data) {
           res.status(401).json({
-            message: 'Wrong email or password!'
+            message: "Email/password is wrong!"
           })
         }
         else if(!comparePassword(obj.password, data.password)) {
           res.status(401).json({
-            message: 'Wrong email or password!'
+            message: "Password is wrong!"
           })
         }
         else {
