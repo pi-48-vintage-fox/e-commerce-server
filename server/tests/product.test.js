@@ -1,5 +1,9 @@
 const request = require('supertest')
 const app = require('../app')
+const { sequelize } = require('../models')
+const { User, Product } = require('../models')
+const { signToken } = require('../helpers/jwt')
+const { queryInterface } = sequelize
 
 
 // Create Failed
