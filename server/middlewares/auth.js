@@ -21,15 +21,17 @@ module.exports = {
           }
           else {
 
-            res.status(401).json({msg: 'You have to register first'})
-    
+            throw {name: 'Authentication failed', msg: 'You have to register first', status: 401}
+
           }
       } else {
-        res.status(401).json({msg: 'You have to login first'})
+
+        throw {name: 'Authentication failed', msg: 'You have to login first', status: 401}
+       
       }
 
     } catch (err) {
-        res.status(500).json({err})
+        next(err)
     }
   },
   authorization: async (req, res, next) => {
@@ -42,11 +44,11 @@ module.exports = {
       if(user.role === 'admin') {
         next()
       } else {
-
-        return res.status(401).json({msg: `You don't have authorization to access this data`})
+        throw { name: 'Authorization failed', msg: `You don't have authorization to access this data`, status: 401}
+        
       }
     } catch (error) {
-      return res.status(500).json({err})
+      next(error)
     }
   }
 }

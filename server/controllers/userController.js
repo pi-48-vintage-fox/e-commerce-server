@@ -4,7 +4,7 @@ const { generateToken } = require('../helpers/jsonwebtoken')
 
 class userController {
 
-  static login(req, res){
+  static login(req, res, next){
 
     const { email, password } = req.body
 
@@ -13,7 +13,7 @@ class userController {
       password
     }
     if(email === '' || password === ''){
-      res.status(400).json({msg: 'you should input something to the field'})
+      throw {name: 'login failed', msg: 'you should input something to the field', status: 400}
     }
     else {
       User.findOne({
@@ -24,10 +24,10 @@ class userController {
         .then(user => {
   
           if(!user){
-            res.status(401).json({msg : 'invalid email or password'})
+            throw {name: 'login failed', msg: 'invalid email or password', status: 401}
           }
           else if(!comparePassword(password, user.password)){
-            res.status(401).json({msg : 'invalid email or password'})
+            throw {name: 'login failed', msg: 'invalid email or password', status: 401}
           }
           else if(comparePassword(password, user.password)){
             const token = generateToken({
@@ -36,19 +36,12 @@ class userController {
               
             })
             res.status(200).json({access_token: token})
-          }
-          
+          }  
         })
         .catch(err => {
-         
-      
-            res.status(500).json({err})
-        
-          
+            next(err)
         })
-    }
-
-    
+    }  
   }
 }
 

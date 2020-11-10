@@ -2,7 +2,7 @@ const { Product } = require('../models')
 
 class productController{
 
-  static addProduct(req, res) {
+  static addProduct(req, res, next) {
 
     const {name, image_url, price, stock} = req.body
     
@@ -25,27 +25,11 @@ class productController{
         
       })
       .catch(err => {
-        if(err.errors[0].validatorName === 'notEmpty'){
-          console.log(err.name, 'ini do product controller');
-          //console.log(err);
-          return res.status(400).json({msg: 'please fill in the field'})
-        }
-        if(err.errors[0].validatorName === 'min'){
-            //console.log();
-            return res.status(400).json({msg: 'price or stock must greater than 0'})    
-        }
-        if(err.errors[0].validatorName == 'isNumeric'){
-          return res.status(400).json({msg: 'price or stock must be number'}) 
-        }
-        else {
-
-          console.log(err.errors[0].validatorName);
-          return res.status(500).json(err)
-        }
+        next(err)
       })
   }
   
-  static showProduct (req, res) {
+  static showProduct (req, res, next) {
 
     Product.findAll()
       .then(products => {
@@ -56,7 +40,7 @@ class productController{
       })
   }
 
-  static showProductById (req, res) {
+  static showProductById (req, res, next) {
 
     let id = +req.params.id
     
@@ -70,10 +54,10 @@ class productController{
         })
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
   }
-  static updateProduct (req, res) {
+  static updateProduct (req, res, next) {
 
     let id = +req.params.id
 
@@ -103,13 +87,12 @@ class productController{
         })
       })
       .catch(err => {
-        console.log(err);
-        res.status(500).json({err})
+        next(err)
         
       })
   }
 
-  static deleteProduct(req, res) {
+  static deleteProduct(req, res, err) {
 
     let id = +req.params.id
 
@@ -123,7 +106,7 @@ class productController{
 
       })
       .catch(err => {
-        res.status(500).json(err)
+        next(err)
       })
 
   }

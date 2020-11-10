@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken')
 
 function generateToken (payload){
 
-  const token = jwt.sign(payload, 'inirahasianegara')
+  const token = jwt.sign(payload, process.env.SECRET)
 
   return token
 }
 
 function verifyToken (token){
 
-  const decoded = jwt.verify(token, 'inirahasianegara')
+  const decoded = jwt.verify(token, process.env.SECRET)
 
   return decoded
 

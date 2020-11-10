@@ -6,7 +6,7 @@ const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 let access_token = ''
 let idProduct
-let role 
+let tokenUser = ''
 
 
 beforeAll((done) => {
@@ -21,6 +21,17 @@ beforeAll((done) => {
      access_token = generateToken({
         id: user.id,
         email: user.email,        
+      })
+      return User.findOne({
+        where: {
+          email: 'dedi@mail.com'
+        }
+      })
+    })
+    .then(userCustomer => {
+      tokenUser = generateToken({
+        id: userCustomer.id,
+        email: userCustomer.email
       })
       done()
     })
@@ -145,6 +156,26 @@ describe('test add product', () => {
       done(err)
     })
   })
+  it('add product fail role not admin', (done) => {
+    request(app)
+    .post('/products')
+    .set('access_token', tokenUser)
+    .send({name: 'sweater gakUnik', 
+          image_url: 'https://d15udtvdbbfasl.cloudfront.net/catalog/product/large_image/69_412960.jpg',
+          price: 100000, 
+          stock: 100})
+    .then(response => {
+      const { body, status } = response
+      
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You don't have authorization to access this data`)
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
+      done(err)
+    })
+  })
 })
 
 describe("test show all Product", () => {
@@ -165,6 +196,43 @@ describe("test show all Product", () => {
         expect(el).toHaveProperty('price', 100000)
         expect(el).toHaveProperty('stock', 100 )
       })
+      done()
+    })
+    .catch(err => {
+      //console.log(err);
+      done(err)
+    })
+  })
+  it('show products failed does not have token', (done) => {
+    request(app)
+    .get('/products')
+    .then(response => {
+
+      const { body, status } = response
+      //console.log(body);
+      
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', 'You have to login first')
+      
+      done()
+    })
+    .catch(err => {
+      //console.log(err);
+      done(err)
+    })
+  })
+  it('show products failed role not admin', (done) => {
+    request(app)
+    .get('/products')
+    .set('access_token', tokenUser)
+    .then(response => {
+
+      const { body, status } = response
+      //console.log(body);
+      
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You don't have authorization to access this data`)
+      
       done()
     })
     .catch(err => {
@@ -194,7 +262,39 @@ describe("test showProduct by id", () => {
       //console.log(err);
       done(err)
     })
-    
+  })
+  it('show one failed does not have token', (done) => {
+    request(app)
+    .get('/products/' + idProduct)
+    .then(response => {
+
+     const { body, status } = response
+        expect(status).toEqual(401)
+        expect(body).toHaveProperty('msg', 'You have to login first')
+        
+        done()
+    })
+    .catch(err => {
+    //console.log(err);
+      done(err)
+    })
+  })
+  it('show one failed does not have token', (done) => {
+      request(app)
+      .get('/products/' + idProduct)
+      .set('access_token', tokenUser)
+      .then(response => {
+
+       const { body, status } = response
+          expect(status).toEqual(401)
+          expect(body).toHaveProperty('msg', `You don't have authorization to access this data`)
+          
+          done()
+    })
+      .catch(err => {
+        //console.log(err);
+        done(err)
+      })
   })
 })
 
@@ -220,8 +320,111 @@ describe("test editProduct" ,() => {
     })
     .catch(err => {
       //console.log(err);
+      done(err)  
+    })
+  })
+  it('update failed dont have token', (done) => {
+    request(app)
+    .post('/products/' + idProduct)
+    .send({ name: 'sweater unikSekali',
+            image_url: 'https://id-test-11.slatic.net/p/046278f899ed2b1c214f662669779f68.jpg',
+            price: 150000,
+            stock: 150
+          })
+    .then(response => {
+      const { body, status } = response
+     
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You have to login first`)
+      done()
+    })
+    .catch(err => {
       done(err)
+    })
+  })
+  it('update failed one of required field is empty', (done) => {
+    request(app)
+    .put('/products/' + idProduct)
+    .set('access_token', access_token)
+    .send({
+          name: 'sweater unikSekali',
+          image_url: '',
+          price: 150000, 
+          stock: 100
+        })
+    .then(response => {
+      const { body, status } = response
       
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty('msg', 'please fill in the field')
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
+      done(err)
+    })
+  })
+  it('update failed one of stock or price less than 0', (done) => {
+    request(app)
+    .put('/products/' + idProduct)
+    .set('access_token', access_token)
+    .send({
+          name: 'sweater unikSekali',
+          image_url: 'https://id-test-11.slatic.net/p/046278f899ed2b1c214f662669779f68.jpg',
+          price: -10, 
+          stock: 100
+        })
+    .then(response => {
+      const { body, status } = response
+      
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty('msg', 'price or stock must greater than 0')
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
+      done(err)
+    })
+  })
+  it('update failed one of stock or price string', (done) => {
+    request(app)
+    .put('/products/' + idProduct)
+    .set('access_token', access_token)
+    .send({
+          name: 'sweater unikSekali',
+          image_url: 'https://id-test-11.slatic.net/p/046278f899ed2b1c214f662669779f68.jpg',
+          price: "'150000'", 
+          stock: 100})
+    .then(response => {
+      const { body, status } = response
+      
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty('msg', 'price or stock must be number')
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
+      done(err)
+    })
+  })
+  it('update product fail role not admin', (done) => {
+    request(app)
+    .put('/products/' + idProduct)
+    .set('access_token', tokenUser)
+    .send({name: 'sweater gakUnik', 
+          image_url: 'https://d15udtvdbbfasl.cloudfront.net/catalog/product/large_image/69_412960.jpg',
+          price: 100000, 
+          stock: 100})
+    .then(response => {
+      const { body, status } = response
+      
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You don't have authorization to access this data`)
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
+      done(err)
     })
   })
 })
@@ -242,6 +445,36 @@ describe('test delete product' , () => {
     })
     .catch(err => {
       //console.log(err);
+      done(err)
+    })
+  })
+  it('delete failed dont have token', (done) => {
+    request(app)
+    .delete('/products/' + idProduct)
+    .then(response => {
+      const { body, status } = response
+     
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You have to login first`)
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+  it('update product fail role not admin', (done) => {
+    request(app)
+    .put('/products/' + idProduct)
+    .set('access_token', tokenUser)
+    .then(response => {
+      const { body, status } = response
+      
+      expect(status).toEqual(401)
+      expect(body).toHaveProperty('msg', `You don't have authorization to access this data`)
+      done()
+    })
+    .catch(err => {
+      //console.log(err, 'ini di add product test');
       done(err)
     })
   })
