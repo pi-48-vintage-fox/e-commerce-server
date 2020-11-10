@@ -34,11 +34,11 @@ class AdminControllers {
                     role: admin.role
                 }
                 let access_token = signToken(data)
-                res.status(200).json({access_token, role})
+                res.status(200).json({access_token})
             }
         })
         .catch(err => {
-            res.status(500).json(err)
+            next(err)
         })
     }
 }

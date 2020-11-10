@@ -3,17 +3,7 @@ const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
 
-// afterAll((done) => {
-//     queryInterface.bulkDelete('Admins')
-//     .then(() => {
-//         done()
-//     })
-//     .catch(err => {
-//         done()
-//     })
-// })
-
-describe('Test Endpoint POST /login', () => {
+describe('Test Endpoint POST /admin/login', () => {
     it('Test login sucess', (done) => {
         request(app)
         .post('/admin/login')
