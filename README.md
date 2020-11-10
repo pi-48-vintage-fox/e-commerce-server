@@ -1,1 +1,1 @@
-# e-commerce-server
+# e-commerce-cms-client
