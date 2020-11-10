@@ -23,11 +23,10 @@ describe('Test Endpoint POST /adminRegister', () => {
         last_name: 'Bagja',
         gender: 'male',
         email: 'musabagja@gmail.com',
-        password: 'password',
+        password: 'password'
       })
       .then(response => {
         const { body, status } = response;
-
         expect(status).toEqual(201);
         expect(body).toHaveProperty("id", expect.any(Number));
         expect(body).toHaveProperty("first_name", "Musa");
@@ -38,7 +37,7 @@ describe('Test Endpoint POST /adminRegister', () => {
         done();
       })
       .catch(err => {
-        console.log(err);
+        done(err);
       })
   })
 
@@ -63,7 +62,7 @@ describe('Test Endpoint POST /adminRegister', () => {
         done();
       })
       .catch(err => {
-        console.log(err);
+        done(err);
       })
   })
 
@@ -86,31 +85,125 @@ describe('Test Endpoint POST /adminRegister', () => {
         done();
     })
     .catch(err => {
-      console.log(err)
+      done(err);
     })
   })
 
   // Each key must not be empty
-  it('Test register each key must not be empty register', done => {
+
+  // first_name property must not be empty
+  it('Test cannot register with empty first_name property', done => {
     request(app)
       .post('/adminRegister')
       .send({
         first_name: '',
-        last_name: '',
+        last_name: 'Bagja',
         gender: 'male',
         email: 'musabagja@gmail.com',
-        password: 'password',
+        password: 'password'
       })
       .then(response => {
         const { body, status } = response;
 
         expect(status).toEqual(400);
-        expect(body).toHaveProperty("message", "First name required, Last name required");
+        expect(body).toHaveProperty("message", "First name required");
         done();
-        // The message would dynamicly changeable according to what you've emptied
       })
       .catch(err => {
-        console.log(err)
+        done(err);
+      })
+  })
+
+  // last_name property must not be empty
+  it('Test cannot register with empty last_name property', done => {
+    request(app)
+      .post('/adminRegister')
+      .send({
+        first_name: 'Musa',
+        last_name: '',
+        gender: 'male',
+        email: 'musabagja@gmail.com',
+        password: 'password'
+      })
+      .then(response => {
+        const { body, status } = response;
+
+        expect(status).toEqual(400);
+        expect(body).toHaveProperty("message", "Last name required");
+        done();
+      })
+      .catch(err => {
+        done(err);
+      })
+  })
+
+  // gender property must not be empty
+  it('Test cannot register with empty gender property', done => {
+    request(app)
+      .post('/adminRegister')
+      .send({
+        first_name: 'Musa',
+        last_name: 'Bagja',
+        gender: '',
+        email: 'musabagja@gmail.com',
+        password: 'password'
+      })
+      .then(response => {
+        const { body, status } = response;
+
+        expect(status).toEqual(400);
+        expect(body).toHaveProperty("message", "Gender required");
+        done();
+      })
+      .catch(err => {
+        done(err);
+      })
+  })
+
+  // email property must not be empty
+  it('Test cannot register with empty email property', done => {
+    request(app)
+      .post('/adminRegister')
+      .send({
+        first_name: 'Musa',
+        last_name: 'Bagja',
+        gender: 'male',
+        email: '',
+        password: 'password'
+      })
+      .then(response => {
+        const { body, status } = response;
+
+        expect(status).toEqual(400);
+        expect(body).toHaveProperty("message", "Email required, Email must be using email format");
+        // Email input broke 2 kind of validation rules which is the input require email with an email format
+        done();
+      })
+      .catch(err => {
+        done(err);
+      })
+  })
+
+  // password property must not be empty
+  it('Test cannot register with empty password property', done => {
+    request(app)
+      .post('/adminRegister')
+      .send({
+        first_name: 'Musa',
+        last_name: 'Bagja',
+        gender: 'male',
+        email: 'musabagja@mail.com',
+        password: ''
+      })
+      .then(response => {
+        const { body, status } = response;
+
+        expect(status).toEqual(400);
+        expect(body).toHaveProperty("message", "Password required");
+        done();
+      })
+      .catch(err => {
+        done(err);
       })
   })
 })
@@ -126,10 +219,11 @@ describe('Test Endpoint POST /adminLogin', () => {
 
         expect(status).toEqual(200);
         expect(body).toHaveProperty("token", expect.anything());
+        
         done();
       })
       .catch(err => {
-        console.log(err);
+        done(err);
       })
   })
 
@@ -146,7 +240,7 @@ describe('Test Endpoint POST /adminLogin', () => {
         done();
       })
       .catch(err => {
-        console.log(err);
+        done(err);
       })
   })
 })

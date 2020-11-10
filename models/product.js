@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Product.belongsTo(models.Category);
     }
   };
   Product.init({
@@ -51,6 +51,14 @@ module.exports = (sequelize, DataTypes) => {
         min: {
           args: [0],
           msg: 'Stock must not be lower than 0'
+        }
+      }
+    },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'Please choose product category'
         }
       }
     }

@@ -1,4 +1,4 @@
-const { Product } = require('../models/index');
+const { Product, Category } = require('../models/index');
 
 class ProductController {
   static async getProducts(req, res, next) {
@@ -12,8 +12,8 @@ class ProductController {
 
   static async addProduct(req, res, next) {
     try {
-      const { name, image_url, price, stock } = req.body;
-      const newProduct = await Product.create({name, image_url, price, stock});
+      const { name, image_url, price, stock, CategoryId } = req.body;
+      const newProduct = await Product.create({name, image_url, price, stock, CategoryId});
       res.status(201).json(newProduct);
     } catch(err) {
       next(err);
@@ -22,8 +22,8 @@ class ProductController {
 
   static async editProduct(req, res, next) {
     try {
-      const { name, image_url, price, stock } = req.body;
-      const newProduct = await Product.update({name, image_url, price, stock}, {where: {id: req.params.id}, returning: true});
+      const { name, image_url, price, stock, CategoryId } = req.body;
+      const newProduct = await Product.update({name, image_url, price, stock, CategoryId}, {where: {id: req.params.id}, returning: true});
       res.status(200).json(newProduct[1]);
     } catch(err) {
       next(err);
