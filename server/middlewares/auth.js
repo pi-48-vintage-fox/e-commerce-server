@@ -7,7 +7,7 @@ async function authentication(req, res, next) {
   try {
     const access_token = req.headers.access_token
     if(!access_token){
-      throw { msg : 'unauthorized', status : 401 }
+      throw { name : "Unauthorized", msg : 'unauthorized', status : 401 }
     }
     const decoded = verifyToken(access_token)
     const user = await User.findOne({

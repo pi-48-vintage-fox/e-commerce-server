@@ -21,6 +21,7 @@ class ProductController {
       const data = await Product.create(params)
       res.status(200).json(data)
     } catch (error) {
+      // let err = {name : "Bad Request", status : 400}
       next(error)
     }
   }

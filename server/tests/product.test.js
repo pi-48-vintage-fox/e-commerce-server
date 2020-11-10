@@ -1,9 +1,7 @@
 const request = require('supertest')
 const app = require('../app')
-const { sequelize } = require('../models')
 const { User, Product } = require('../models')
 const { signToken } = require('../helpers/jwt')
-const { queryInterface } = sequelize
 
 
 const user = { email: "admin@mail.com", password : "bimobimo", role: "Admin" }
@@ -97,7 +95,7 @@ describe("Test Success Crud products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -120,7 +118,7 @@ describe("Test Success Crud products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -128,7 +126,7 @@ describe("Test Success Crud products", () => {
 describe("Test Success Crud products", () => {
   it("Test success Post Products", (done) => {
     request(app)
-    .delete('/products')
+    .delete('/products/2')
     .set('access_token', access_token)
     .then((response) => {
       let { body, status } = response
@@ -137,7 +135,7 @@ describe("Test Success Crud products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -155,13 +153,14 @@ describe("Test failed CRUD products", () => {
       stock : 5
     })
     .then((response) => {
+      
       let { body, status } = response
-      expect(status).toBe(400)
-      expect(body).toHaveProperty(Object.keys(response.body))
+      expect(status).toBe(401)
+      expect(body).toHaveProperty("errors", expect.any(Array))
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -184,7 +183,7 @@ describe("Test Success Crud products", () => {
       done()
     })
     .catch(err => {
-      done(err)
+      return done(err)
     })
   })
 })
@@ -195,7 +194,7 @@ describe("Test failed CRUD Products", () => {
     request(app)
     .post('/products')
     .send({
-      name : "",
+      name : "Sepatu",
       image_url : "",
       price : 500000,
       stock : 2
@@ -204,11 +203,11 @@ describe("Test failed CRUD Products", () => {
     .then((response) => {
       let { body, status } = response
       expect(status).toBe(400)
-      expect(body).toHaveProperty(Object.keys(response.body))
+      expect(body).toHaveProperty("errors", expect.any(Array))
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -231,7 +230,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -246,6 +245,7 @@ describe("Test failed CRUD Products", () => {
       price : -1000000,
       stock : 10
     })
+    .set("access_token", access_token)
     .then((response) => {
       let { body, status } = response
       expect(status).toBe(400)
@@ -253,7 +253,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -276,7 +276,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -295,12 +295,12 @@ describe("Test failed CRUD Products", () => {
     })
     .then((response) => {
       let { body, status } = response
-      expect(status).toBe(400)
+      expect(status).toBe(401)
       expect(body).toHaveProperty(Object.keys(response.body))
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -323,7 +323,7 @@ describe("Test failed CRUD products", () => {
       done()
     })
     .catch(err => {
-      return done(err)
+      done(err)
     })
   })
 })
@@ -346,7 +346,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -369,7 +369,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -377,7 +377,7 @@ describe("Test failed CRUD Products", () => {
 describe("Test failed CRUD Products", () => {
   it("test failed with different types", (done) => {
     request(app)
-    .put('/products')
+    .put('/products/2')
     .send({
       name : "Sepatu Nike",
       image_url : "https://awsimages.detik.net.id/community/media/visual/2019/01/17/f31f05dd-5e6b-42f7-969d-c03ab4540729_169.jpeg?w=620",
@@ -392,7 +392,7 @@ describe("Test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -416,7 +416,7 @@ describe("test failed CRUD Products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
