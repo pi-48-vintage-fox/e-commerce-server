@@ -193,7 +193,7 @@ describe("test endpoint update failed product", () => {
 
     it("tidak menyertakan access_token", (done) => {
         request(app)
-        .put("/product")
+        .put("/product/31")
         .send({
             name: "Baju Wanita",
             image_url: "https://cf.shopee.co.id/file/62b08941de80bea161e2598cc02f5280",
@@ -214,7 +214,7 @@ describe("test endpoint update failed product", () => {
 
     it("menyertakan access_token bukan admin", (done) => {
         request(app)
-        .put("/product/1")
+        .put("/product/31")
         .set("access_token", access_token_user)
         .send({
             name: "Baju Wanita",
@@ -247,7 +247,7 @@ describe("test endpoint update failed product", () => {
             CategoryId: 8
         })
         .then(response => {
-         console.log(response, "<<<dari  minus stock");
+   
             const { status, body } = response
             expect(status).toBe(400)
             expect(body).toBe("Validation error: Input stock minimal 1 pcs")

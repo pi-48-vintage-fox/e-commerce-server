@@ -5,6 +5,7 @@ const { User } = require("../models/index")
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 
+let id = 0
 let access_token = ''
 
 beforeAll((done) => {
@@ -50,6 +51,7 @@ describe("test success endpoint product", () => {
         })
         .then(response => {
             const { status, body } = response
+            id = body.id
             expect(status).toBe(201)
             expect(body).toHaveProperty("name", "Baju Wanita")
             expect(body).toHaveProperty("image_url", "https://cf.shopee.co.id/file/62b08941de80bea161e2598cc02f5280")
@@ -64,7 +66,7 @@ describe("test success endpoint product", () => {
 
     it("test put product", (done) => {
         request(app)
-        .put("/product/32")
+        .put(`/product/${id}`)
         .set({access_token})
         .send({
             name: "Baju Wanita Lengan Panjang",
@@ -105,7 +107,7 @@ describe("test success endpoint product", () => {
 
     it("test delete product", (done) => {
         request(app)
-        .delete("/product/32")
+        .delete(`/product/${id}`)
         .set({access_token})
         .then(response => {
             const { status, body } = response
