@@ -1,0 +1,12 @@
+const app = require('../app.js')
+const http = require('http')
+const server = http.createServer(app)
+const port = 3000
+const cors = require('cors')
+
+app.set('port', port)
+app.use(cors())
+
+server.listen(port, () => {
+    console.log(`app listen on port ${port}`)
+})
