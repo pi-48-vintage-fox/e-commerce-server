@@ -6,6 +6,54 @@ const { signToken } = require('../helpers/jwt')
 const { queryInterface } = sequelize
 
 
+const user = { email: "admin@mail.com", password : "bimobimo", role: "Admin" }
+const user2 = { email: "sahaieu@mail.com", password : "naonieuteh", role: "Customer" }
+
+let access_token
+let token
+
+beforeAll((done) => {
+  User.create(user)
+  .then((data) => {
+    const user = {
+      id : data.id,
+      email : data.email
+    }
+    access_token = signToken(user)
+    return User.create(user2)
+  })
+  .then((data) => {
+    const user2 = {
+      id : data.id,
+      email : data.email
+    }
+    token = signToken(user2)
+    return done()
+  })
+  .catch(err =>{
+    return done(err)
+  })
+})
+
+afterAll((done) => {
+  User.destroy({
+    truncate : true
+  })
+  .then(_ => {
+    return Product.destroy({
+      truncate : true
+    })
+  })
+  .then(_ => {
+    return done()
+  })
+  .catch(err =>{
+    return done(err)
+  })
+
+})
+
+
 // Success Create CRUD
 
 describe("Test Success Crud products", () => {
@@ -26,7 +74,7 @@ describe("Test Success Crud products", () => {
       done()
     })
     .catch(err => {
-      done()
+      done(err)
     })
   })
 })
@@ -94,7 +142,7 @@ describe("Test Success Crud products", () => {
   })
 })
 
-// Create Failed
+// // Create Failed
 
 describe("Test failed CRUD products", () => {
   it("Test failed without access_token", (done) => {
@@ -117,6 +165,30 @@ describe("Test failed CRUD products", () => {
     })
   })
 })
+
+describe("Test Success Crud products", () => {
+  it("Test failed role not Admin Post Products", (done) => {
+    request(app)
+    .post('/products')
+    .send({
+      name : "Sepatu Nike",
+      image_url : "https://awsimages.detik.net.id/community/media/visual/2019/01/17/f31f05dd-5e6b-42f7-969d-c03ab4540729_169.jpeg?w=620",
+      price : 1000000,
+      stock : 5
+    })
+    .set('access_token', token)
+    .then((response) => {
+      let { body, status } = response
+      expect(status).toBe(401)
+      expect(response).toHaveProperty("body", expect.any(Object))
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+})
+
 
 describe("Test failed CRUD Products", () => {
   it("Test failed with empty field", (done) => {
@@ -209,7 +281,7 @@ describe("Test failed CRUD Products", () => {
   })
 })
 
-//Update Failed
+// //Update Failed
 
 describe("Test failed CRUD Products", () => {
   it("test failed without access_token", (done) => {
@@ -233,9 +305,32 @@ describe("Test failed CRUD Products", () => {
   })
 })
 
+describe("Test failed CRUD products", () => {
+  it("Test failed  role not Admin Put Products", (done) => {
+    request(app)
+    .put('/products/2')
+    .send({
+      name : "Sepatu Nike",
+      image_url : "https://awsimages.detik.net.id/community/media/visual/2019/01/17/f31f05dd-5e6b-42f7-969d-c03ab4540729_169.jpeg?w=620",
+      price : 1000000,
+      stock : 5
+    })
+    .set('access_token', token)
+    .then((response) => {
+      let { body, status } = response
+      expect(status).toBe(401)
+      expect(response).toHaveProperty("body", expect.any(Object))
+      done()
+    })
+    .catch(err => {
+      return done(err)
+    })
+  })
+})
+
 describe("Test failed CRUD Products", () => {
   it("test failed with minus stock", (done) => {
-    response(app)
+    request(app)
     .put('/products/2')
     .send({
       name : "Sepatu Adidas",
@@ -258,7 +353,7 @@ describe("Test failed CRUD Products", () => {
 
 describe("Test failed CRUD Products", () => {
   it("test failed with minus price", (done) => {
-    response(app)
+    request(app)
     .put('/products/2')
     .send({
       name : "Sepatu Adidas",
@@ -302,7 +397,7 @@ describe("Test failed CRUD Products", () => {
   })
 })
 
-// Delete Failed
+// // Delete Failed
 
 describe("test failed CRUD Products", () => {
   it("test failed without access_token", (done) => {

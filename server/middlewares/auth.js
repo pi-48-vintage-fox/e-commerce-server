@@ -16,7 +16,7 @@ async function authentication(req, res, next) {
       }
     })
     if (!user){
-      throw { msg : 'unathorized', status : 401 }
+      throw { name : "Unauthorized" ,msg : 'Email / Password salah', status : 401 }
     }
     else {
       req.loginUser = user
@@ -35,7 +35,7 @@ async function authorization(req, res, next) {
       next()
     }
     else {
-      throw { msg : "Ente bukan admin bos", status : 401}
+      throw { name : "Unauthorized" , msg : "You're not Admin", status : 401}
     }
   } catch (error) {
     next(error)

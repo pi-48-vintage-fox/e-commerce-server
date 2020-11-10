@@ -6,13 +6,20 @@ function errorHandler(err,req,res,next){
     message = err.message
     statusCode = 401
   }
+  
   else if (err.name === "SequelizeValidationError"){
     message = err.errors.map(element =>{
       return " " + element.message
     })
   }
+
   else if (err.name === "SequelizeUniqueConstraintError"){
     message = err.message + ", email already used"
+  }
+
+  else if (err.name === "JsonWebTokenError"){
+    message = err.message + "user unauthenticated"
+    statusCode = 401
   }
   console.log(err)
   res.status(statusCode).json({message})
