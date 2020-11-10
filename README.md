@@ -1,1 +1,327 @@
-# e-commerce-server
+## e-commerce-server
+Membuat product list dan menampilkan product list yang telah dibuat
+
+| method | routes | description |
+|--------|--------|-------------|
+| POST | /products | Menambah product baru |
+| PUT | /products/:id | Mengupdate product berdasarkan id |
+| DELETE | /products/:id | Menghapus product berdasarkan id |
+| POST | /login | Login Menggunakan Email & Password |
+
+
+## POST /products
+  Menambah product  baru
+
+* **URL**
+
+  /products
+
+* **Method:**
+
+  `POST`
+  
+*  **Data Params**
+   
+    **Request body:**
+   ```javascript
+   {
+   "name" : "string",
+   "image_url" : "string",
+   "price" : INT,
+   "stock" : INT
+   }
+   ```
+* **Header Params**
+
+   `accessToken: 'eyJhbXXXXXXXX.ayaXXXX'`
+      
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    `{
+    "id": 20,
+    "name": "Sepatu Converse",
+    "image_url": "https://s.kaskus.id/r480x480/images/fjb/2019/03/01/tmp_phpuop0mn_8337575_1551396108.jpg",
+    "price": 100000,
+    "stock": 10,
+    "updatedAt": "2020-11-06T10:52:38.280Z",
+    "createdAt": "2020-11-06T10:52:38.280Z"
+    }`
+   
+
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Name required" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Image URL required" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Price must be a number" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Price cannot be negative value" }`
+
+  OR
+
+    * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Please fill all form" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Stock must be a number" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Stock cannot be negative value" }`
+
+  OR
+
+  * **Code:** 403 FORBIDEN <br />
+    **Content:** `{ msg : "You dont have access" }`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+          url : '/products',
+          method : 'POST',
+          data : {
+            name,
+            image_url,
+            price,
+            stock
+          },
+          headers : {access_token}
+        })
+  ```
+
+
+## PUT /products/:id
+Mengupdate products berdasarkan parameter id
+
+* **URL**
+
+  /products/:id
+
+* **Method:**
+
+  `PUT`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+        
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ msg : "Data Not Found" }` 
+
+
+*  **Data Params**
+   
+    **Request body:**
+   ```javascript
+   {
+   "name" : "string",
+   "image_url" : "string",
+   "price" : INT,
+   "stock" : INT
+   }
+   ```
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+	```javascript
+	{
+    "id": 20,
+    "name": "Sepatu Converse Edit",
+    "image_url": "https://s.kaskus.id/r480x480/images/fjb/2019/03/01/tmp_phpuop0mn_8337575_1551396108.jpg",
+    "price": 150000,
+    "stock": 9,
+    "updatedAt": "2020-11-06T10:52:38.280Z",
+    "createdAt": "2020-11-06T10:52:38.280Z"
+    }
+	 ```
+
+* **Error Response:**
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Name required" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Image URL required" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Price must be a number" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Price cannot be negative value" }`
+
+  OR
+
+    * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Please fill all form" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Stock must be a number" }`
+
+  OR
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ msg : "Stock cannot be negative value" }`
+
+  OR
+
+  * **Code:** 403 FORBIDEN <br />
+    **Content:** `{ msg : "You dont have access" }`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+          url : `/products/${id}`,
+          method : 'PUT',
+          data : {
+            name,
+            image_url,
+            price,
+            stock
+          },
+          headers : {access_token}
+        })
+  ```
+
+
+## DELETE /products/:id
+  Menghapus product list berdasarkan parameter id
+
+* **URL**
+
+  /products/:id
+
+* **Method:**
+
+  `DELETE`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+        
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ msg : "Data Not Found" }` 
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+	```javascript
+	{
+        "msg": "Product Deleted"
+    }
+	 ```
+
+* **Error Response:**
+
+  * **Code:** 403 FORBIDEN <br />
+    **Content:** `{ msg : "You dont have access" }`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+        url : `/products/${id}`,
+        method : 'DELETE',
+        headers : {access_token}
+    })
+  ```
+
+## **POST /login**
+---
+  Mengembalikan JSON access_token, id, email, dan role setelah berhasil login.
+
+* **URL**
+
+  /login
+
+* **Method:**
+
+  `POST`
+
+* **Success Response:**
+
+  * **Code:** 200 **OK** <br />
+    **Content:** 
+    ```json
+    {
+    "access_token": "eyJhbGciOiJIUzzkxkzxkzlxklzklxxxxxxxxxxxxxxxxxxxxxxx",
+    "id": 2,
+    "email": "admin@admin.com",
+    "role":"admin"
+}
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 **UNAUTHORIZED** <br />
+    **Content:**`{ msg: "Invalid email or password"}`
+  OR
+
+  * **Code:** 401 **UNAUTHORIZED** <br />
+    **Content:**`{ msg: "Email and Password cannot be empty"}`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+        method: 'POST',
+        url: '/login',
+        data : {
+            email,
+            password
+        }
+    })
+  ```
