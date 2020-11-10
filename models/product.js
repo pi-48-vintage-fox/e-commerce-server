@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Product.belongsTo(models.Category);
     }
   };
   Product.init({
@@ -43,6 +44,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: 0
       }
+    },
+    CategoryId: {
+      type:DataTypes.INTEGER
     }
   }, {
     sequelize,
