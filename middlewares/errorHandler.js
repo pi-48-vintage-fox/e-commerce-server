@@ -1,11 +1,8 @@
 'use strict'
 
 function errorHandler (err,req,res,next){
-  if(process.env.NODE_ENV == "development"){
-    console.log(err);
-  }
- 
-  let status = err.status
+  
+  let status = err.status || 500
   let msg = err.msg
   
   switch (err.name) {
