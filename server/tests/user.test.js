@@ -20,16 +20,15 @@ const { queryInterface } = sequelize
 //   })
 // })
 
-// afterAll((done) => {
-//   queryInterface.bulkDelete('Product')
-//   .then(() => {
-//     done()
-//   })
-//   .catch(err => {
-//     console.log(err);
-//     done()
-//   })
-// })
+afterAll((done) => {
+  queryInterface.bulkDelete('Users')
+  .then(() => {
+    done()
+  })
+  .catch(err => {
+    done()
+  })
+})
 
 describe("Post /login", () => {
   test("Login Successfully", (done) => {
@@ -67,8 +66,7 @@ describe("Post /login", () => {
         done()
       })
       .catch((err) => {
-        console.log(err);
-        done()
+        done(err)
       })
   })
 
@@ -88,7 +86,7 @@ describe("Post /login", () => {
       })
       .catch((err) => {
         console.log(err);
-        done()
+        done(err)
       })
   })
 
@@ -108,7 +106,7 @@ describe("Post /login", () => {
       })
       .catch((err) => {
         console.log(err);
-        done()
+        done(err)
       })
   })
 })
