@@ -9,9 +9,8 @@ class userController {
       email: req.body.email,
       password: req.body.password
     }
-
-    if (!obj.email || !obj.password) {
-      throw {name: "BadRequest", message: "Please, required email and password"}
+    if (obj.email == '' || obj.email == '') {
+      throw {name: 'Unauthorized', message: "Please required email and password"}
     }
     User.findOne({
       where: {
@@ -19,7 +18,10 @@ class userController {
       }
     })
     .then(data => {
-      if(!comparePassword(obj.password, data.password)) {
+      // console.log(data);
+      if (!data) {
+        throw {name: 'Unauthorized', message: "Wrong email/password!"}
+      } else if (!comparePassword(obj.password, data.password)) {
         throw{
           name: 'Unauthorized', 
           message: "Wrong email/password!"
@@ -33,7 +35,7 @@ class userController {
       }
     })
     .catch(err => {
-      next(err)
+      console.log(err);
     })
   
   }

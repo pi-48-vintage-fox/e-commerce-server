@@ -1,12 +1,12 @@
 const router = require('express').Router()
-const userRouter = require('./userRouter')
 const productRouter = require('./productRouter')
-const bannerRouter = require('./bannerRouter')
+// const bannerRouter = require('./bannerRouter')
+const userController = require('../controllers/userControllers')
 const authentication = require('../middleware/authentication')
 
+router.post('/login', userController.login)
 router.use(authentication)
-router.use(userRouter)
-router.use(productRouter)
-router.use(bannerRouter)
+router.use('/products', productRouter)
+// router.use(bannerRouter)
 
 module.exports = router

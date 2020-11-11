@@ -19,37 +19,52 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Name cannot be empty!"
+          message: "Name cannot be empty!"
         }
       }
     },
     image_url: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isUrl: {
-          msg: "Must be format url"
+          message: "Must be format url"
+        },
+        notEmpty: {
+          message: "Image cannot be empty!"
         }
       }
     },
     price: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         min: {
           args: [0],
-          msg: "The price should not be less than 0."
+          message: "The price should not be less than 0."
         },
         notEmpty: {
-          msg: "Price cannot be empty."
+          message: "Price cannot be empty!"
+        },
+        isNumeric: {
+          message: 'Must be format number'
         }
       }
 
     },
     stock: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         min: {
           args: [0],
-          msg: "The stock should not be less than 0."
+          message: "The stock should not be less than 0."
+        },
+        notEmpty: {
+          message: "Stock cannot be empty!"
+        },
+        isNumeric: {
+          message: 'Must be format number'
         }
       }
     }

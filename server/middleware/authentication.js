@@ -6,7 +6,7 @@ async function authentication(req, res, next) {
   try{
     if (!access_token) {
       throw {name: 'Unauthorized', message: "Wrong Email/password!", status: 401}
-    } else {
+    } else if(access_token) {
       const decoded = verifyToken(access_token)
       const user = await User.findOne({
         where: {

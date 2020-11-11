@@ -1,34 +1,5 @@
 const request = require('supertest')
 const app = require('../app')
-const { User, sequelize } = require('../models/index')
-const { signToken } = require('../helpers/jwt')
-const { queryInterface } = sequelize
-// let access_token= ''
-
-// beforeAll((done) => {
-//   User.findOne({
-//     where: {
-//       email: 'admin@mail.com'
-//     }
-//   })
-//   .then(data => {
-//     access_token = signToken({
-//       id: data.id,
-//       email: data.email
-//     })
-//     done()
-//   })
-// })
-
-afterAll((done) => {
-  queryInterface.bulkDelete('Users')
-  .then(() => {
-    done()
-  })
-  .catch(err => {
-    done()
-  })
-})
 
 describe("Post /login", () => {
   test("Login Successfully", (done) => {
@@ -41,7 +12,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toBe(200)
+        expect(status).toEqual(200)
         expect(body).toHaveProperty("access_token", expect.any(String))
         done()
       })
@@ -61,7 +32,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toBe(401)
+        expect(status).toEqual(401)
         expect(body).toHaveProperty("message", "Wrong Email/password!")
         done()
       })
@@ -80,7 +51,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toBe(401)
+        expect(status).toEqual(401)
         expect(body).toHaveProperty("message", "Wrong Email/password!")
         done()
       })
@@ -100,7 +71,9 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toBe(401)
+        console.log({body});
+        expect(status).toEqual(401)
+
         expect(body).toHaveProperty("message", "Wrong Email/password!")
         done()
       })
