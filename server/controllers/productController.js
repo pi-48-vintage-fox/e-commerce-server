@@ -14,6 +14,7 @@ class ProductController {
     Product.create(obj)
       .then(data => {
         res.status(201).json({
+          id: data.id,
           name: data.name,
           image_url: data.image_url,
           price: data.price,
@@ -51,6 +52,22 @@ class ProductController {
     })
     .then(() => {
       res.status(200).json({msg: "Successfully edited data with id: " + id})
+    })
+    .catch(err => {
+      next(err)
+    })
+  }
+
+  static delete(req, res, next) {
+    const id = req.params.id
+
+    Product.destroy({
+      where: {
+        id: id
+      }
+    })
+    .then(() => {
+      res.status(200).json({msg: "Successfully deleted product!"})
     })
     .catch(err => {
       next(err)

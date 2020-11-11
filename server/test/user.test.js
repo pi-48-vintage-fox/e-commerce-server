@@ -6,7 +6,7 @@ describe('POST /login', () => {
     request(app)
       .post('/login')
       .send({
-        email: 'riz@mail.id',
+        email: 'brody@mail.id',
         password: 'hohoho'
       })
       .then(res => {
