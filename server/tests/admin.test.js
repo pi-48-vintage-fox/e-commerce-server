@@ -1,7 +1,5 @@
 const request = require('supertest')
 const app = require('../app')
-const {sequelize} = require('../models')
-const {queryInterface} = sequelize
 
 describe('Test Endpoint POST /admin/login', () => {
     it('Test login sucess', (done) => {
@@ -12,7 +10,6 @@ describe('Test Endpoint POST /admin/login', () => {
             let {body, status} = response
             expect(status).toEqual(200)
             expect(body).toHaveProperty('access_token', expect.any(String))
-            expect(body).toHaveProperty('role', 'admin')
             done()
         })
         .catch(err => {
@@ -21,7 +18,7 @@ describe('Test Endpoint POST /admin/login', () => {
         })
     })
 
-    it('Test login wrong email/password', (done) => {
+    it('Test login wrong password', (done) => {
         request(app)
         .post('/admin/login')
         .send({email: 'admin@mail.com', password: '12345667788'})

@@ -1,16 +1,14 @@
-const {Product} = require('../models/index')
+const {Admin} = require('../models/index')
 
 function authorization (req, res, next) {
-    const id = req.params.id
-    Product.findByPk(id)
-    .then(data => {
-        if(!data) { 
-            let err = {
-                name: 'Not Found'
-            }
-            throw err
+   
+    Admin.findOne({
+        where: {
+            email: req.loggedInUser.email
         }
-        else if(req.loggedInUser.role === 'admin'){
+    })
+    .then(data => {
+        if(data && req.loggedInUser.role == 'admin'){
             console.log('authorized')
             next()
         }

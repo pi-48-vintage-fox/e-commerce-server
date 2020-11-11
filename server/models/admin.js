@@ -34,11 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     role: DataTypes.STRING
   }, {
-    hooks: {
-      beforeCreate(Admin) {
-        Admin.password = hashPassword(Admin.password)
-      }
-    },
     sequelize,
     modelName: 'Admin',
   });

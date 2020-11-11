@@ -42,14 +42,14 @@ class ProductControllers {
             }
         })
         .then(product => {
-            if(product){
-                res.status(200).json(product)
-            }
-            else if(!id){
+            if(product == 0){
                 let err = {
                     name: 'Not Found'
                 }
                 throw next(err)
+            }
+            if(product){
+                res.status(200).json({msg: 'Sucessfully update product'})
             }
         })
         .catch(err => {
@@ -68,14 +68,14 @@ class ProductControllers {
             }
         })
         .then(product => {
-            if(product){
-                res.status(200).json(product)
-            }
-            else if(!id){
+            if(product == 0){
                 let err = {
                     name: 'Not Found'
                 }
                 throw next(err)
+            }
+            if(product){
+                res.status(200).json({msg: 'Sucessfully update stock'})
             }
         })
         .catch(err => {
@@ -91,14 +91,14 @@ class ProductControllers {
             }
         })
         .then(product => {
-            if(product){
-                res.status(200).json('Sucessfully delete product')
-            }
-            else if(!id){
+            if(product == 0) {
                 let err = {
                     name: 'Not Found'
                 }
                 throw next(err)
+            }
+            if(product){
+                res.status(200).json({msg: 'Sucessfully delete product'})
             }
         })
         .catch(err => {

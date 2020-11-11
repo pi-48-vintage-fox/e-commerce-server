@@ -4,6 +4,9 @@ const {Admin} = require('../models/index')
 function authentication (req, res, next) {
     const { access_token } = req.headers
     if(!access_token){
+        let err = {
+            name: 'Authentication failed'
+        }
         throw next(err)
     }
     else{
