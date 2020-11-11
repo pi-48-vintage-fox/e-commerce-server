@@ -1,5 +1,4 @@
 const { VerifyToken } = require('../helpers/jwt')
-const jwt = require('../helpers/jwt')
 const {User} = require('../models/index')
 
 async function Authenticate(req,res,next){
@@ -14,7 +13,8 @@ async function Authenticate(req,res,next){
             const decoded = VerifyToken(access_token)
             const user = await User.findOne({
                 where:{
-                    email: decoded.email
+                    email: decoded.email,
+                    role: "Admin"
                 }
             })
             if(!user){

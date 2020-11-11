@@ -7,7 +7,7 @@ function authorization(req, res, next){
         if(!result) { 
             throw { msg: 'Not found', status: 404}
         }
-        else if(result.UserId === req.decoded.id){
+        else if(req.decoded.role === 'Admin'){
             next()
         }
         else{

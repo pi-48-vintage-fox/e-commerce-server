@@ -8,7 +8,6 @@ class Controller {
             image_url:req.body.image_url,
             price:req.body.price,
             stock:req.body.stock,
-            UserId:req.decoded.id,
             createdAt: date,
             updatedAt: date
         }
@@ -28,20 +27,6 @@ class Controller {
         })
         .catch(err => {
             console.log(err)
-            next(err)
-        })
-    }
-
-    static readById(req, res) {
-        Todo.findByPk({
-            where: {
-                UserId: req.decoded.id
-            }
-        })
-        .then(result => {
-            res.status(200).json(result)
-        })
-        .catch(err => {
             next(err)
         })
     }
