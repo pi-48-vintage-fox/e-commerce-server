@@ -22,16 +22,6 @@ module.exports = errorHandler = (err, req,res,next)=>{
       status = 404
       msg = err.name
   }
-  if (err.name == 'Please Fill Category Input'){
-      status = 400
-      msg = err.name
-  }
-  if (err.name == 'Please Fill Title Input'){
-      status = 400
-      msg = err.name
-  }
-
-
   
   res.status(status).json({msg})
 }

@@ -1,8 +1,10 @@
 # e-commerce-server
 --------------------------
+USER ROUTER
+--------------------------
 * **URL**
 
-  `/user/login`
+  `/users/login`
 
 * **Description** <br />
 `LOGIN USER`
@@ -51,6 +53,224 @@
 
   * **Code:** 400 BAD REQUEST <br />
     **Content:** `{ error : "VALIDATION FAILS" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    
+
+* **Sample Call:**
+
+  `none`
+
+* **Notes:**
+
+  `none`
+--------------------------
+--------------------------
+PRODUCT ROUTER
+--------------------------
+* **URL**
+
+  `/products/addproduct`
+
+* **Description** <br />
+`create product`
+
+* **Method:**
+  
+  `POST`
+
+*  **Headers**
+
+   `access_token: string`
+
+
+*  **URL Params**
+
+   `none`
+
+   **Required:**
+ 
+   `none`
+
+   **Optional:**
+ 
+   `none`
+
+* **Data Params**
+
+  `request body`
+
+    | Key       | Type | Description|Validation|
+    |-----------|------|------------|----------|
+    |name       |string|REQUIRED    |-
+    |image_url  |string|REQUIRED    |
+    |price      |double|REQUIRED    |
+    |stock      |integer|REQUIRED   |
+   
+
+* **Success Response:**<br />
+    `IF PAYLOAD SUITS VALIDATION RULE`
+  * **Code:** 201 OK <br />
+    **Content:** <br />
+    ```javascript
+    {
+        "id":integer,
+        "name": string,
+        "image_url": string,
+        "price": double,
+        "stock":integer,
+        "updatedAt": timestamps,
+        "createdAt": timestamps
+    }
+    ```
+ 
+* **Error Response:**
+
+  `IF VALIDATION FAILS`
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "VALIDATION FAILS" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    
+
+* **Sample Call:**
+
+  `none`
+
+* **Notes:**
+
+  `none`
+--------------------------
+--------------------------
+* **URL**
+
+  `/products/:id`
+
+* **Description** <br />
+`update product`
+
+* **Method:**
+  
+  `PUT`
+
+*  **Headers**
+
+   `access_token: string`
+
+
+*  **URL Params**
+
+   `none`
+
+   **Required:**
+ 
+   `none`
+
+   **Optional:**
+ 
+   `none`
+
+* **Data Params**
+
+  `request body`
+
+    | Key       | Type | Description|Validation|
+    |-----------|------|------------|----------|
+    |name       |string|REQUIRED    |-
+    |image_url  |string|REQUIRED    |
+    |price      |double|REQUIRED    |
+    |stock      |integer|REQUIRED   |
+   
+
+* **Success Response:**<br />
+    `IF PAYLOAD SUITS VALIDATION RULE`
+  * **Code:** 200 OK <br />
+    **Content:** <br />
+    ```javascript
+    {
+        "id":integer,
+        "name": string,
+        "image_url": string,
+        "price": double,
+        "stock":integer,
+        "updatedAt": timestamps,
+        "createdAt": timestamps
+    }
+    ```
+ 
+* **Error Response:**
+
+  `IF VALIDATION FAILS`
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "VALIDATION FAILS" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    
+
+* **Sample Call:**
+
+  `none`
+
+* **Notes:**
+
+  `none`
+--------------------------
+--------------------------
+* **URL**
+
+  `/products/:id`
+
+* **Description** <br />
+`delete product`
+
+* **Method:**
+  
+  `DELETE`
+
+*  **Headers**
+
+   `access_token: string`
+
+
+*  **URL Params**
+
+   `none`
+
+   **Required:**
+ 
+   `none`
+
+   **Optional:**
+ 
+   `none`
+
+* **Data Params**
+  `none`
+
+* **Success Response:**<br />
+    `IF PAYLOAD SUITS VALIDATION RULE`
+  * **Code:** 200 OK <br />
+    **Content:** <br />
+    ```javascript
+    {
+         "msg": "Product sucessfully deleted "
+    }
+    ```
+ 
+* **Error Response:**
+
+  `IF VALIDATION FAILS`
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `"msg": "Ensure your product detail is correct"`
 
   OR
 

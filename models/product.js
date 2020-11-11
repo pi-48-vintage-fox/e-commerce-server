@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
           msg:'Please Specify Your Product Price'
         },
         min:{
-          args:0,
+          args:[0],
           msg:'Please Ensure You Have a Valid Price Range'
         }
       }
@@ -44,11 +44,12 @@ module.exports = (sequelize, DataTypes) => {
           msg:'Please Specify Your Product Stock'
         },
         min:{
-          args:0,
+          args:[0],
           msg:'Please Ensure You Have a Valid Product Stock'
         }
       }
-    }
+    },
+    UserId:DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Product',
