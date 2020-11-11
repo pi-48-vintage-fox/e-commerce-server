@@ -1,24 +1,67 @@
 'use strict'
 const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       Product.belongsTo(models.ProductCategory)
     }
   }
   Product.init(
     {
-      name: DataTypes.STRING,
-      image_url: DataTypes.STRING,
-      image_id: DataTypes.STRING,
-      price: DataTypes.INTEGER,
-      stock: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Product name cannot be empty',
+          },
+          notEmpty: {
+            msg: 'Product name cannot be empty',
+          },
+        },
+      },
+      description: DataTypes.STRING,
+      imageUrl: DataTypes.STRING,
+      imageId: DataTypes.STRING,
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isNumeric: {
+            msg: 'Price must be of numeric type',
+          },
+          min: {
+            args: [0],
+            msg: 'Price cannot be less than 0',
+          },
+          notNull: {
+            msg: 'Product price cannot be empty',
+          },
+          notEmpty: {
+            msg: 'Product price cannot be empty',
+          },
+        },
+      },
+      stock: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isNumeric: {
+            msg: 'Product stock must be of numeric type',
+          },
+          min: {
+            args: [0],
+            msg: 'Product stock cannot be less than 0',
+          },
+          notNull: {
+            msg: 'Product stock cannot be empty',
+          },
+          notEmpty: {
+            msg: 'Product stock cannot be empty',
+          },
+        },
+      },
       ProductCategoryId: DataTypes.INTEGER,
     },
     {

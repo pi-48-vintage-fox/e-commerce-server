@@ -1,6 +1,5 @@
 'use strict'
 
-const bcrypt = require('bcrypt')
 const { User } = require('../models')
 
 let users = [
@@ -8,11 +7,6 @@ let users = [
     email: 'admin@mail.com',
     password: '1234',
     role: 'admin',
-  },
-  {
-    email: 'budi@mail.com',
-    password: '123',
-    role: 'customer',
   },
 ]
 

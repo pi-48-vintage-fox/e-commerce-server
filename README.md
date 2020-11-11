@@ -244,10 +244,10 @@ $.get('/categories').done((result) => {
 
 - **Data Parameters**
 
-  | Fields | Type   | Description                  | Notes |
-  | ------ | ------ | :--------------------------- | ----- |
-  | name   | string | Product category's name      |       |
-  | name   | string | Product category's parent ID |       |
+  | Fields   | Type   | Description                  | Notes |
+  | -------- | ------ | :--------------------------- | ----- |
+  | name     | string | Product category's name      |       |
+  | parentId | string | Product category's parent ID |       |
 
   ```js
   {
@@ -538,15 +538,15 @@ $.get('/products/').done((result) => {
 
 - **Data Parameters**
 
-  | Fields                             | Type    | Description               | Notes |
-  | ---------------------------------- | ------- | :------------------------ | ----- |
-  | name **_(required)_**              | string  | Product's name            |       |
-  | price **_(required)_**             | integer | Product's price           |       |
-  | stock **_(required)_**             | integer | Product's stock           |       |
-  | ProductCategoryId **_(required)_** | integer | Product's category ID     |       |
-  | description                        | string  | Product's description     |       |
-  | imageUrl                           | string  | Product's image URL       |       |
-  | imageId                            | string  | Product's image public ID |       |
+  | Fields                 | Type    | Description               | Notes |
+  | ---------------------- | ------- | :------------------------ | ----- |
+  | name **_(required)_**  | string  | Product's name            |       |
+  | price **_(required)_** | integer | Product's price           |       |
+  | stock **_(required)_** | integer | Product's stock           |       |
+  | ProductCategoryId      | integer | Product's category ID     |       |
+  | description            | string  | Product's description     |       |
+  | imageUrl               | string  | Product's image URL       |       |
+  | imageId                | string  | Product's image public ID |       |
 
   ```js
   {
@@ -723,7 +723,7 @@ $.get('/products/1').done((result) => {
 
   ```js
   {
-    msg: 'Product modified successfully'
+    msg: 'Product was modified successfully'
   }
   ```
 

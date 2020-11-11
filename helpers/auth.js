@@ -9,16 +9,15 @@ const comparePassword = (password, hash) => {
   return bcrypt.compareSync(password, hash)
 }
 
-
-function signToken (payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET_KEY)
+function signToken(payload) {
+  return jwt.sign(payload, 'secret')
 }
 
-function verifyToken (token) {
-  return jwt.verify(token, process.env.JWT_SECRET_KEY)
+function verifyToken(token) {
+  return jwt.verify(token, 'secret')
 }
 
-function decodeToken (token) {
+function decodeToken(token) {
   return jwt.decode(token)
 }
 
@@ -27,5 +26,5 @@ module.exports = {
   comparePassword,
   signToken,
   verifyToken,
-  decodeToken
+  decodeToken,
 }

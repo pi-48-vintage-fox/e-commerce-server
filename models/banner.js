@@ -1,26 +1,47 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Banner extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+    static associate(models) {}
+  }
+  Banner.init(
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+        validate: {
+          notNull: 'Banner title cannot be empty',
+          notEmpty: 'Banner title cannot be empty',
+        },
+      },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+        validate: {
+          notNull: 'Banner status cannot be empty',
+          notEmpty: 'Banner status cannot be empty',
+        },
+      },
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+        validate: {
+          notNull: 'Banner image URL cannot be empty',
+          notEmpty: 'Banner image URL cannot be empty',
+        },
+      },
+      imageId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Banner',
     }
-  };
-  Banner.init({
-    title: DataTypes.STRING,
-    status: DataTypes.STRING,
-    image_url: DataTypes.STRING,
-    image_id: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Banner',
-  });
-  return Banner;
-};
+  )
+  return Banner
+}

@@ -10,12 +10,25 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       ProductCategory.hasMany(models.Product)
-      ProductCategory.hasMany(models.ProductCategory)
+      ProductCategory.hasMany(models.ProductCategory, {
+        foreignKey: 'parentId',
+      })
     }
   }
   ProductCategory.init(
     {
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Product category name cannot be empty',
+          },
+          notEmpty: {
+            msg: 'Product category name cannot be empty',
+          },
+        },
+      },
       parentId: DataTypes.INTEGER,
     },
     {

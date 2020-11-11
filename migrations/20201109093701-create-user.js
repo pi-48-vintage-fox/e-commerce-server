@@ -19,8 +19,12 @@ module.exports = {
       },
       role: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
-      avatarUrl: {
+      imageUrl: {
+        type: Sequelize.STRING,
+      },
+      imageId: {
         type: Sequelize.STRING,
       },
       createdAt: {

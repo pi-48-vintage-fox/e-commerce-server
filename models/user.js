@@ -17,10 +17,33 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      role: DataTypes.STRING,
-      avatarUrl: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: 'Email cannot be empty',
+          notEmpty: 'Email cannot be empty',
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: 'Password cannot be empty',
+          notEmpty: 'Password cannot be empty',
+        },
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+        validate: {
+          notNull: 'Role cannot be empty',
+          notEmpty: 'Role cannot be empty',
+        },
+      },
+      imageUrl: DataTypes.STRING,
+      imageId: DataTypes.STRING,
     },
     {
       sequelize,
@@ -33,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
 
     user.password = hash
     user.email = user.email.toLowerCase()
-    if (!user.avatarUrl) {
-      user.avatarUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+    if (!user.imageUrl) {
+      user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
     }
   })
 
@@ -43,8 +66,8 @@ module.exports = (sequelize, DataTypes) => {
 
     user.password = hash
     user.email = user.email.toLowerCase()
-    if (!user.avatarUrl) {
-      user.avatarUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+    if (!user.imageUrl) {
+      user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
     }
   })
 
@@ -56,15 +79,15 @@ module.exports = (sequelize, DataTypes) => {
       user.password = hash
       user.email = user.email.toLowerCase()
 
-      if (!user.avatarUrl) {
-        user.avatarUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+      if (!user.imageUrl) {
+        user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
       }
     })
   })
 
   User.beforeFind((options) => {
     for (let key in options.where) {
-      if (key === 'email' || key === 'username') {
+      if (key === 'email') {
         options.where[key] = options.where[key].toLowerCase()
       }
     }
