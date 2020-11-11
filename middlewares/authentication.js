@@ -1,5 +1,5 @@
 const { verifyToken } = require("../helpers/jwt")
-const { User } = require('../models/index')
+const { Admin } = require('../models/index')
 
 async function authentication(req, res, next) {
     const { access_token } = req.headers
@@ -8,16 +8,20 @@ async function authentication(req, res, next) {
             throw { message: 'Authentication Failed', status: 401 }
         } else {
             const decoded = verifyToken(access_token)
-            const user = await User.findOne({
-                where: {
-                    email: decoded.email
-                }
-            })
-            if(!user) {
-                throw { message: 'Authentication Failed', status: 401 }
+            if(decoded.role !== 'admin') {
+                throw { message: `You don't have an access`, status: 403 }
             } else {
-                req.loggedIn = decoded
-                next()
+                const user = await Admin.findOne({
+                    where: {
+                        email: decoded.email
+                    }
+                })
+                if(!user) {
+                    throw { message: 'Authentication Failed', status: 401 }
+                } else {
+                    req.loggedIn = decoded
+                    next()
+                }
             }
         }
     } catch (err) {

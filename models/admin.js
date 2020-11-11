@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: 'Email is required' },
         len: [6]
       }
+    },
+    role: {
+      type: DataTypes.STRING
     }
   }, {
     hooks: {

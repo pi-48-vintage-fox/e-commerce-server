@@ -3,6 +3,7 @@ const { signToken } = require('../helpers/jwt')
 const { Admin, Product } = require('../models/index')
 
 class Controller {
+    // ADMIN
     static async login (req, res, next) {
         try {
             const payload = {
@@ -10,13 +11,13 @@ class Controller {
                 password: req.body.password
             }
 
-            const admin = await Admin.findOne({
+            const user = await Admin.findOne({
                 where: {
                     email: payload.email
                 }
             })
 
-            if (!admin) {
+            if (!user) {
                 res.status(401).json({
                     message: "Wrong email or password"
                 })
@@ -25,20 +26,75 @@ class Controller {
                     message: "Wrong email or password"
                 })
             } else {
-                const id = admin.id
-                const name = admin.name
                 const access_token = signToken({
-                    id: admin.id,
-                    name: admin.name,
-                    email: admin.email
+                    id: user.id,
+                    email: user.email,
+                    role: user.role
                 })
 
                 res.status(200).json({
                     access_token,
-                    id,
-                    name
+                    id: user.id,
+                    email: user.email
                 })
             }
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    //PRODUCT
+    static async show(req, res, next) {
+        try {
+            const data = await Product.findAll()
+            res.status(200).json(data)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async create(req, res, next) {
+        try {
+            const data = {
+                name: req.body.name,
+                image_url: req.body.image_url,
+                price: req.body.price,
+                stock: req.body.stock,
+            }
+            const newProduct = await Product.create(data)
+            res.status(201).json(newProduct)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async update(req, res, next) {
+        try {
+            const data = {
+                name: req.body.name,
+                image_url: req.body.image_url,
+                price: req.body.price,
+                stock: req.body.stock,
+            }
+            const editProduct = await Product.update(data, {
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.status(200).json({ message: 'Product has been updated' })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async delete(req, res, next) {
+        try {
+            const deletedProduct = await Product.destroy({
+                where: {
+                    id: req.params.id
+                }
+            }) 
+            res.status(200).json({ message: 'Product has been deleted' })
         } catch (err) {
             next(err)
         }

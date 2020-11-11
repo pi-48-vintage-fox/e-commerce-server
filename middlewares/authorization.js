@@ -1,9 +1,9 @@
-const { Task } = require('../models/index')
+const { Product } = require('../models/index')
 
 async function authorization(req, res, next) {
     const { id } = req.params
     try {
-        const data = await Task.findByPk(id)
+        const data = await Product.findByPk(id)
         if(!data) {
             throw { name: `Data's Not Found`, status: 404 }
         } else if(data.UserId === req.loggedIn.id) {

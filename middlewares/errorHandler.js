@@ -23,6 +23,9 @@ function errorHandler(err, req, res, next) {
     } else if(err.name === 'Not Found'){
         status = 404
         message = 'Error Not Found'
+    } else if(err.name === 'UserUnauthorized'){
+        status = 403
+        message = 'User unauthorized'
     }
     res.status(status).json({message})
 }
