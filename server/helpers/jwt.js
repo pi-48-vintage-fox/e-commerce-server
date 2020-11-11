@@ -7,7 +7,7 @@ const signToken = (payload) => {
 }
 
 const verifyToken = (token) => {
-  const decoded = jwt.verify(token, process.env.SECRET)
+  const decoded = jwt.verity(token, process.env.SECRET)
 
   return decoded
 }
