@@ -46,7 +46,7 @@ class UserController {
                     email: find.email
                 })
 
-                res.status(200).json(access_token);
+                res.status(200).json({access_token});
             }
         } catch (error) {
             res.status(500).json(error);

@@ -28,6 +28,21 @@ class ProductController {
             res.status(500).json(error);
         }
     }
+
+    static async getProductById(req, res){
+        try {
+            const getProduct = await Product.findByPk(+req.params.id);
+            if (getProduct) {
+                res.status(200).json(getProduct)
+            } else {
+                res.status(401).json({
+                    message: "Product not found"
+                })
+            }
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 }
 
 module.exports = ProductController
