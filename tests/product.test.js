@@ -1,5 +1,42 @@
 const request = require("supertest");
 const app = require("../app");
+const { User, sequelize } = require('../models');
+const { queryInterface } = sequelize;
+const { signToken } = require('../helpers/jwt');
+
+let access_token = ""
+
+const userDataAdmin = {
+    email: "admin@mail.com",
+    password: "1234"
+}
+
+beforeAll((done) => {
+    User.findOne({
+            where: {
+                email: userDataAdmin.email
+            }
+        })
+        .then(user => {
+            access_token = signToken({ id: user.id, email: user.email, role: user.role })
+            done()
+        })
+        .catch(err => {
+            console.log(err);
+            done()
+        })
+})
+
+afterAll((done) => {
+    queryInterface.bulkDelete("Products")
+        .then(() => {
+            done()
+        })
+        .catch(err => {
+            console.log(err);
+            done()
+        })
+})
 
 const newProduct = {
     name: "Keseharian Rasulullah 24 Jam Aktivitas Sosok Insan Kamil",
@@ -25,7 +62,7 @@ describe("Testing Create Product", () => {
             .post("/products")
             .send(newProduct)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then(response => {
                 const { status, body } = response
                 id = body.id
@@ -80,7 +117,7 @@ describe("Testing Create Product", () => {
             .post("/products")
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -102,7 +139,7 @@ describe("Testing Create Product", () => {
             .post("/products")
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -124,7 +161,7 @@ describe("Testing Create Product", () => {
             .post("/products")
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -146,7 +183,7 @@ describe("Testing Create Product", () => {
             .post("/products")
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -160,7 +197,7 @@ describe("Testing Get all Product", () => {
     test("Get all Product Success", (done) => {
         request(app)
             .get("/products")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(200);
@@ -198,7 +235,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/${id}`)
             .send(updatedProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(200);
@@ -221,7 +258,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/1000001`)
             .send(updatedProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 console.log(status, body);
@@ -271,7 +308,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/${id}`)
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -293,7 +330,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/${id}`)
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -315,7 +352,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/${id}`)
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -337,7 +374,7 @@ describe("Testing Update Product Data", () => {
             .put(`/products/${id}`)
             .send(wrongProductData)
             .set("Accept", "application/json")
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(400);
@@ -351,7 +388,7 @@ describe("Testing Delete Product Data", () => {
     test("Delete Product Success", (done) => {
         request(app)
             .delete(`/products/${id}`)
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(200);
@@ -363,7 +400,7 @@ describe("Testing Delete Product Data", () => {
     test("Delete Product Failed, product ID doesn't exist", (done) => {
         request(app)
             .delete(`/products/100001`)
-            .set("access_token", process.env.ACCESS_TOKEN)
+            .set("access_token", access_token)
             .then((res) => {
                 const { status, body } = res;
                 expect(status).toBe(404);
