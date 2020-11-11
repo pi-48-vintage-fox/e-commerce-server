@@ -43,6 +43,28 @@ class ProductController {
             res.status(500).json(error);
         }
     }
+
+    static patchProduct(req, res){
+        Product.findByPk(+req.params.id)
+        .then(find => {
+            return find.update({
+                stock: find.stock - req.body.stock
+            })
+        })
+        .then(result => {
+            if (result) {
+                res.status(201).json(result)
+            } else {
+                res.status(400).json({
+                    message: 'Stock habis'
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err.errors[0].message);
+            res.status(500).json(err.errors[0].message);
+        })
+    }
 }
 
 module.exports = ProductController
