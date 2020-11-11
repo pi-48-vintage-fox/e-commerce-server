@@ -22,6 +22,6 @@ module.exports = errorHandler = (err, req,res,next)=>{
       status = 404
       msg = err.name
   }
-  
+  console.log(err)
   res.status(status).json({msg})
 }

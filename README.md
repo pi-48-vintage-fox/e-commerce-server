@@ -285,3 +285,70 @@ PRODUCT ROUTER
 
   `none`
 --------------------------
+--------------------------
+* **URL**
+
+  `/products/`
+
+* **Description** <br />
+`read all product`
+
+* **Method:**
+  
+  `GET`
+
+*  **Headers**
+
+   `access_token: string`
+
+*  **URL Params**
+
+   `none`
+
+   **Required:**
+ 
+   `none`
+
+   **Optional:**
+ 
+   `none`
+
+* **Data Params**
+  `none`
+
+* **Success Response:**<br />
+    `IF PAYLOAD SUITS VALIDATION RULE`
+  * **Code:** 200 OK <br />
+    **Content:** <br />
+    ```javascript
+    {
+        "id":integer,
+        "name": string,
+        "image_url": string,
+        "price": double,
+        "stock":integer,
+        "updatedAt": timestamps,
+        "createdAt": timestamps
+    }
+    ```
+ 
+* **Error Response:**
+
+  `IF VALIDATION FAILS`
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** ``{ error : "VALIDATION FAILS" }``
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    
+
+* **Sample Call:**
+
+  `none`
+
+* **Notes:**
+
+  `none`
+--------------------------

@@ -18,6 +18,15 @@ module.exports = class productController {
     }
   }
 
+  static async getAll(req,res,next){
+    try {
+      let product=await Product.findAll()
+      res.status(200).json(product)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async editProduct(req,res,next){
     try {
       let {id} = req.params

@@ -12,7 +12,7 @@ module.exports = class userController{
       }
       let loginUser = await User.findOne({where:{email:params.email}})
       if(loginUser && bcrypt.compareSync(params.password,loginUser.password)){
-        var access_token = jwt.sign({id:loginUser.id, email:loginUser.email}, process.env.SECRET)
+        var access_token = jwt.sign({id:loginUser.id, email:loginUser.email, role:loginUser.role}, process.env.SECRET)
         res.status(200).json({access_token, name:loginUser.name, profpic:loginUser.profpic,role:loginUser.role})
       }
       else{

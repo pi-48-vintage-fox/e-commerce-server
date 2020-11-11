@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../app')
-const bcrypt = require('bcryptjs')
+
 
 describe('Test Endpoint POST /users/login', ()=>{
   it ('test login success', (done)=>{
@@ -16,15 +16,14 @@ describe('Test Endpoint POST /users/login', ()=>{
       done()
     })
     .catch(err=>{
-      console.log(err)
-      done()
+      done(err)
     })
   })
 
   it ('test login, have email but wrong password', (done)=>{
     request(app)
     .post('/users/login')
-    .send({email:'yulizarwidiatama@gmail.com', password:'Tiramisu12'})
+    .send({email:'yulizarwidiatama@gmail.com', password:'Tiramisu1'})
     .then(res=>{
       let {body, status} = res
       expect(status).toBe(400)
@@ -32,8 +31,7 @@ describe('Test Endpoint POST /users/login', ()=>{
       done()
     })
     .catch(err=>{
-      console.log(err)
-      done()
+      done(err)
     })
   })
 
@@ -48,8 +46,7 @@ describe('Test Endpoint POST /users/login', ()=>{
       done()
     })
     .catch(err=>{
-      console.log(err)
-      done()
+      done(err)
     })
   })
 
