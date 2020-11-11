@@ -14,7 +14,7 @@ describe('Test Endpoint POST /admin/login', () => {
         })
         .catch(err => {
             console.log(err)
-            done()
+            done(err)
         })
     })
 
@@ -30,7 +30,7 @@ describe('Test Endpoint POST /admin/login', () => {
         })
         .catch(err => {
             console.log(err)
-            done()
+            done(err)
         })
     })
 
@@ -46,7 +46,7 @@ describe('Test Endpoint POST /admin/login', () => {
         })
         .catch(err => {
             console.log(err)
-            done()
+            done(err)
         })
     })
 
@@ -56,13 +56,13 @@ describe('Test Endpoint POST /admin/login', () => {
         .send({email: '', password: ''})
         .then(response => {
             let {body, status} = response
-            expect(status).toEqual(400)
+            expect(status).toEqual(401)
             expect(body).toHaveProperty('msg', 'Wrong email/password')
             done()
         })
         .catch(err => {
             console.log(err)
-            done()
+            done(err)
         })
     })
 })

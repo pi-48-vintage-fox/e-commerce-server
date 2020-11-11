@@ -3,6 +3,6 @@ const admin = require('./admin')
 const product = require('./product')
 
 router.use('/admin', admin)
-router.use('/product', product)
+router.use('/products', product)
 
 module.exports = router

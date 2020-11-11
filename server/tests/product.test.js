@@ -39,35 +39,10 @@ afterAll((done) => {
 })
 
 
-describe('Test Endpoint GET /product', () => {
-    it('Test view all product success', (done) => {
-        request(app)
-        .get('/product')
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(200)
-            expect(body).toEqual(expect.arrayContaining([
-                expect.objectContaining({id: expect.any(Number)}),
-                expect.objectContaining({name: expect.any(String)}),
-                expect.objectContaining({image_url: expect.any(String)}),
-                expect.objectContaining({price: expect.any(Number)}),
-                expect.objectContaining({stock: expect.any(Number)})
-            ]))
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        })
-    })
-})
-
-
-
 describe('Test Endpoint POST /product', () => {
     it('Test add product success', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', access_token)
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: 700000, stock: 10})
         .then(response => {
@@ -89,7 +64,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product with no access token', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: 700000, stock: 10})
         .then(response => {
             let {body, status} = response
@@ -105,7 +80,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product with wrong role', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', signToken({
             id: 4,
             email: 'hutamy@mail.com',
@@ -126,7 +101,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product fail, empty field', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', access_token)
         .send({name: '', image_url: '', price: '', stock: ''})
         .then(response => {
@@ -143,7 +118,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product fail, price below 0', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', access_token)
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: -1, stock: 10})
         .then(response => {
@@ -160,7 +135,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product fail, stock below 0', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', access_token)
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: 700000, stock: -5})
         .then(response => {
@@ -177,7 +152,7 @@ describe('Test Endpoint POST /product', () => {
 
     it('Test add product fail, wrong data type', (done) => {
         request(app)
-        .post('/product')
+        .post('/products')
         .set('access_token', access_token)
         .send({name: 15, image_url: 'shorturl.at/axDWX', price: 'satu', stock: 10})
         .then(response => {
@@ -198,7 +173,7 @@ describe('Test Endpoint POST /product', () => {
 describe('Test Endpoint PUT/product/:id', () => {
     it('Test edit product success', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', access_token)
         .send({name: 'Vans Old Skool', image_url: 'shorturl.at/axDWX', price: 700000, stock: 10})
         .then(response => {
@@ -215,7 +190,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product failed, no access token', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .send({name: 'Vans Old Skool', image_url: 'shorturl.at/axDWX', price: 700000, stock: 10})
         .then(response => {
             let {body, status} = response
@@ -231,7 +206,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product failed, role is not admin', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', signToken({
             id: 4,
             email: 'hutamy@mail.com',
@@ -252,7 +227,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product failed, id not found', (done) => {
         request(app)
-        .put(`/product/1110`)
+        .put(`/products/1110`)
         .set('access_token', access_token)
         .send({name: 'Vans Old Skool', image_url: 'shorturl.at/axDWX', price: 700000, stock: 10})
         .then(response => {
@@ -269,7 +244,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit empty input', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', access_token)
         .send({name: '', image_url: '', price: '', stock: ''})
         .then(response => {
@@ -286,7 +261,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product fail, price below 0', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', access_token)
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: -1, stock: 10})
         .then(response => {
@@ -303,7 +278,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product fail, stock below 0', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', access_token)
         .send({name: 'Birkenstock', image_url: 'shorturl.at/axDWX', price: 700000, stock: -1})
         .then(response => {
@@ -320,7 +295,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 
     it('Test edit product fail, wrong data type', (done) => {
         request(app)
-        .put(`/product/${id}`)
+        .put(`/products/${id}`)
         .set('access_token', access_token)
         .send({name: 15, image_url: 'shorturl.at/axDWX', price: 'satu', stock: 10})
         .then(response => {
@@ -341,7 +316,7 @@ describe('Test Endpoint PUT/product/:id', () => {
 describe('Test Endpoint PATCH/product/:id', () => {
     it('Test patch product success', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .set('access_token', access_token)
         .send({stock: 11})
         .then(response => {
@@ -358,7 +333,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, no access token', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .send({stock: 11})
         .then(response => {
             let {body, status} = response
@@ -374,7 +349,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, wrong role', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .set('access_token', signToken({
             id: 4,
             email: 'hutamy@mail.com',
@@ -395,7 +370,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, id not found', (done) => {
         request(app)
-        .patch(`/product/99999`)
+        .patch(`/products/99999`)
         .set('access_token', access_token)
         .send({stock: 10})
         .then(response => {
@@ -412,7 +387,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, below 0', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .set('access_token', access_token)
         .send({stock: -5})
         .then(response => {
@@ -429,7 +404,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, empty input', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .set('access_token', access_token)
         .send({stock: ''})
         .then(response => {
@@ -446,7 +421,7 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
     it('Test patch product failed, wrong data type', (done) => {
         request(app)
-        .patch(`/product/${id}`)
+        .patch(`/products/${id}`)
         .set('access_token', access_token)
         .send({stock: 'lima'})
         .then(response => {
@@ -464,10 +439,34 @@ describe('Test Endpoint PATCH/product/:id', () => {
 
 
 
+describe('Test Endpoint GET /product', () => {
+    it('Test view all product success', (done) => {
+        request(app)
+        .get('/products')
+        .then(response => {
+            let {body, status} = response
+            expect(status).toEqual(200)
+            expect(body).toEqual(expect.arrayContaining([
+                expect.objectContaining({id: expect.any(Number)}),
+                expect.objectContaining({name: expect.any(String)}),
+                expect.objectContaining({image_url: expect.any(String)}),
+                expect.objectContaining({price: expect.any(Number)}),
+                expect.objectContaining({stock: expect.any(Number)})
+            ]))
+            done()
+        })
+        .catch(err => {
+            console.log(err)
+            done(err)
+        })
+    })
+})
+
+
 describe('Test delete product', () => {
     it('Test delete success', (done) => {
         request(app)
-        .delete(`/product/${id}`)
+        .delete(`/products/${id}`)
         .set('access_token', access_token)
         .then(response => {
             let {body, status} = response
@@ -483,7 +482,7 @@ describe('Test delete product', () => {
 
     it('Test delete failed, no access token', (done) => {
         request(app)
-        .delete(`/product/${id}`)
+        .delete(`/products/${id}`)
         .then(response => {
             let {body, status} = response
             expect(status).toEqual(401)
@@ -498,7 +497,7 @@ describe('Test delete product', () => {
 
     it('Test delete failed, wrong role', (done) => {
         request(app)
-        .delete(`/product/${id}`)
+        .delete(`/products/${id}`)
         .set('access_token', signToken({
             id: 4,
             email: 'hutamy@mail.com',
@@ -518,7 +517,7 @@ describe('Test delete product', () => {
 
     it('Test delete id not found', (done) => {
         request(app)
-        .delete(`/product/999999`)
+        .delete(`/products/999999`)
         .set('access_token', access_token)
         .then(response => {
             let {body, status} = response

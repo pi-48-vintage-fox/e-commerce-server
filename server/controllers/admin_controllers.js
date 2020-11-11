@@ -17,13 +17,13 @@ class AdminControllers {
         .then(admin => {
             if(!admin){
                 let err = {
-                    msg: 'Wrong email/password'
+                    name: 'WrongEmailPassword'
                 }
                 throw next(err)
             }
             else if(!comparePassword(payload.password, admin.password)){
                 let err = {
-                    msg: 'Wrong email/password'
+                    name: 'WrongEmailPassword'
                 }
                 throw next(err)
             }

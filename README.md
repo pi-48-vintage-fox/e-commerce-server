@@ -123,7 +123,7 @@
     
 -   **Success Response:**
     
-    -   **Code:**  201   **Content:**   `{msg: 'Sucessfully update product'}`
+    -   **Code:**  200   **Content:**   `{msg: 'Sucessfully update product'}`
     
 -   **Error Response:**
 
@@ -164,7 +164,7 @@
     
 -   **Success Response:**
     
-    -   **Code:**  201   **Content:**   `{msg: 'Sucessfully update stock'}`
+    -   **Code:**  200   **Content:**   `{msg: 'Sucessfully update stock'}`
     
 -   **Error Response:**
 
