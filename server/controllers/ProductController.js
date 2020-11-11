@@ -49,6 +49,14 @@ class ProductController {
             next(error)
         }
     }
+    static async list(req,res,next){
+        try {
+            const data = await Product.findAll({order: [['id','ASC']]})
+            res.status(200).json(data)
+        } catch (error) {
+            next(error)            
+        }
+    }
 }
 
 module.exports=ProductController
