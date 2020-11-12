@@ -7,13 +7,15 @@ class UserController {
         try {
             const userRegis = {
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                role: 'customer'
             }
 
             const addUser = await User.create(userRegis);
             res.status(201).json({
                 id: addUser.id,
-                email: addUser.email
+                email: addUser.email,
+                role: addUser.role
             }) 
 
         } catch (error) {

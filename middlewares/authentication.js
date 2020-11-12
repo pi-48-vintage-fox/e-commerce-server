@@ -15,7 +15,9 @@ function authentication(req, res, next) {
             next('Authentication failed');
         } else {
             req.userLogin = decoded
-            next()
+            if (req.userLogin) {
+                next()
+            }
         }
     })
     .catch(err => {
