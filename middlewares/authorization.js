@@ -1,11 +1,8 @@
 async function authorization(req, res, next) {
+    console.log(req.userLogin);
     try {
-        if (req.userHasLogin.role === 'admin') {
+        if (req.userLogin.role === 'admin') {
             next()
-        } else if (!find) {
-            next({
-                name: 'not found'
-            });
         } else {
             next({
                 name: 'unauthorized'

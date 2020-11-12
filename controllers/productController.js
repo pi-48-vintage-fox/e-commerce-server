@@ -44,6 +44,28 @@ class ProductController {
         }
     }
 
+    static async editPut(req, res){
+        const editProduct = {
+            name: req.body.name,
+            image_url: req.body.image_url,
+            price: req.body.price,
+            stock: req.body.stock,
+            CategoryId: req.body.CategoryId
+        }
+
+        try {
+            const update = await Product.update(editProduct, {
+                where: {
+                    id: +req.params.id
+                }
+            })
+
+            res.status(201).josn(update);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
     static patchProduct(req, res){
         Product.findByPk(+req.params.id)
         .then(find => {

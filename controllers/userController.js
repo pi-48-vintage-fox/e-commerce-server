@@ -7,8 +7,7 @@ class UserController {
         try {
             const userRegis = {
                 email: req.body.email,
-                password: req.body.password,
-                role: 'customer'
+                password: req.body.password
             }
 
             const addUser = await User.create(userRegis);
@@ -45,13 +44,31 @@ class UserController {
             } else {
                 const access_token = token({
                     id: find.id,
-                    email: find.email
+                    email: find.email,
+                    role: find.role
                 })
 
                 res.status(200).json({access_token});
             }
         } catch (error) {
             res.status(500).json(error);
+        }
+    }
+
+    static async deleteUser(req, res){
+        try {
+            const deleteUser = await User.destroy({
+                where: {
+                    id: +req.params.id
+                }
+            });
+            if (deleteUser) {
+                res.status(200).json({
+                    message: 'Succes delete user'
+                });
+            }
+        } catch (error) {
+            res.status(500).josn(error);
         }
     }
 }

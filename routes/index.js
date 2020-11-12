@@ -7,5 +7,6 @@ router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.use('/products', productRouter);
 router.use('/categories', categoryRouter);
+router.delete('/user/:id', UserController.deleteUser);
 
 module.exports = router;

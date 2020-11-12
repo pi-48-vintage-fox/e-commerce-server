@@ -25,13 +25,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     role: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     }
   }, {
     hooks: {
       beforeCreate: (user) => {
-        user.password = hashPassword(user.password)
+        user.password = hashPassword(user.password),
+        user.role = 'customer'
       }
     },
     sequelize,
