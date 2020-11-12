@@ -64,7 +64,7 @@ describe('Testing Add Product /POST', () => {
     })
   })
 
-  it('Fail add product, not access token', (done) => {
+  it('Fail add product, access token is not defined', (done) => {
     request(app)
     .post('/products')
     .send({
@@ -75,7 +75,7 @@ describe('Testing Add Product /POST', () => {
     })
     .then(response => {
       const { body, status } = response
-      expect(status).toEqual(401)
+      expect(status).toEqual(400)
       expect(body).toHaveProperty("message", "Wrong Email/password!")
       done()
     })
@@ -150,5 +150,126 @@ describe('Testing Add Product /POST', () => {
       done(err)
     })
   })
+})
 
+
+describe('Testing edit product /PUT', () => {
+  it('Success edit product', (done) => {
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token', access_token)
+    .send({
+      name: 'Oronamin-C',
+      image_url: 'https://www.google.com/aclk?sa=l&ai=DChcSEwj4hcrWjvnsAhUJ3EwCHf4vBEoYABAOGgJ0bQ&sig=AOD64_22WSGC5bniQcaFwI5viyjFO4lfDg&adurl&ctype=5&ved=2ahUKEwie477WjvnsAhWkU3wKHXfzDagQvhd6BAgBEEY',
+      price: 8000,
+      stock: 100
+    })
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(200)
+      expect(body).toHaveProperty('name', 'Oronamin-C')
+      expect(body).toHaveProperty('image_url', 'https://www.google.com/aclk?sa=l&ai=DChcSEwj4hcrWjvnsAhUJ3EwCHf4vBEoYABAOGgJ0bQ&sig=AOD64_22WSGC5bniQcaFwI5viyjFO4lfDg&adurl&ctype=5&ved=2ahUKEwie477WjvnsAhWkU3wKHXfzDagQvhd6BAgBEEY')
+      expect(body).toHaveProperty('price', 8000)
+      expect(body).toHaveProperty('stock', 100)
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+  it('Fail edit product, access token is not defined', (done) => {
+    request(app)
+    .put(`/products/${id}`)
+    .send({
+      name: 'Oronamin-C',
+      image_url: 'https://www.google.com/aclk?sa=l&ai=DChcSEwj4hcrWjvnsAhUJ3EwCHf4vBEoYABAOGgJ0bQ&sig=AOD64_22WSGC5bniQcaFwI5viyjFO4lfDg&adurl&ctype=5&ved=2ahUKEwie477WjvnsAhWkU3wKHXfzDagQvhd6BAgBEEY',
+      price: 8000,
+      stock: 100
+    })
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty("message", "Wrong Email/password!")
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+  it('Fail edit product, price or stock cannot less than 0', (done) => {
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token', access_token)
+    .send({
+      name: 'Oronamin-C',
+      image_url: 'https://www.google.com/aclk?sa=l&ai=DChcSEwj4hcrWjvnsAhUJ3EwCHf4vBEoYABAOGgJ0bQ&sig=AOD64_22WSGC5bniQcaFwI5viyjFO4lfDg&adurl&ctype=5&ved=2ahUKEwie477WjvnsAhWkU3wKHXfzDagQvhd6BAgBEEY',
+      price: 8000,
+      stock: -1
+    })
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty('message', "Price or stock must be more than 0")
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+  it('Fail edit product, Incorrect data type', (done) => {
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token', access_token)
+    .send({
+      name: 'Oronamin-C',
+      image_url: 'https://www.google.com/aclk?sa=l&ai=DChcSEwj4hcrWjvnsAhUJ3EwCHf4vBEoYABAOGgJ0bQ&sig=AOD64_22WSGC5bniQcaFwI5viyjFO4lfDg&adurl&ctype=5&ved=2ahUKEwie477WjvnsAhWkU3wKHXfzDagQvhd6BAgBEEY',
+      price: "'8000'",
+      stock: 100
+    })
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty('message', "Incorret data type (string/number)")
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+})
+
+
+describe('Testing delete product /DELETE', () => {
+  it('Success delete product', (done) => {
+    request(app)
+    .delete(`/products/${id}`)
+    .set('access_token', access_token)
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(200)
+      expect(body).toHaveProperty('message', 'Success delete product')
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+  it('Fail delete product, access token is not defined', (done) => {
+    request(app)
+    .delete(`/products/${id}`)
+    .then(response => {
+      const { body, status } = response
+      expect(status).toEqual(400)
+      expect(body).toHaveProperty("message", "Wrong Email/password!")
+      done()
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
 })

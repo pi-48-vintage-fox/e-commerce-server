@@ -2,8 +2,11 @@ function errorHandler(err, req, res, next) {
   let status = 500
   let message = err.message
 
-  if(err.name == 'Unauthorized') {
-    res.status(401).json({message})
+  if(err.name == 'Authentication Failed') {
+    res.status(400).json({message})
+  } else if(err.errors[0].validatorKey == 'isUrl') {
+    console.log(err);
+    res.status(400).json({ message: 'Image must be format Url!'})
   } else if(err.errors[0].validatorKey == "notEmpty") {
     res.status(400).json({ message: "Field Cannot be empty!" })
   } else if(err.errors[0].validatorKey == 'isNumeric') {
@@ -17,8 +20,8 @@ function errorHandler(err, req, res, next) {
     res.status(404).json({message})
   } else if (err.name == "Authorization Failed") {
     res.status(401).json({message})
-  } else  {
-    res.status(status).json({message})
+  } else {
+    res.status(status).json({message: "Internal server error"})
   }
 }
 

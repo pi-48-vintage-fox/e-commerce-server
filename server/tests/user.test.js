@@ -1,5 +1,9 @@
 const request = require('supertest')
 const app = require('../app')
+const { User, sequelize } = require('../models/index')
+const { signToken } = require('../helpers/jwt')
+const { queryInterface } = sequelize
+
 
 describe("Post /login", () => {
   test("Login Successfully", (done) => {
@@ -12,7 +16,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toEqual(200)
+        expect(status).toBe(200)
         expect(body).toHaveProperty("access_token", expect.any(String))
         done()
       })
@@ -32,7 +36,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toEqual(401)
+        expect(status).toBe(400)
         expect(body).toHaveProperty("message", "Wrong Email/password!")
         done()
       })
@@ -51,7 +55,7 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        expect(status).toEqual(401)
+        expect(status).toBe(400)
         expect(body).toHaveProperty("message", "Wrong Email/password!")
         done()
       })
@@ -71,10 +75,9 @@ describe("Post /login", () => {
       .send(obj)
       .then((response) => {
         const { status, body } = response
-        console.log({body});
-        expect(status).toEqual(401)
-
-        expect(body).toHaveProperty("message", "Wrong Email/password!")
+        // console.log({body});
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Please required Email and password")
         done()
       })
       .catch((err) => {
