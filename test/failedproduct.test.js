@@ -8,7 +8,7 @@ const{sequelize} = require('../models')
 const {queryInterface} = sequelize
 
 let access_token
-let id
+let id=1
 
 beforeAll((done) => {
   let params = {
@@ -37,7 +37,8 @@ afterAll(done=>{
     })
 })
 
-describe ('Test endpoint post /products/addproduct', ()=>{
+
+describe ('Test failed create product', ()=>{
   it('Not Have Access Token', (done)=>{
     request(app)
     .post('/products/addproduct')
@@ -135,6 +136,118 @@ describe ('Test endpoint post /products/addproduct', ()=>{
         expect(status).toBe(400)
         expect(body).toHaveProperty('msg',expect.any(String))
         
+        done()
+      })
+      .catch(err=>{
+        done(err)
+      })
+  })
+})
+
+describe ('test failed update product ',()=>{
+  it('Not Have Access Token',(done)=>{
+    request(app)
+      .put(`/products/${id}`)
+      .send({name:'test product', image_url:'test url', price:'10000', stock:'100'})
+        .then(res=>{
+          let {status,body} = res
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('msg',expect.any(String))
+          done()
+        })
+        .catch(err=>{
+          done(err)
+        })
+  })
+
+  it('Access Token but not an admin',(done)=>{
+    request(app)
+      .put(`/products/${id}`)
+      .set('access_token',access_token)
+      .send({name:'test product', image_url:'test url', price:'10000', stock:'100'})
+        .then(res=>{
+          let {status,body} = res
+          expect(status).toBe(400)
+          expect(body).toHaveProperty('msg',expect.any(String))
+          done()
+        })
+        .catch(err=>{
+          done(err)
+        })
+  })
+
+  it('Stock Negative value', (done)=>{
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token',access_token)
+    .send({name:'test product', image_url:'test url', price:1000, stock:-100})
+      .then(res=>{
+        let {status,body} = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('msg',expect.any(String))
+        done()
+      })
+      .catch(err=>{
+        done(err)
+      })
+  })
+
+  it('Wrong Datatypes',(done)=>{
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token',access_token)
+    .send({name:'test product', image_url:'test url', price:'1000', stock:100})
+      .then(res=>{
+        let {status,body} = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('msg',expect.any(String))
+        done()
+      })
+      .catch(err=>{
+        done(err)
+      })
+  })
+
+  it('Price Negative Value',(done)=>{
+    request(app)
+    .put(`/products/${id}`)
+    .set('access_token',access_token)
+    .send({name:'test product', image_url:'test url', price:-1000, stock:100})
+      .then(res=>{
+        let {status,body} = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('msg',expect.any(String))
+        done()
+      })
+      .catch(err=>{
+        done(err)
+      })
+  })
+})
+
+describe('test failed delete product',()=>{
+  it('Not Have Access Token',(done)=>{
+    request(app)
+    .delete(`/products/${id}`)
+      .then(res=>{
+        let {status,body} = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('msg',expect.any(String))
+        done()
+      })
+      .catch(err=>{
+        done(err)
+      })
+  })
+
+  it('Not Admin Access Token / unauthorized token',(done)=>{
+    request(app)
+    .delete(`/products/${id}`)
+    .set('access_token',access_token)
+      .then(res=>{
+        let {status,body} = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('msg',expect.any(String))
         done()
       })
       .catch(err=>{
