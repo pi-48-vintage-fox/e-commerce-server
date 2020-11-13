@@ -68,6 +68,24 @@ class ProductController {
         next(err)
       })
   }
+
+  static getEditProduct(req, res, next){
+    let id = +req.params.id
+
+    Product.findByPk(id)
+    .then(data => {
+      res.status(200).json({
+        name: data.name,
+        price: data.price,
+        stock: data.stock,
+        image_url: data.image_url
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+  }
+
 }
 
 module.exports = ProductController

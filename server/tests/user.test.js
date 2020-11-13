@@ -9,20 +9,20 @@ describe(" Testing Login ", () => {
     const userData = {
       email: "yeska@mail.com",
       password: "yeska"
-    } // <---- based on my database
+    } 
 
     request(app)
-      .post("/login") // based on my routers
-      .send(userData) // <-- send the user data
+      .post("/login") 
+      .send(userData) 
       .set("Accept", "application/json")
       .then((res) => {
         const {
           status,
           body
         } = res
-        expect(status).toBe(200) //status expectation
-        expect(body).toHaveProperty("access_token", expect.any(String)) // body will have access token
-        expect(body).toHaveProperty("full_name", expect.any(String)) // body will return full name
+        expect(status).toBe(200) 
+        expect(body).toHaveProperty("access_token", expect.any(String)) 
+        expect(body).toHaveProperty("full_name", expect.any(String)) 
         done()
       })
       .catch((err) => {
