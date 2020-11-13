@@ -14,11 +14,38 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Checkout.init({
-    name: DataTypes.STRING,
-    address: DataTypes.STRING,
-    UserId: DataTypes.INTEGER,
-    ProductId: DataTypes.INTEGER,
-    qty: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Name cannot empty'
+        }
+      }
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Address cannot empty'
+        }
+      }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    ProductId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    qty: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Checkout',

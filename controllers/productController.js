@@ -31,7 +31,9 @@ class ProductController {
 
     static async getProductById(req, res){
         try {
-            const getProduct = await Product.findByPk(+req.params.id);
+            const getProduct = await Product.findByPk(+req.params.id, {
+                include: Category
+            });
             if (getProduct) {
                 res.status(200).json(getProduct)
             } else {
@@ -86,6 +88,10 @@ class ProductController {
             console.log(err.errors[0].message);
             res.status(500).json(err.errors[0].message);
         })
+    }
+
+    static async deleteProduct(req, res){
+        
     }
 }
 
