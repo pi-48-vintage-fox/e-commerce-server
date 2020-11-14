@@ -4,9 +4,7 @@ const { User } = require('../models/index')
 async function authentication(req, res, next) {
   const { access_token } = req.headers
   try{
-    if (!access_token) {
-      throw {name: 'Authentication Failed', message: "Wrong Email/password!", status: 401}
-    } else if(access_token) {
+    if(access_token) {
       const decoded = verifyToken(access_token)
       const user = await User.findOne({
         where: {
