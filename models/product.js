@@ -51,6 +51,9 @@ module.exports = (sequelize, DataTypes) => {
           message: 'Stock cannot be negative value'
         }
       }
+    },
+    category: {
+      type: DataTypes.STRING
     }
   }, {
     sequelize,

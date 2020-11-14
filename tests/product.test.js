@@ -59,7 +59,8 @@ describe('POST /create', () => {
             name: 'NIKE Mercurial',
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
-            stock: 20
+            stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             const { body, status } = response
@@ -71,6 +72,7 @@ describe('POST /create', () => {
             expect(body).toHaveProperty('image_url', 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg')
             expect(body).toHaveProperty('price', 2000000)
             expect(body).toHaveProperty('stock', 20)
+            expect(body).toHaveProperty('category', 'Frozen')
             done()
         })
         .catch(err => {
@@ -87,6 +89,7 @@ describe('POST /create', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -109,6 +112,7 @@ describe('POST /create', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -130,7 +134,8 @@ describe('POST /create', () => {
             name: '',
             image_url: '',
             price: 2000000,
-            stock: 20
+            stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             const { body, status } = response
@@ -153,6 +158,7 @@ describe('POST /create', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: -7,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -175,6 +181,7 @@ describe('POST /create', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: -1000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -197,6 +204,7 @@ describe('POST /create', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 'apasih',
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -222,6 +230,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 5,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -245,6 +254,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -267,6 +277,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -289,6 +300,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: -7,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -311,6 +323,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: -1000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -333,6 +346,7 @@ describe('PUT /update', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 'apasih',
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -374,6 +388,7 @@ describe('DELETE /delete', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response
@@ -396,6 +411,7 @@ describe('DELETE /delete', () => {
             image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
             price: 2000000,
             stock: 20,
+            category: 'Frozen'
         })
         .then(response => {
             let { body, status } = response

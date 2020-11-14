@@ -60,6 +60,7 @@ class Controller {
                 image_url: req.body.image_url,
                 price: req.body.price,
                 stock: req.body.stock,
+                category: req.body.category
             }
             const newProduct = await Product.create(data)
             res.status(201).json(newProduct)
@@ -75,6 +76,7 @@ class Controller {
                 image_url: req.body.image_url,
                 price: req.body.price,
                 stock: req.body.stock,
+                category: req.body.category
             }
             const editProduct = await Product.update(data, {
                 where: {
