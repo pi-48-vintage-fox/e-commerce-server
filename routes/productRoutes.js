@@ -7,4 +7,5 @@ routes.use(authentication)
 routes.post('/addproduct', productController.createProduct)
 routes.put('/:id',authorization, productController.editProduct)
 routes.delete('/:id', authorization, productController.deleteProduct)
+routes.get('/filter/:id',authorization, productController.getById)
 module.exports = routes

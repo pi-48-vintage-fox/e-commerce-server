@@ -27,6 +27,16 @@ module.exports = class productController {
     }
   }
 
+  static async getById(req,res,next){
+    try {
+      let id = req.params.id
+      let product=await Product.findAll({where:{id}})
+      res.status(200).json(product)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async editProduct(req,res,next){
     try {
       let {id} = req.params

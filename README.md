@@ -83,7 +83,7 @@ PRODUCT ROUTER
 
 *  **Headers**
 
-   `access_token: string`
+   `accesstoken: string`
 
 
 *  **URL Params**
@@ -160,7 +160,7 @@ PRODUCT ROUTER
 
 *  **Headers**
 
-   `access_token: string`
+   `accesstoken: string`
 
 
 *  **URL Params**
@@ -237,7 +237,7 @@ PRODUCT ROUTER
 
 *  **Headers**
 
-   `access_token: string`
+   `accesstoken: string`
 
 
 *  **URL Params**
@@ -299,7 +299,74 @@ PRODUCT ROUTER
 
 *  **Headers**
 
-   `access_token: string`
+   `accesstoken: string`
+
+*  **URL Params**
+
+   `none`
+
+   **Required:**
+ 
+   `none`
+
+   **Optional:**
+ 
+   `none`
+
+* **Data Params**
+  `none`
+
+* **Success Response:**<br />
+    `IF PAYLOAD SUITS VALIDATION RULE`
+  * **Code:** 200 OK <br />
+    **Content:** <br />
+    ```javascript
+    {
+        "id":integer,
+        "name": string,
+        "image_url": string,
+        "price": double,
+        "stock":integer,
+        "updatedAt": timestamps,
+        "createdAt": timestamps
+    }
+    ```
+ 
+* **Error Response:**
+
+  `IF VALIDATION FAILS`
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** ``{ error : "VALIDATION FAILS" }``
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    
+
+* **Sample Call:**
+
+  `none`
+
+* **Notes:**
+
+  `none`
+--------------------------
+--------------------------
+* **URL**
+
+  `/products/filter/:id`
+
+* **Description** <br />
+`filter product by id`
+
+* **Method:**
+  
+  `GET`
+
+*  **Headers**
+
+   `accesstoken: string`
 
 *  **URL Params**
 
