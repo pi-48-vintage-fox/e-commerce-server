@@ -29,7 +29,18 @@ class ProductController {
   static fetch(req, res, next) {
     Product.findAll()
     .then(data => {
-      res.status(200).json({data})
+      res.status(200).json(data)
+    })
+    .catch(err => {
+      next(err)
+    })
+  }
+
+  static fetchById(req, res, next) {
+    const id = +req.params.id
+    Product.findByPk(id)
+    .then(data => {
+      res.status(200).json(data)
     })
     .catch(err => {
       next(err)

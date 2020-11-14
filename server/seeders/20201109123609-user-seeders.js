@@ -17,6 +17,14 @@ const users = [
     role: "customer",
     createdAt: new Date(),
     updatedAt: new Date()
+  },
+  {
+    name: "Admin Zheyenk",
+    email: "adminz@mail.id",
+    password: hashPassword("admindong"),
+    role: "admin",
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ]
 

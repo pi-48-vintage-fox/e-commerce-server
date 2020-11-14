@@ -265,9 +265,8 @@ describe('GET /products', () => {
       .set('access_token', access_token)
       .then(res => {
         const { body, status } = res
-
         expect(status).toBe(200)
-        body.data.forEach(product => {
+        body.forEach(product => {
           expect(product).toHaveProperty('name', 'Naikin Shoes')
           expect(product).toHaveProperty('image_url', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/i1-728eb69b-04be-4f07-8483-15f4829d4cb5/air-max-2090-mens-shoe-3pVM46.jpg')
           expect(product).toHaveProperty('price', 1299000)
@@ -299,6 +298,59 @@ describe('GET /products', () => {
   it('Test fetching product failed authorization', (done) => {
     request(app)
       .get('/products')
+      .set('access_token', nonAdminToken)
+      .then(res => {
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('msg', 'Authorization failed! You cannot access this data')
+        done()
+      })
+      .catch(err => {
+        console.log(err)
+        done()
+      })
+  })
+})
+
+describe('GET /products/:id', () => {
+  it('Test fetching data success', (done) => {
+    request(app)
+      .get(`/products/${productId}`)
+      .set('access_token', access_token)
+      .then(res => {
+        const { body, status } = res
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty('name', 'Naikin Shoes')
+        expect(body).toHaveProperty('image_url', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/i1-728eb69b-04be-4f07-8483-15f4829d4cb5/air-max-2090-mens-shoe-3pVM46.jpg')
+        expect(body).toHaveProperty('price', 1299000)
+        expect(body).toHaveProperty('stock', 50)
+        done()
+      })
+      .catch(err => {
+        console.log(err)
+        done()
+      })
+  })
+
+  it('Test fetching product failed authentication', (done) => {
+    request(app)
+      .get(`/products/${productId}`)
+      .then(res => {
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('msg', 'Authentication failed! You have to login first')
+        done()
+      })
+      .catch(err => {
+        console.log(err)
+        done()
+      })
+  })
+
+  it('Test fetching product failed authorization', (done) => {
+    request(app)
+      .get(`/products/${productId}`)
       .set('access_token', nonAdminToken)
       .then(res => {
         const { body, status } = res
@@ -543,10 +595,10 @@ describe('DELETE /products/:id', () => {
         done()
       })
   })
-  
+
   it('Test delete authorization failed', (done) => {
     request(app)
-    .delete('/products/' + productId)
+      .delete('/products/' + productId)
       .set('access_token', nonAdminToken)
       .then(res => {
         const { body, status } = res
