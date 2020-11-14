@@ -1,5 +1,4 @@
 function errorHandler(err,req,res,next){
-  // console.log(err, '<<<<<<<<<<<< sumpah balak banget parah')
   let message = err.message || 'Server Internal Error'
   let statusCode = err.response || 500
   let errors = []
@@ -20,7 +19,6 @@ function errorHandler(err,req,res,next){
       errors.push(element.message)
     })
     statusCode = 400
-    console.log(message,'<><><><><><><><><><><><>');
   }
 
   else if (err.name === "SequelizeUniqueConstraintError"){

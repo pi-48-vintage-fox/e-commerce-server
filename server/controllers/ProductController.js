@@ -10,6 +10,15 @@ class ProductController {
     }
   }
 
+  static async findOne(req,res,next){
+    try {
+      const data = await Product.findByPk(req.params.id)
+      res.status(200).json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async add(req,res,next){
     try {
       let params = {
@@ -21,7 +30,6 @@ class ProductController {
       const data = await Product.create(params)
       res.status(200).json(data)
     } catch (error) {
-      // let err = {name : "Bad Request", status : 400}
       next(error)
     }
   }

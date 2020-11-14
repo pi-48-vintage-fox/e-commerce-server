@@ -6,6 +6,7 @@ const { signToken } = require('../helpers/jwt')
 
 class UserController {
   static async login(req, res, next) {
+    console.log(req.body, '<><><><><><><><><><><> ini req.bodeh')
     try {
       let options = {
         where: {
@@ -22,7 +23,6 @@ class UserController {
           email: user.email
         })
         res.status(200).json({
-          email,
           access_token
         })
       }
