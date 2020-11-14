@@ -23,7 +23,6 @@ beforeAll((done) => {
         done()
     })
     .catch(err => {
-        console.log(err)
         done()
     })
 }) 
@@ -57,7 +56,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -73,7 +71,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -94,7 +91,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -111,7 +107,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -128,7 +123,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -145,7 +139,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -162,7 +155,6 @@ describe('Test Endpoint POST /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -183,7 +175,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -199,7 +190,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -220,7 +210,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -237,7 +226,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -254,7 +242,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -271,7 +258,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -288,7 +274,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -305,133 +290,6 @@ describe('Test Endpoint PUT/product/:id', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
-            done(err)
-        })
-    })
-})
-
-
-
-describe('Test Endpoint PATCH/product/:id', () => {
-    it('Test patch product success', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .set('access_token', access_token)
-        .send({stock: 11})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(200)
-            expect(body).toHaveProperty('msg', 'Sucessfully update stock')
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        }) 
-    })
-
-    it('Test patch product failed, no access token', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .send({stock: 11})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(401)
-            expect(body).toHaveProperty('msg', 'User unauthorized')
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        }) 
-    })
-
-    it('Test patch product failed, wrong role', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .set('access_token', signToken({
-            id: 4,
-            email: 'hutamy@mail.com',
-            role: 'customer'
-        }))
-        .send({stock: 11})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(401)
-            expect(body).toHaveProperty('msg', 'User unauthorized')
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        }) 
-    })
-
-    it('Test patch product failed, id not found', (done) => {
-        request(app)
-        .patch(`/products/99999`)
-        .set('access_token', access_token)
-        .send({stock: 10})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(404)
-            expect(body).toHaveProperty('msg', 'Error Not Found')
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        })
-    })
-
-    it('Test patch product failed, below 0', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .set('access_token', access_token)
-        .send({stock: -5})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(400)
-            expect(body).toHaveProperty('msg', expect.any(String))
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        })
-    })
-
-    it('Test patch product failed, empty input', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .set('access_token', access_token)
-        .send({stock: ''})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(400)
-            expect(body).toHaveProperty('msg', expect.any(String))
-            done()
-        })
-        .catch(err => {
-            console.log(err)
-            done(err)
-        })
-    })
-
-    it('Test patch product failed, wrong data type', (done) => {
-        request(app)
-        .patch(`/products/${id}`)
-        .set('access_token', access_token)
-        .send({stock: 'lima'})
-        .then(response => {
-            let {body, status} = response
-            expect(status).toEqual(500)
-            expect(body).toHaveProperty('msg', expect.any(String))
-            done()
-        })
-        .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -443,6 +301,7 @@ describe('Test Endpoint GET /product', () => {
     it('Test view all product success', (done) => {
         request(app)
         .get('/products')
+        .set('access_token', access_token)
         .then(response => {
             let {body, status} = response
             expect(status).toEqual(200)
@@ -456,7 +315,6 @@ describe('Test Endpoint GET /product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -475,7 +333,6 @@ describe('Test delete product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -490,7 +347,6 @@ describe('Test delete product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -510,7 +366,6 @@ describe('Test delete product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
@@ -526,7 +381,6 @@ describe('Test delete product', () => {
             done()
         })
         .catch(err => {
-            console.log(err)
             done(err)
         })
     })
