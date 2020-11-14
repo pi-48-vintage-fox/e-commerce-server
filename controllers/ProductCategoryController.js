@@ -14,6 +14,18 @@ class ProductCategoryController {
       })
   }
 
+  static findById(req, res, next) {
+    console.log('getting category details:', req.params.id)
+    ProductCategory.findByPk(req.params.id)
+      .then((category) => {
+        res.status(200).json(category)
+      })
+      .catch((err) => {
+        console.log(err)
+        next(err)
+      })
+  }
+
   static addCategory(req, res, next) {
     const { name, parentId } = req.body
     let input = {
