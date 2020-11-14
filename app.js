@@ -13,8 +13,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/', routes)
 app.use(errorHandler)
-// app.listen(port, () => {
-//     console.log(`E-commerce sever runing on http://localhost:${port}`)
-// })
+app.listen(port, () => {
+    console.log(`E-commerce sever runing on http://localhost:${port}`)
+})
 
 module.exports = app
