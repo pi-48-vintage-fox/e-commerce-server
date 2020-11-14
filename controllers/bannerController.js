@@ -6,6 +6,7 @@ class BannerController {
       const getBanner = await Banner.findAll();
       res.status(200).json(getBanner);
     } catch (error) {
+      console.log(error);
       next(error)
     }
   }

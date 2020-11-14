@@ -8,9 +8,9 @@ const bannerRouter = require('./banner');
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.use('/products', productRouter);
+router.use('/banner', bannerRouter);
 router.use('/categories', categoryRouter);
 router.use('/checkout', checkoutRouter);
-router.use('/banner', bannerRouter);
 router.delete('/user/:id', UserController.deleteUser);
 
 module.exports = router;
