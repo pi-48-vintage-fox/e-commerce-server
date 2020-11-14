@@ -6,6 +6,7 @@ const app = express();
 const router = require('./routes/index');
 const cors = require('cors');
 const port = process.env.PORT || 3000;
+const errorHandlers = require('./middlewares/errorHandler');
 
 app.use(cors());
 app.use(express.json());
@@ -17,7 +18,7 @@ app.get('/', (req, res) => {
     })
 })
 app.use(router);
-
+app.use(errorHandlers);
 
 app.listen(port, () => {
     console.log(`Application running on port ${port}`);

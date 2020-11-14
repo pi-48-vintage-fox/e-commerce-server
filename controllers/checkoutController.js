@@ -1,7 +1,7 @@
 const { Checkout } = require('../models/index')
 
 class ChekoutController {
-  static async addCheckout(req, res) {
+  static async addCheckout(req, res, next) {
     const checkout = {
       name: req.body.name,
       address: req.body.address,
@@ -15,7 +15,7 @@ class ChekoutController {
       res.send(201).json(addCheckout);
     } catch (error) {
       console.log(error);
-      res.send(500).json(error);
+      next(error);
     }
   }
 }

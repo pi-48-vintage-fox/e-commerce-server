@@ -1,18 +1,18 @@
 const {Product, Category} = require('../models/index');
 
 class ProductController {
-    static async getProduct(req, res){
+    static async getProduct(req, res, next){
         try {
             const getAllProduct = await Product.findAll({
                 include: Category
             });
             res.status(200).json(getAllProduct);
         } catch (error) {
-            res.status(500).json(error)
+            next(error)
         }
     }
     
-    static async addProduct(req, res){
+    static async addProduct(req, res, next){
         try {
             const newProduct = {
                 name: req.body.name,
@@ -25,11 +25,11 @@ class ProductController {
             const addProduct = await Product.create(newProduct);
             res.status(201).json(addProduct);
         } catch (error) {
-            res.status(500).json(error);
+            next(error);
         }
     }
 
-    static async getProductById(req, res){
+    static async getProductById(req, res, next){
         try {
             const getProduct = await Product.findByPk(+req.params.id, {
                 include: Category
@@ -42,11 +42,11 @@ class ProductController {
                 })
             }
         } catch (error) {
-            res.status(500).json(error);
+            next(error);
         }
     }
 
-    static async editPut(req, res){
+    static async editPut(req, res, next){
         const editProduct = {
             name: req.body.name,
             image_url: req.body.image_url,
@@ -65,11 +65,11 @@ class ProductController {
             res.status(201).json(update);
         } catch (error) {
             console.log(error);
-            res.status(500).json(error);
+            next(error);
         }
     }
 
-    static patchProduct(req, res){
+    static patchProduct(req, res, next){
         Product.findByPk(+req.params.id)
         .then(find => {
             return find.update({
@@ -87,11 +87,11 @@ class ProductController {
         })
         .catch(err => {
             console.log(err.errors[0].message);
-            res.status(500).json(err.errors[0].message);
+            next(err.errors[0].message);
         })
     }
 
-    static async deleteProduct(req, res){
+    static async deleteProduct(req, res, next){
         try {
             const deleteProduct = await Product.destroy({
                 where: {
@@ -105,7 +105,7 @@ class ProductController {
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json(error);
+            next(error);
         }
     }
 }

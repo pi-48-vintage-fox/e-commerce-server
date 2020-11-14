@@ -1,16 +1,16 @@
 const {Banner} = require('../models');
 
 class BannerController {
-  static async getBanner(req, res){
+  static async getBanner(req, res, next){
     try {
       const getBanner = await Banner.findAll();
       res.status(200).json(getBanner);
     } catch (error) {
-      res.status(500).json(error)
+      next(error)
     }
   }
 
-  static async addBanner(req, res){
+  static async addBanner(req, res, next){
     const newBanner = {
       name: req.body.name,
       image_url: req.body.image_url,
@@ -21,11 +21,11 @@ class BannerController {
       const insertBanner = await Banner.create(newBanner);
       res.status(201).json(insertBanner);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async changeActive(req, res){
+  static async changeActive(req, res, next){
     try {
       const change = await Banner.update({
         isActive: req.body.isActive
@@ -41,11 +41,11 @@ class BannerController {
         })
       }
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async deleteBanner(req, res){
+  static async deleteBanner(req, res, next){
     try {
       const deleteBanner = Banner.destroy({
         where: {

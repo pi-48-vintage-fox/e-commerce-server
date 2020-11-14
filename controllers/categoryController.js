@@ -1,16 +1,16 @@
 const {Category} = require('../models/index');
 
 class CategoryController {
-  static async getCategories(req, res){
+  static async getCategories(req, res, next){
     try {
       const getCategories = await Category.findAll();
       res.status(200).json(getCategories);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async addCategory(req, res){
+  static async addCategory(req, res, next){
     try {
       const newCategory = {
         name: req.body.name
@@ -19,11 +19,11 @@ class CategoryController {
       const insert = await Category.create(newCategory);
       res.status(201).json(insert);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   }
 
-  static async deleteCategory(req, res){
+  static async deleteCategory(req, res, next){
     try {
       const deleteCategory = await Category.destroy({
         where: {
@@ -37,7 +37,7 @@ class CategoryController {
         })
       }
     } catch (error) {
-      res.status(500).json(error)
+      next(error)
     }
   }
 }

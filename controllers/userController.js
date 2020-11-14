@@ -3,7 +3,7 @@ const {token} = require('../helpers/jwt');
 const {compare} = require('../helpers/bcrypt')
 
 class UserController {
-    static async register(req, res){
+    static async register(req, res, next){
         try {
             const userRegis = {
                 email: req.body.email,
@@ -18,11 +18,11 @@ class UserController {
             }) 
 
         } catch (error) {
-            res.status(500).json(error);
+            next(error);
         }
     }
 
-    static async login(req, res){
+    static async login(req, res, next){
         try {
             const userLogin = {
                 email: req.body.email,
@@ -50,11 +50,11 @@ class UserController {
                 res.status(200).json({access_token, role: find.role});
             }
         } catch (error) {
-            res.status(500).json(error);
+            next(error);
         }
     }
 
-    static async deleteUser(req, res){
+    static async deleteUser(req, res, next){
         try {
             const deleteUser = await User.destroy({
                 where: {
@@ -67,7 +67,7 @@ class UserController {
                 });
             }
         } catch (error) {
-            res.status(500).josn(error);
+            next(error);
         }
     }
 }
