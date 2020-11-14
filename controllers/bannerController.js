@@ -3,7 +3,7 @@ const { Banner } = require('../models/index');
 class BannerController {
   static async getBanners(req, res, next) {
     try {
-      const banners = await Banner.findAll();
+      const banners = await Banner.findAll({order: [['createdAt', 'DESC']]});
       res.status(200).json(banners);
     } catch(err) {
       next(err);
@@ -12,9 +12,10 @@ class BannerController {
 
   static async addBanner(req, res, next) {
     try {
-      const { title, image_url, status } = req.body;
+      console.log('sampe')
+      const { title, image_url } = req.body;
       const newBanner = await Banner.create({
-        title, image_url, status
+        title, image_url, status: 'Inactive'
       });
       res.status(201).json(newBanner);
     } catch(err) {
