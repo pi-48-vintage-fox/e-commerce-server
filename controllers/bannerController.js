@@ -12,7 +12,6 @@ class BannerController {
 
   static async addBanner(req, res, next) {
     try {
-      console.log('sampe')
       const { title, image_url } = req.body;
       const newBanner = await Banner.create({
         title, image_url, status: 'Inactive'
