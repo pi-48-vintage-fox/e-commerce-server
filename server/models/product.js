@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Input price must be greater than 0"
         },
         isNumeric: {
-          msg: "must input by number"
+          msg: "price must input by number"
         }
       }
     },
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Input stock minimal 1 pcs"
         },
         isNumeric: {
-          msg: "must input by number"
+          msg: "stock must input by number"
         }
       }
     },

@@ -14,6 +14,21 @@ class ProductController {
         })
     }
 
+    static getProductById(req, res, next) {
+        let newId = req.params.id
+        Product.findOne({
+            where: {
+                id: newId
+            }
+        })
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+
     static postProduct(req, res, next) {
         let dataProduct = {
             name: req.body.name,
@@ -69,6 +84,34 @@ class ProductController {
         })
         .then(() => {
             res.status(200).json({message: "Item deleted successfuly"})
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+
+    static getCategory(req, res, next) {
+        Category.findAll({
+            include: [Product]
+        })
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+
+    static getCategoryById(req, res, next) {
+        let idParams = req.params.id
+        Category.findAll({
+            where: {
+                id: idParams
+            },
+            include: [Product]
+        })
+        .then(result => {
+            res.status(200).json(result)
         })
         .catch(err => {
             res.status(500).json(err)
