@@ -62,8 +62,9 @@ class ProductController {
                 }
             })
 
-            res.status(201).josn(update);
+            res.status(201).json(update);
         } catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     }
