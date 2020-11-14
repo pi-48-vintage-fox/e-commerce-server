@@ -16,7 +16,27 @@ module.exports = {
        name: "Unassigned",
        createdAt: new Date(),
        updatedAt: new Date()
-     }
+     },
+     {
+       name: "House Plants",
+       createdAt: new Date(),
+       updatedAt: new Date()
+     },
+     {
+       name: "Small Plants",
+       createdAt: new Date(),
+       updatedAt: new Date()
+     },
+     {
+       name: "Succulents",
+       createdAt: new Date(),
+       updatedAt: new Date()
+     },
+     {
+       name: "Terrariums",
+       createdAt: new Date(),
+       updatedAt: new Date()
+     },
    ], {})
   },
 

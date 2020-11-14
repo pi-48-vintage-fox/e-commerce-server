@@ -3,9 +3,48 @@ const { Product } = require('../models')
 class ProductController {
   static products(req, res, next) {
     console.log('getting products')
-    Product.findAll()
-      .then((products) => {
-        res.status(200).json(products)
+    console.log(req.query, '<<< product query')
+
+    if (req.query.category) {
+      Product.findAll({
+        order: [['id']],
+        include: 'ProductCategory',
+        where: {
+          ProductCategoryId: req.query.category,
+        },
+      })
+        .then((products) => {
+          res.status(200).json(products)
+        })
+
+        .catch((err) => {
+          console.log(err)
+          next(err)
+        })
+    } else {
+      Product.findAll({
+        order: [['id']],
+        include: 'ProductCategory',
+      })
+        .then((products) => {
+          res.status(200).json(products)
+        })
+
+        .catch((err) => {
+          console.log(err)
+          next(err)
+        })
+    }
+  }
+
+  static findProductById(req, res, next) {
+    console.log('getting product details')
+    console.log(req.params, '<<< req.params')
+
+    Product.findByPk(req.params.ProductId)
+      .then((product) => {
+        console.log(product)
+        res.status(200).json(product)
       })
 
       .catch((err) => {
@@ -95,13 +134,9 @@ class ProductController {
   static putProduct(req, res, next) {
     console.log(req.body, '<<<<<<<<<< putProduct')
 
-    // let input = {}
-
-    // for (let key in req.body) {
-    //   if (req.body[key]) {
-    //     input[key] = req.body[key]
-    //   }
-    // }
+    if (Object.entries(req.body).length === 0) {
+      return res.status(200).json({ msg: 'Nothing was modified' })
+    }
 
     // console.log({ input })
     Product.update(req.body, {

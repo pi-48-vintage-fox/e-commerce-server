@@ -10,11 +10,11 @@ async function authentication(req, res, next) {
       throw { msg: 'Not authenticated', status: 401 }
     }
 
-    console.log({access_token})
+    // console.log({access_token})
 
     const decoded = verifyToken(access_token)
 
-    console.log({ decoded })
+    // console.log({ decoded })
 
     const user = await User.findByPk(decoded.id)
 

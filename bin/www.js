@@ -3,7 +3,7 @@ if (process.env.NODE_ENV != 'production') {
 }
 const http = require('http')
 const app = require('../app')
-const port = process.env.PORT || 30001
+const port = process.env.PORT || 3000
 
 app.set('port', port)
 

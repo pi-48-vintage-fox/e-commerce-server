@@ -89,11 +89,7 @@ class UserController {
 
   static async findOrgMembers(req, res, next) {
     try {
-      const members = await User.findAll({
-        where: {
-          OrganizationId: req.user.OrganizationId,
-        },
-      })
+      const members = await User.findAll()
 
       res.status(200).json(members)
     } catch (error) {
@@ -130,9 +126,9 @@ class UserController {
         throw { status: 404, msg: 'User was not found' }
       }
 
-      const { name, username, avatarUrl, password, OrganizationId } = req.body
+      const { name, username, imageUrl, imageId, password } = req.body
 
-      const input = { name, username, avatarUrl, password, OrganizationId }
+      const input = { name, username, imageUrl, imageId, password }
 
       try {
         await User.update(input, {
@@ -176,19 +172,14 @@ class UserController {
 
     try {
       const user = await User.findByPk(req.user.id, {
-        include: Organization,
       })
-      const { id, name, email, avatarUrl, OrganizationId } = user
+      const { id, name, email, imageUrl, imageId } = user
       let output = {
         id,
         name,
         email,
-        avatarUrl,
-        OrganizationId,
-        Organization:
-          user.Organization && user.Organization.name
-            ? user.Organization.name
-            : '',
+        imageUrl,
+        imageId,
       }
       res.status(200).json(output)
     } catch (error) {
