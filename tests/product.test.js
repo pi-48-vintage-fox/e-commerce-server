@@ -1,9 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
 const {sequelize} = require('../models/index');
-const {queryInterface} = sequelize;
-const {User} = require('../models/index');
-const {token, verify} = require('../helpers/jwt');
 
 let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjgsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJpYXQiOjE2MDUwMjEwMDl9.rKPG5lI3koAFsTwcfDKAOvxJGmYt5W6K8E3IKQhgJI8';
 
