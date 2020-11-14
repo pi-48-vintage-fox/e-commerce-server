@@ -4,7 +4,7 @@ const app = require('../app')
 describe('Test Endpoints POST /login',()=>{
     it('Test login success',(done)=>{
         request(app)
-        .post('/user/login')
+        .post('/login')
         .send({email:"admin@mail.com",password:'1234'})
         .then(response=>{
             let{body, status} = response
@@ -19,7 +19,7 @@ describe('Test Endpoints POST /login',()=>{
     })
     it('Test invalid email/password',(done)=>{
         request(app)
-        .post('/user/login')
+        .post('/login')
         .send({email:"adminer@mail.com",password:'12345'})
         .then(response => {
             let {body, status} = response
@@ -33,7 +33,7 @@ describe('Test Endpoints POST /login',()=>{
     })
     it('Test invalid email',(done)=>{
         request(app)
-        .post('/user/login')
+        .post('/login')
         .send({email:"",password:'1234'})
         .then(response => {
             let {body, status} = response
@@ -47,7 +47,7 @@ describe('Test Endpoints POST /login',()=>{
     })
     it('Test invalid password',(done)=>{
         request(app)
-        .post('/user/login')
+        .post('/login')
         .send({email:"admin@mail.com",password:''})
         .then(response => {
             let {body, status} = response

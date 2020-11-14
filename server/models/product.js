@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       notNull: {
         args: true,
         msg: `Name is required.`
+      },
+      notEmpty: {
+        args: true,
+        msg: `Name cannot be empty.`
       }
      }
     },
@@ -35,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         isUrl: {
           args: true,
           msg:'Image must be URL format'
+        },
+        notEmpty: {
+          args: true,
+          msg: `Image cannot be empty.`
         }
       }
     },
@@ -52,7 +60,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       min: {
         args: 1,
-        msg: `Price must be more than zero`
+        msg: `Price must be more than 0`
+      },
+      notEmpty: {
+        args: true,
+        msg: `Price cannot be empty.`
       }
      }
     },
@@ -70,7 +82,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         min: {
           args: 1,
-          msg: `Stock must be more than zero`
+          msg: `Stock must be more than 0`
+        },
+        notEmpty: {
+          args: true,
+          msg: `Stock cannot be empty.`
         }
       }
     }

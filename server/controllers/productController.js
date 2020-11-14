@@ -31,7 +31,7 @@ class Controller {
         })
     }
 
-    static editProduct(req,res) {
+    static editProduct(req,res,next) {
         const id = +req.params.id
         const obj = {
             name:req.body.name,
@@ -46,7 +46,7 @@ class Controller {
             returning: true
         })
         .then(result => {
-            res.status(200).json(result)
+            res.status(200).json({message: 'Updated Success'})
         })
         .catch(err => {
             next(err)
