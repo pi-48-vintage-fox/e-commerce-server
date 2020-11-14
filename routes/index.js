@@ -4,6 +4,10 @@ const productsRoutes = require('./product.js');
 const categoriesRoutes = require('./category.js');
 const bannersRoutes = require('./banner.js');
 
+router.get('/', (req, res, next) => {
+  res.send('IM ACTIVE')
+})
+
 router.post('/adminRegister', AdminController.register);
 router.post('/adminLogin', AdminController.login);
 
