@@ -4,7 +4,7 @@ function errorHandler (err,req,res,next){
   
   let status = err.status || 500
   let msg = err.msg
-  
+  console.log(err);
   switch (err.name) {
     case "SequelizeValidationError":  
       let errors = err.errors.map(item=>{   

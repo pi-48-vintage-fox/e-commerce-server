@@ -2,7 +2,7 @@
   "development": {
     "username": "dev",
     "password": "qwerty",
-    "database": "test_ecommerce",
+    "database": "ecommerce",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

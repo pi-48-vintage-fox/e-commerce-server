@@ -66,7 +66,7 @@ class ProductController {
         msg: "Product deleted",
         product
       })
-      product.delete()
+      product.destroy()
       product.save()
     } catch (err) {
       next(err)

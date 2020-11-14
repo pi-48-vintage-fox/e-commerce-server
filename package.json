@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "reset-db": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate",
+    "reset-db": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "reset-db-test": "sequelize-cli db:migrate:undo:all --env test && sequelize-cli db:migrate --env test",
     "seed-test": "sequelize-cli db:seed:all --env test",
     "seed": "sequelize-cli db:seed",
     "test": "jest --forceExit --runInBand --verbose --detectOpenHandles --watch",
-    "dev": "node ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "start": "node ./bin/www"
   },
   "keywords": [],
   "author": "Mochamad Zulfikar",
