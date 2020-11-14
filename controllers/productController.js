@@ -20,7 +20,7 @@ module.exports = class productController {
 
   static async getAll(req,res,next){
     try {
-      let product=await Product.findAll()
+      let product=await Product.findAll({order:[['price','DESC']]})
       res.status(200).json(product)
     } catch (error) {
       next(error)

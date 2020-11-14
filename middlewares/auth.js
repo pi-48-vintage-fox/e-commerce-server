@@ -2,8 +2,9 @@ const {User, Product} = require('../models')
 const jwt = require('jsonwebtoken')
 
 const authentication = (req,res,next)=>{
-  const access_token = req.headers.access_token
-
+  // ini dari client kok bisa ngirim accesstoken ??
+  const access_token = req.headers.accesstoken
+  // console.log(req.headers, 'dari server')
   if(access_token){
     const decode = jwt.verify(access_token,process.env.SECRET)
     req.userData = decode
