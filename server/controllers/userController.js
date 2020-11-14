@@ -7,7 +7,8 @@ class userController {
   static login(req, res, next){
 
     const { email, password } = req.body
-
+    console.log(password, email);
+    
     const userObj = {
       email,
       password
@@ -35,7 +36,11 @@ class userController {
               email: user.email,
               
             })
-            res.status(200).json({access_token: token})
+            const username = user.email.split('@')[0]
+            res.status(200).json({
+              access_token: token,
+              username: username
+            })
           }  
         })
         .catch(err => {

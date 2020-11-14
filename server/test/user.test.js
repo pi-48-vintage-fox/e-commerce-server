@@ -15,6 +15,7 @@ describe('TestLogin Post/login' ,() => {
         
         expect(status).toEqual(200)
         expect(body).toHaveProperty('access_token', expect.any(String))
+        expect(body).toHaveProperty('username', 'admin')
         done()     
       })
       .catch(err => {
