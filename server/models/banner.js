@@ -2,10 +2,8 @@
 const {
   Model
 } = require('sequelize');
-
-
 module.exports = (sequelize, DataTypes) => {
-  class Admin extends Model {
+  class Banner extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,28 +11,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-     
     }
   };
-  Admin.init({
-    email: {
+  Banner.init({
+    title: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty :{msg: 'Email is required'},
-        isEmail : {msg: 'Must be an email format'},
+        notEmpty: {msg: 'Title is required'}
       }
     },
-    password: {
+    image_url: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty :{msg: 'Password is required'},
-        len: [6]
+        notEmpty: {msg: 'Image URL is required'},
+        isUrl: {msg: 'Image be an URL Format'}
       }
     },
-    role: DataTypes.STRING
+    status: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {msg: 'Status is required'}
+      }
+    }
   }, {
     sequelize,
-    modelName: 'Admin',
+    modelName: 'Banner',
   });
-  return Admin;
+  return Banner;
 };

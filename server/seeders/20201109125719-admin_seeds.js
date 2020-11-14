@@ -4,15 +4,6 @@ const {hashPassword} = require('../helpers/bcrypt')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
    await queryInterface.bulkInsert('Admins', [
     {
       email: 'admin@mail.com',
@@ -22,7 +13,7 @@ module.exports = {
       updatedAt: new Date()
     },
     {
-      email: 'admin1@mail.com',
+      email: 'hutamy@mail.com',
       password: hashPassword('123456'),
       role: 'admin',
       createdAt: new Date(),
@@ -32,12 +23,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
     await queryInterface.bulkDelete('Admins', null, {})
   }
 };

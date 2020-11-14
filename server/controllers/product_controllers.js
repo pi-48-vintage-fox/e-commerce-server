@@ -56,32 +56,6 @@ class ProductControllers {
             next(err)
         })
     }
-
-    static changeStock (req, res, next) {
-        const id = +req.params.id
-        const payload = {
-            stock: req.body.stock
-        }
-        Product.update(payload, {
-            where: {
-                id: id
-            }
-        })
-        .then(product => {
-            if(product == 0){
-                let err = {
-                    name: 'Not Found'
-                }
-                throw next(err)
-            }
-            if(product){
-                res.status(200).json({msg: 'Sucessfully update stock'})
-            }
-        })
-        .catch(err => {
-            next(err)
-        })
-    }
     
     static deleteProducts (req, res, next) {
         const id = +req.params.id

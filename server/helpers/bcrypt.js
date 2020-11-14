@@ -1,5 +1,3 @@
-const { request } = require("express");
-
 const bcrypt = require('bcryptjs')
 
 function hashPassword (password) {

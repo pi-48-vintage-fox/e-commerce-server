@@ -1,8 +1,26 @@
 const {Admin} = require('../models/index')
-const {comparePassword} = require('../helpers/bcrypt')
+const {hashPassword, comparePassword} = require('../helpers/bcrypt')
 const {signToken} = require('../helpers/jwt')
 
 class AdminControllers {
+
+    static register (req, res, next) {
+        const payload = {
+            email: req.body.email,
+            password: hashPassword(req.body.password)
+        }
+        Admin.create(payload)
+        .then(admin => {
+            let data = {
+                id: admin.id,
+                email: admin.email
+            }
+            res.status(201).json(data)
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
     
     static loginAdmin (req, res, next) {
         const payload = {
