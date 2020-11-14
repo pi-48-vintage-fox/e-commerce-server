@@ -15,6 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", routes);
 app.use(errorHandlers);
 
-// app.listen(PORT, () => console.log(`Server berjalan pada port ${PORT}`)); jgn lupya dinyalain pas mau deploy
+app.listen(PORT, () => console.log(`Server berjalan pada port ${PORT}`));
 
 module.exports = app;
