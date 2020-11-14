@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit --runInBand --verbose"
+    "test": "jest --detectOpenHandles --forceExit --runInBand --verbose",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "Rizky Akbar",
