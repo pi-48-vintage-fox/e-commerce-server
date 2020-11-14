@@ -49,6 +49,7 @@ class ProductController {
     }
 
     static putProduct(req, res, next) {
+        console.log(req.body, 'dari server put');
         let productId = +req.params.id
         let dataProduct = {
             name: req.body.name,
