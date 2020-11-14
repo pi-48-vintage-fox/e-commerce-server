@@ -382,10 +382,11 @@ describe('DELETE /delete', () => {
         request(app)
         .delete(`/products/${id}`)
         .send({
-            name: 'NIKE Mercurial Vapor',
-            image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
-            price: 2000000,
-            stock: 20,
+            name: 'Craftopia',
+            image_url: 'https://steamcdn-a.akamaihd.net/steam/apps/1307550/header.jpg?t=1602802037',
+            price: 200000,
+            stock: "wadidaw",
+            category: "Game"
         })
         .then(response => {
             let { body, status } = response
@@ -404,10 +405,11 @@ describe('DELETE /delete', () => {
         .delete(`/products/${id}`)
         .set('access_token', customer_token)
         .send({
-            name: 'NIKE Mercurial Vapor',
-            image_url: 'https://thumblr.uniid.it/product/188895/6223a335d145.jpg',
-            price: 2000000,
-            stock: 20,
+            name: 'Craftopia',
+            image_url: 'https://steamcdn-a.akamaihd.net/steam/apps/1307550/header.jpg?t=1602802037',
+            price: 200000,
+            stock: "wadidaw",
+            category: "Game"
         })
         .then(response => {
             let { body, status } = response
