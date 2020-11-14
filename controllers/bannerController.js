@@ -1,4 +1,4 @@
-const {Banner} = require('../models');
+const {Banner} = require('../models/index');
 
 class BannerController {
   static async getBanner(req, res, next){
