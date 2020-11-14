@@ -12,8 +12,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(router)
 
-// app.listen(port, () =>
-//   console.log(`E-commerce CMS running at http://localhost:${port}`)
-// )
+app.listen(port, () =>
+  console.log(`E-commerce CMS running at http://localhost:${port}`)
+)
 
 module.exports = app
