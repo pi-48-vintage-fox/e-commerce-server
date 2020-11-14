@@ -2,9 +2,6 @@ const request = require('supertest');
 const app = require('../app');
 const {sequelize} = require('../models/index');
 const {queryInterface} = sequelize;
-const {User} = require('../models/index');
-const {token, verify} = require('../helpers/jwt');
-const {compare} = require('../helpers/bcrypt');
 
 
 // akan dijalankan abis test selesai

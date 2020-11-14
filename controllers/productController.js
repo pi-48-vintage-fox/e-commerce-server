@@ -91,7 +91,21 @@ class ProductController {
     }
 
     static async deleteProduct(req, res){
-        
+        try {
+            const deleteProduct = await Product.destroy({
+                where: {
+                    id: +req.params.id
+                }
+            })
+            if (deleteProduct) {
+                res.status(201).json({
+                    message: 'Success delete product'
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
     }
 }
 
