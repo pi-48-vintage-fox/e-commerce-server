@@ -16,7 +16,7 @@ app.use(router)
 app.get('/', (req, res) => {
   res.send({ message: 'Halooooooooooooo' })
 })
-app.use(errorHandler)
+// app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`App berada di http://localhost:${port}`);
