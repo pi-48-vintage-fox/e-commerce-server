@@ -9,7 +9,7 @@ router.post("/register", Controller.register);
 router.post("/login", Controller.login);
 router.post("/googleLogin", Controller.googleLogin);
 
-router.use("/products", authentication, productRouter)
+router.use("/products", authentication, authorization, productRouter)
 router.use("/orders", authentication, orderRouter)
 
 module.exports = router;

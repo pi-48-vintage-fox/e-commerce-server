@@ -8,10 +8,10 @@ async function authentication(req, res, next){
         const decoded = verifyToken(access_token)
         const user = await User.findOne({
             where: {
-                email: decoded.email,
-                role: "admin"
+                email: decoded.email
             }
         })
+        // console.log(decoded, "<<<<")
         if(!user) return next({name: "Unauthorized", msg: "Token tidak ditemukan"})
         req.decoded = decoded
         next()
@@ -24,17 +24,32 @@ async function authentication(req, res, next){
 // perlu revisi **
 async function authorization(req, res, next){
     try {
+        console.log(req.decoded.role, "<<<<<")
         const userId = req.decoded.id
         const id = +req.params.id
+        const role = req.decoded.role
 
-        if(!taskConj) {
+        const user = await User.findOne({
+            where: {
+                email: req.decoded.email
+            }
+        })
+        if(!user) {
             next({name: "Unauthorized", msg: "Data tidak ditemukan, tidak memiliki akses"})
-        } 
-        else if(taskConj.UserId !== userId) {
+        } else if (user.role !== role) {
             next({name: "Unauthorized", msg: " tidak memiliki akses"})
         } else {
             next()
         }
+
+        // if(!taskConj) {
+        //     next({name: "Unauthorized", msg: "Data tidak ditemukan, tidak memiliki akses"})
+        // } 
+        // else if(taskConj.UserId !== userId) {
+        //     next({name: "Unauthorized", msg: " tidak memiliki akses"})
+        // } else {
+        //     next()
+        // }
     } catch (err) {
         next(err)
     }

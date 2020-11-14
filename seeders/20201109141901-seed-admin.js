@@ -20,16 +20,7 @@ module.exports = {
         role: "admin",
         createdAt: new Date(),
         updatedAt: new Date(),
-      },
-      {
-        name: "rivari22",
-        email: "rivari22@gmail.com",
-        password: "rivari22",
-        image: null,
-        role: "admin",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      }
     ];
     queryInterface.bulkInsert("Users", data);
   },

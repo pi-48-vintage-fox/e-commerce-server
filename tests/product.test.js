@@ -5,7 +5,7 @@ const { queryInterface } = sequelize;
 const {User, Product, Order} = require("../models/index")
 const { generateToken } = require("../helpers/jwt");
 
-let access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTYwNTAxNDQ0NX0.g72OT8fgyJtv49WEeL0bihkvq5Ze6nDdAD3attilYsI"
+let access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTYwNTMzMzI5MH0.9LWWBp14x2e-0LLfyFICmPg8uT_g-tJYbG44bKmyJCg"
 let access_token_cust
 let idUser
 let idProduct
@@ -22,7 +22,7 @@ let dataUser = {
 let product =
     {
     name: "Jacket",
-    image_url: "https://www.freepik.com/free-psd/iphone-11-pro-mockup_10313276.htm",
+    image_url: "https://www.freepik.com/free-psd/iphone-11-pro-mockup_10313276.html",
     S: 3,
     M: 5,
     L: 10,
@@ -119,6 +119,21 @@ describe("Post add products endpoint /products", () => {
             done()
         })
     })
+
+    it("failed add product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, S: -1}
+        request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed add product - Stock size M product is required", (done) => {
         const newProduct = {...product, M: ""}
         request(app)
@@ -132,6 +147,21 @@ describe("Post add products endpoint /products", () => {
             done()
         })
     })
+
+    it("failed add product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, M: -1}
+        request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed add product - Stock size L product is required", (done) => {
         const newProduct = {...product, L: ""}
         request(app)
@@ -145,6 +175,21 @@ describe("Post add products endpoint /products", () => {
             done()
         })
     })
+
+    it("failed add product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, L: -1}
+        request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed add product - Stock size XL product is required", (done) => {
         const newProduct = {...product, XL: ""}
         request(app)
@@ -158,6 +203,21 @@ describe("Post add products endpoint /products", () => {
             done()
         })
     })
+
+    it("failed add product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, XL: -1}
+        request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed add product - Price product is required", (done) => {
         const newProduct = {...product, price: ""}
         request(app)
@@ -168,6 +228,19 @@ describe("Post add products endpoint /products", () => {
             if(err) return done(err)
             expect(res.status).toBe(400)
             expect(res.body).toHaveProperty("errorMsg", "Price product is required");
+            done()
+        })
+    })
+    it("failed add product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, price: -1}
+        request(app)
+        .post("/products")
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
             done()
         })
     })
@@ -245,6 +318,20 @@ describe("PUT edit product with endpoint /products/:id", () => {
             done()
         })
     })
+    it("failed edit product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, S: -1}
+        request(app)
+        .put(`/products/${idProduct}`)
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed edit product - Stock size M product is required", (done) => {
         const newProduct = {...product, M: ""}
         request(app)
@@ -258,6 +345,20 @@ describe("PUT edit product with endpoint /products/:id", () => {
             done()
         })
     })
+    it("failed edit product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, M: -1}
+        request(app)
+        .put(`/products/${idProduct}`)
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed edit product - Stock size L product is required", (done) => {
         const newProduct = {...product, L: ""}
         request(app)
@@ -271,6 +372,20 @@ describe("PUT edit product with endpoint /products/:id", () => {
             done()
         })
     })
+    it("failed edit product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, L: -1}
+        request(app)
+        .put(`/products/${idProduct}`)
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed edit product - Stock size XL product is required", (done) => {
         const newProduct = {...product, XL: ""}
         request(app)
@@ -284,6 +399,20 @@ describe("PUT edit product with endpoint /products/:id", () => {
             done()
         })
     })
+    it("failed edit product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, XL: -1}
+        request(app)
+        .put(`/products/${idProduct}`)
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
+            done()
+        })
+    })
+
     it("failed edit product - Price product is required", (done) => {
         const newProduct = {...product, price: ""}
         request(app)
@@ -294,6 +423,19 @@ describe("PUT edit product with endpoint /products/:id", () => {
             if(err) return done(err)
             expect(res.status).toBe(400)
             expect(res.body).toHaveProperty("errorMsg", "Price product is required");
+            done()
+        })
+    })
+    it("failed edit product - Tidak boleh memasukan angka minus dan minimal 0", (done) => {
+        const newProduct = {...product, price: -1}
+        request(app)
+        .put(`/products/${idProduct}`)
+        .send(newProduct)
+        .set("access_token", access_token)
+        .end((err, res) => {
+            if(err) return done(err)
+            expect(res.status).toBe(400)
+            expect(res.body).toHaveProperty("errorMsg", "Tidak boleh memasukan angka minus dan minimal 0");
             done()
         })
     })

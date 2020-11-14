@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Stock size S product is required",
           },
+          min: {
+            args: [0],
+            msg: "Tidak boleh memasukan angka minus dan minimal 0"
+          }
         },
       },
       M: {
@@ -46,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Stock size M product is required",
           },
+          min: {
+            args: [0],
+            msg: "Tidak boleh memasukan angka minus dan minimal 0"
+          }
         },
       },
       L: {
@@ -54,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Stock size L product is required",
           },
+          min: {
+            args: [0],
+            msg: "Tidak boleh memasukan angka minus dan minimal 0"
+          }
         },
       },
       XL: {
@@ -62,6 +74,10 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Stock size XL product is required",
           },
+          min: {
+            args: [0],
+            msg: "Tidak boleh memasukan angka minus dan minimal 0"
+          }
         },
       },
       price:  {
@@ -69,6 +85,10 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: {
             msg: "Price product is required"
+          },
+          min: {
+            args: [0],
+            msg: "Tidak boleh memasukan angka minus dan minimal 0"
           }
         }
       },
