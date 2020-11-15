@@ -10,9 +10,10 @@ class productController {
       price: req.body.price,
       stock: req.body.stock
     }
+    // console.log(obj);
     Product.create(obj)
     .then(data => {
-      // console.log(data);
+      console.log(data);
       res.status(201).json({
         id: data.id,
         name: data.name,
