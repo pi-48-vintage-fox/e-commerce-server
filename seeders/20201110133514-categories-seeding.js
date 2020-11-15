@@ -25,6 +25,16 @@ const categories = [
     name: "Komputer",
     createdAt: new Date(),
     updatedAt: new Date()
+  },
+  {
+    name: "Handphone",
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    name: "Laptop",
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ]
 
