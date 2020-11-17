@@ -1,6 +1,6 @@
 const { CartProduct } = require('../models')
 
-class CartProduct {
+class CartProductController {
   static async findAll(req, res, next) {
     try {
       console.log('find all cart items')
@@ -101,4 +101,4 @@ class CartProduct {
   }
 }
 
-module.exports = CartProduct
+module.exports = CartProductController

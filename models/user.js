@@ -56,9 +56,10 @@ module.exports = (sequelize, DataTypes) => {
     const hash = hashPassword(user.password)
 
     user.password = hash
+    user.role = 'guest'
     user.email = user.email.toLowerCase()
     if (!user.imageUrl) {
-      user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+      user.imageUrl = `https://avatars.dicebear.com/api/initials/${user.email}.svg`
     }
   })
 
@@ -68,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
     user.password = hash
     user.email = user.email.toLowerCase()
     if (!user.imageUrl) {
-      user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+      user.imageUrl = `https://avatars.dicebear.com/api/initials/${user.email}.svg`
     }
   })
 
@@ -78,19 +79,18 @@ module.exports = (sequelize, DataTypes) => {
       const hash = hashPassword(user.password)
 
       user.password = hash
+      user.role = 'guest'
       user.email = user.email.toLowerCase()
 
       if (!user.imageUrl) {
-        user.imageUrl = `https://avatars.dicebear.com/api/jdenticon/${user.email}.svg`
+        user.imageUrl = `https://avatars.dicebear.com/api/initials/${user.email}.svg`
       }
     })
   })
 
   User.beforeFind((options) => {
-    for (let key in options.where) {
-      if (key === 'email') {
-        options.where[key] = options.where[key].toLowerCase()
-      }
+    if (options.where && options.where.email) {
+      options.where.email = options.where.email.toLowerCase()
     }
   })
 

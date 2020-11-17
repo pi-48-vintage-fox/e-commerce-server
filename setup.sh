@@ -11,5 +11,5 @@
 
 # npx sequelize model:create --name Cart --attributes UserId:integer,status:string
 
-# npx sequelize model:create --name CardProduct --attributes CardId:integer,ProductId:integer,quantity:integer
+# npx sequelize model:create --name CartProduct --attributes CartId:integer,ProductId:integer,quantity:integer
 
