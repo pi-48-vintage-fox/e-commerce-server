@@ -5,8 +5,24 @@ const { compareHash } = require('../helpers/hash')
 const { signToken } = require('../helpers/jwt')
 
 class UserController {
+
+  static async register(req, res, next) {
+    try {
+      let data = {
+        email: req.body.email,
+        password: req.body.password
+      }
+      let user = await User.create(data)
+      res.status(201).json({
+        email: user.email,
+        role: user.role
+      })
+    } catch (error) {
+      return next(error)
+    }
+  }
+
   static async login(req, res, next) {
-    console.log(req.body, '<><><><><><><><><><><> ini req.bodeh')
     try {
       let options = {
         where: {
@@ -20,10 +36,12 @@ class UserController {
       else if (compareHash(req.body.password, user.password)) {
         let access_token = signToken({
           id: user.id,
-          email: user.email
+          email: user.email,
+          role: user.role
         })
         res.status(200).json({
-          access_token
+          access_token,
+          role: user.role
         })
       }
       else {
