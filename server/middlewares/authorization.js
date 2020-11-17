@@ -1,11 +1,15 @@
 'use strict'
-const { Product } = require('../models/index')
+const { Product, Cart } = require('../models/index')
 
 
 const authorization = (req, res, next) => {
     const id = req.params.id
     const userData = req.userData.id
-    Product.findByPk(id)
+    Cart.findOne({
+        where: {
+            id: id
+        }
+    })
         .then(data => {
             if (!data) {
                 res.status(404).json({ msg: 'data not found' })

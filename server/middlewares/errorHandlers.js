@@ -3,7 +3,6 @@
 module.exports = function (err, req, res, next) {
     switch (err.name) {
         case "SequelizeValidationError":
-            console.log('xxxx')
             let msg = []
             err.errors.forEach(el=> {
                 if (el.validatorName === 'notEmpty') {
