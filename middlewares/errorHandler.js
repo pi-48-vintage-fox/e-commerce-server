@@ -1,6 +1,6 @@
 module.exports = (err, req, res, next) => {
   console.log('error handler')
-  // console.log(JSON.stringify(err,null,2))
+  console.log(JSON.stringify(err, null, 2))
   console.log('err.status:', err.status)
   console.log('err.msg:', err.msg)
   console.log('err.name:', err.name)
@@ -10,7 +10,6 @@ module.exports = (err, req, res, next) => {
 
   let status = err.status || 500
   let msg = err.msg || 'Internal Server Error'
-
 
   if (err.name) {
     if (err.name.includes('Sequelize')) {
@@ -22,7 +21,6 @@ module.exports = (err, req, res, next) => {
       }
     }
 
-  
     switch (err.name) {
       case 'NotFoundError':
       case 'ForbiddenError':
@@ -40,7 +38,6 @@ module.exports = (err, req, res, next) => {
         break
     }
   }
-
 
   res.status(status).json({ status, msg })
 }
