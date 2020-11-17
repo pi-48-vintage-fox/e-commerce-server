@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const authentication = require('../middleware/authentication')
-const authorization = require('../middleware/authorization')
+const authorization = require('../middleware/authorization_admin')
 const BannerControllers = require('../controllers/banner_controllers')
 
 router.get('/', BannerControllers.viewAllBanner) 

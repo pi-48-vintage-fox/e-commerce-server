@@ -9,7 +9,7 @@ function authorization (req, res, next) {
     })
     .then(data => {
         if(data && req.loggedInUser.role == 'admin'){
-            console.log('authorized')
+            console.log('authorized as admin')
             next()
         }
         else{
