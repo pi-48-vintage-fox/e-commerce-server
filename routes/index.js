@@ -13,6 +13,10 @@ router.get('/products', ProductController.show)
 router.post('/products', authorization, ProductController.add)
 router.put('/products/:id', authorization, ProductController.edit)
 router.delete('/products/:id', authorization, ProductController.delete)
+router.post('/cart', ProductController.addToCart)
+router.get('/cart', ProductController.showCart)
+router.delete('/cart/:id', ProductController.deleteCart)
+router.patch('/cart/:id', ProductController.updateCart)
 
 
 module.exports = router

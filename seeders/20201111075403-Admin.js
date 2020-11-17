@@ -10,7 +10,7 @@ let admin = [
     updatedAt : new Date()
   },
   {
-    email: 'member@gmail.com',
+    email: 'member@mail.com',
     password: hashPass('haha'),
     createdAt: new Date(),
     updatedAt: new Date()

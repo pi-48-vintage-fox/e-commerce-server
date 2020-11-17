@@ -1,4 +1,4 @@
-const { Product } = require('../models/index')
+const { Product, User, Cart } = require('../models/index')
 
 class ProductController {
   static async show(req,res,next){
@@ -60,6 +60,134 @@ class ProductController {
     }
   }
 
+  static async addToCart(req, res, next){
+    try {
+      const userId = req.loggedInUser.id
+      const productId = req.body.productId
+      const cart = await Cart.findOne({
+        where: {
+          userId,
+          productId
+        }
+      })
+      // console.log(cart);
+      if(!cart){
+        const data = await Cart.create({
+          userId,
+          productId,
+          quantity: 1
+        })
+        res.status(201).json(data)
+      }else if(cart){
+        console.log(cart);
+        const temp = cart.quantity+1
+        const input = {
+          quantity: temp
+        }
+        const product = await Product.findOne({
+          where: {
+            id: productId
+          }
+        })
+        const currentCart = await Cart.findOne({
+          where: {
+            userId,
+            productId
+          }
+        })
+        if(currentCart.quantity>=product.stock){
+          throw { msg: "Cannot add more than stock", status: 401 }
+        }else{
+          const data = await Cart.update(input,{
+            where:{
+              userId,
+              productId
+            },
+            returning: true
+          })
+          res.status(201).json(data)
+        }
+        
+      }
+    } catch (err) {
+      next(err)
+    }
+  }
+  static async showCart(req, res, next){
+    try {
+      const data = await Cart.findAll({
+          where: {
+            userId: req.loggedInUser.id
+          },
+          include: User,
+          include: Product
+      })
+      let result = []
+      data.forEach(el => {
+        result.push({
+          id: el.Product.id, 
+          image_url: el.Product.image_url, 
+          name: el.Product.name, 
+          category: el.Product.category, 
+          quantity: el.quantity})
+      });
+      console.log(result);
+      // let result = []
+      // data.forEach(el => {
+      //     el.Users.forEach(i=>{
+      //         if(i.id==req.loggedInUser.id){
+      //             result.push(el)
+      //         }
+      //     })
+      // });
+      res.status(200).json(result)
+    }catch (err) {
+      next(err)
+    }
+  }
+  static async deleteCart(req, res, next){
+    try {
+      const userId = req.loggedInUser.id
+      const productId = req.params.id
+      await Cart.destroy({
+        where: {
+          userId,
+          productId
+        }
+      })
+      res.status(200).json('Successfully remove item from cart')
+    } catch (error) {
+      next(err)
+    }
+  }
+  static async updateCart(req, res, next){
+    try {
+      const userId = req.loggedInUser.id
+      const productId = req.params.id
+      const product = await Product.findOne({
+        where: {
+          id: productId
+        }
+      })
+      const input = {
+        quantity: req.body.quantity
+      }
+      if(req.body.quantity > product.stock){
+        throw { msg: "Cannot add more than stock", status: 401 }
+      }else{
+        const data = await Cart.update(input,{
+          where:{
+            userId,
+            productId
+          },
+          returning: true
+        })
+        res.status(201).json(data)
+      }
+    } catch (err) {
+      next(err)
+    }
+  }
 }
 
 module.exports = ProductController
