@@ -6,9 +6,10 @@ class UserController {
 
   static register(req, res, next) {
     const payload = {
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      role: "user"
+      role: "admin"
     }
     User.create(payload)
       .then(data => {
@@ -50,6 +51,7 @@ class UserController {
         } else {
           const access_token = signToken({
             id: data.id,
+            name: data.id,
             email: data.email,
             role: data.role
           })

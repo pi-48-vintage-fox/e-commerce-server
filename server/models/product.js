@@ -1,22 +1,58 @@
 'use strict';
 const {
-  Model
+  Model, DATE
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    static associate(models) {
-      Product.belongsTo(models.User, {
-        foreignKey: 'UserId',
-        tergetKey: 'id'
-      })
-    }
+    static associate(models) { }
   };
   Product.init({
-    name: DataTypes.STRING,
-    image_url: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "name can't be empty"
+        }
+      }
+    },
+    image_url: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: "image can't be empty"
+        }
+      }
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "price can't be empty"
+        },
+        isNumeric: {
+          msg: "price mush be number"
+        },
+        min: {
+          args: [0],
+          msg: "price more than 0"
+        }
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "stock can't be empty"
+        },
+        isNumeric: {
+          msg: "stock mush be number"
+        },
+        min: {
+          args: [0],
+          msg: "stock more than 0"
+        }
+      }
+    },
   }, {
     sequelize,
     modelName: 'Product',

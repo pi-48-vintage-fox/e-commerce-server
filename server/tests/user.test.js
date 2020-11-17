@@ -1,104 +1,78 @@
 const request = require('supertest')
-const { response } = require('../app')
 const app = require('../app')
-// const { sequelize } = require('../models')
-// const { queryInterface } = sequelize
 
-describe('Test Endpoint POST/login', () => {
+const userData = {
+  email: 'admin@mail.com',
+  password: 'qwerty',
+}
 
+const userData2 = {
+  email: 'admin@mail.com',
+  password: 'qwertyyyy',
+}
+const userData3 = {
+  email: 'admin2@mail.com',
+  password: 'qwerty',
+}
+
+describe('Test Endpoint POST/login success', () => {
   it('Test login success', (done) => {
     request(app)
       .post('/login')
-      .send({ email: "admin@mail.com", password: "qwerty" })
+      .send(userData)
+      .set('Accept', 'application/json')
       .then(response => {
-        let { body, status } = response
-        expect(status).toBe(200)
-        expect(body).toHaveProperty("message", "Login Success")
+        const { status, body } = response
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', 'Login Success')
         expect(body).toHaveProperty('access_token', expect.any(String))
         done()
       })
       .catch(err => {
-        done(err)
-      })
-  })
-
-  it('Test login wrong email/password', (done) => {
-    request(app)
-      .post('/login')
-      .send({ email: 'adminnnn@mail.com', password: 'qwertyyyyy' })
-      .then(response => {
-        let { body, status } = response
-        expect(status).toEqual(401)
-        expect(body).toHaveProperty('message', 'Wrong email/password')
+        console.log(err)
         done()
       })
-      .catch(err => {
-        done(err)
-      })
   })
-
-  it('Test login wrong email', (done) => {
-    response(app)
-      .post('/login')
-      .send({ email: 'adminnnnn@mail.com', password: 'qwerty' })
-      .then(response => {
-        let { body, status } = response
-        expect(status).toEqual(401)
-        expect(body).toHaveProperty('message', 'Wrong email/password')
-        done()
-      })
-      .catch(err => {
-        done(err)
-      })
-  })
-
-  it('Test login no email and password', (done) => {
-    request(app)
-      .post('/login')
-      .send({ email: '', password: '' })
-      .then(response => {
-        let { body, status } = response
-        expect(status).toEqual(400)
-        expect(body).toHaveProperty('message', 'Wrong email/password')
-        done()
-      })
-      .catch(err => {
-        done(err)
-      })
-  })
-
 })
 
-describe('Test Endpoint POST/login', () => {
-
-  it('Test register success', (done) => {
+describe('Test Endpoint POST/login failed', () => {
+  it('Test login failed', (done) => {
     request(app)
-      .post('/register')
-      .send({ email: "test@mail.com", password: "test123" })
+      .post('/login')
+      .send(userData2)
+      .set('Accept', 'application/json')
       .then(response => {
-        let { body, status } = response
-        expect(status).toBe(200)
-        expect(body).toHaveProperty("message", "user Created")
+        const { status, body } = response
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('errors', ['wrong email/password !'])
         done()
       })
-      .catch(err => {
-        done(err)
-      })
   })
 
-  it('Test register no email and password', (done) => {
+  it('Test no email in database', (done) => {
     request(app)
-      .post('/register')
-      .send({ email: "", password: "" })
-      .then(response => {
-        let { body, status } = response
-        let expectedMessages = ["Email Is required", "Password Is required"]
+      .post('/login')
+      .send(userData3)
+      .set('Accept', 'application/json')
+      .then((response) => {
+        const { status, body } = response
         expect(status).toBe(400)
-        expect(body).toHaveProperty("message", expect.arrayContaining(expectedMessages))
-      })
-      .catch(err => {
-        done(err)
+        expect(body).toHaveProperty('errors', ['wrong email/password !'])
+        done()
       })
   })
 
+  it('Test email & password empty', (done) => {
+    request(app)
+      .post('/login')
+      .set('Accept', 'application/json')
+      .then((response) => {
+        const { status, body } = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('errors', [
+          'WHERE parameter \'email\' has invalid \'undefined\' value'
+        ])
+        done()
+      })
+  })
 })
