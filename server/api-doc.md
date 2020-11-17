@@ -245,11 +245,8 @@ Request:
 - headers: access_token (string)
 ```json
 {
-    "": "Liverpool 1st jersey-player",
-    "image_url": "https://www.soccerpro.com/wp-content/uploads/cz2625_687_nike_liverpool_home_match_jsy_2020_21_01.jpg",
-    "price": 130000000,
-    "stock": 10,
-    "category": "Nike"
+   "quantity": 2,
+    "status": "Unpaid",
 },
 ```
 
@@ -260,15 +257,16 @@ Response:
 
 ```json
 {
-    "name": "Liverpool 1st jersey-player",
-    "image_url": "https://www.soccerpro.com/wp-content/uploads/cz2625_687_nike_liverpool_home_match_jsy_2020_21_01.jpg",
-    "price": 130000000,
-    "stock": 10,
-    "category": "Nike"
+    "ProductId": 1,
+    "UserId": 2,
+    "quantity": 2,
+    "status": "Unpaid",
+    "updatedAt": "2020-11-17T15:32:47.129Z",
+    "createdAt": "2020-11-17T15:32:47.129Z"
 }
 ```
 
-### GET /products
+### GET /carts
 
 description: 
   get all products from database
@@ -285,52 +283,29 @@ Response:
 ```json
 [
     {
-       "name": "Liverpool 1st jersey-player",
-      "image_url": "https://www.soccerpro.com/wp-content/uploads/cz2625_687_nike_liverpool_home_match_jsy_2020_21_01.jpg",
-      "price": 1600000,
-      "stock": 10,
-      "category": "Nike"
-    },
-    {
-        "name": "Liverpool 3rd jersey-player",
-        "image_url": "https://www.soccerpro.com/wp-content/uploads/cz3200_060_nike_liverpool_3rd_match_jsy_2020_21_01.jpg",
-        "price": 1600000,
-        "stock": 10,
-        "category": "Nike"
-    },
-    {
-        "name": "Man City 1st jersey-player",
-        "image_url": "https://www.soccerpro.com/wp-content/uploads/757058_01_puma_mancity_home_jsy_2020_21_01.jpg",
-        "price": 1400000,
-        "stock": 10,
-        "category": "Puma",
-    },
-    {
-        "name": "Arsenal 1st jersey-player",
-        "image_url": "https://www.soccerpro.com/wp-content/uploads/fh7818_adidas_w_adidas_arsenal_home_jsy_2020_21_01.jpg",
-        "price": 1200000,
-        "stock": 10,
-        "category": "Adidas",
-    },
-    {
-        "name": "Arsenal 3rd jersey-player",
-        "image_url": "https://www.soccerpro.com/wp-content/uploads/gh6653_adidas_arsenal_3rd_jsy_2020_21_01.jpg",
-        "price": 1200000,
-        "stock": 10,
-        "category": "Adidas",
-    },
-    {
-        "name": "Barcelona 1st jersey-player",
-        "image_url": "https://www.soccerpro.com/wp-content/uploads/cd4232_456_nike_barca_home_jsy_2020_21_01.jpg",
-        "price": 1600000,
-        "stock": 10,
-        "category": "Nike",
+        "UserId": 2,
+        "ProductId": 1,
+        "quantity": 2,
+        "status": "Unpaid",
+        "createdAt": "2020-11-17T15:32:47.129Z",
+        "updatedAt": "2020-11-17T15:32:47.129Z",
+        "Product": {
+            "id": 1,
+            "name": "Liverpool 1st jersey-player",
+            "image_url": "https://www.soccerpro.com/wp-content/uploads/cz2625_687_nike_liverpool_home_match_jsy_2020_21_01.jpg",
+            "price": 1600000,
+            "stock": 4,
+            "category": "Nike",
+            "UserId": 1,
+            "createdAt": "2020-11-17T14:30:36.157Z",
+            "updatedAt": "2020-11-17T15:32:47.147Z"
+        }
     }
-  ] 
+]
 
 ```
 
-### PUT /products/:id
+### PUT /carts/:id
 
 description: 
   add a product
@@ -342,11 +317,8 @@ Request:
     - id: "integer" required
  ```json
 {
-    "name": "string",
-    "image_url": "string",
-    "price": "integer",
-    "stock": "integer",
-    "category": "string"
+    "quantity": 4,
+    "status": "paid",
 },
 ```
 
@@ -358,15 +330,16 @@ Response:
 
 ```json
 {
-    "name": "string",
-    "image_url": "string",
-    "price": "integer",
-    "stock": "integer",
-    "category": "string"
-},
+    "UserId": 2,
+    "ProductId": 1,
+    "quantity": 4,
+    "status": "paid",
+    "createdAt": "2020-11-17T15:32:47.129Z",
+    "updatedAt": "2020-11-17T15:33:57.474Z"
+}
 ```
 
-### DELETE /favorites
+### DELETE /cart
 
 description: 
   delete product
@@ -384,6 +357,6 @@ Response:
 
 ```json
 {
-    "msg":"Product has been deleted."
+    "msg":"Cart has been deleted."
 }
 ```
