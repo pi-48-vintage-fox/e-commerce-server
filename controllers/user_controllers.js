@@ -1,19 +1,20 @@
-const {Admin} = require('../models/index')
+const {User} = require('../models/index')
 const {hashPassword, comparePassword} = require('../helpers/bcrypt')
 const {signToken} = require('../helpers/jwt')
 
-class AdminControllers {
+class UserControllers {
 
     static register (req, res, next) {
         const payload = {
             email: req.body.email,
-            password: hashPassword(req.body.password)
+            password: hashPassword(req.body.password),
+            role: req.body.role || 'customer'
         }
-        Admin.create(payload)
-        .then(admin => {
+        User.create(payload)
+        .then(user => {
             let data = {
-                id: admin.id,
-                email: admin.email
+                id: user.id,
+                email: user.email
             }
             res.status(201).json(data)
         })
@@ -22,24 +23,24 @@ class AdminControllers {
         })
     }
     
-    static loginAdmin (req, res, next) {
+    static loginUser (req, res, next) {
         const payload = {
             email: req.body.email,
             password: req.body.password
         }
-        Admin.findOne({
+        User.findOne({
             where: {
                 email: payload.email
             }
         })
-        .then(admin => {
-            if(!admin){
+        .then(user => {
+            if(!user){
                 let err = {
                     name: 'WrongEmailPassword'
                 }
                 throw next(err)
             }
-            else if(!comparePassword(payload.password, admin.password)){
+            else if(!comparePassword(payload.password, user.password)){
                 let err = {
                     name: 'WrongEmailPassword'
                 }
@@ -47,9 +48,9 @@ class AdminControllers {
             }
             else{
                 let data = {
-                    id: admin.id,
-                    email: admin.email,
-                    role: admin.role
+                    id: user.id,
+                    email: user.email,
+                    role: user.role
                 }
                 let access_token = signToken(data)
                 res.status(200).json({access_token})
@@ -61,4 +62,4 @@ class AdminControllers {
     }
 }
 
-module.exports = AdminControllers
+module.exports = UserControllers

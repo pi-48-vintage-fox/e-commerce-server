@@ -1,8 +1,8 @@
-const {Admin} = require('../models/index')
+const {User} = require('../models/index')
 
 function authorization (req, res, next) {
    
-    Admin.findOne({
+    User.findOne({
         where: {
             email: req.loggedInUser.email
         }

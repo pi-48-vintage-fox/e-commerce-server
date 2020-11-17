@@ -5,7 +5,7 @@ const {
 
 
 module.exports = (sequelize, DataTypes) => {
-  class Admin extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
      
     }
   };
-  Admin.init({
+  User.init({
     email: {
       type: DataTypes.STRING,
       validate: {
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Admin',
+    modelName: 'User',
   });
-  return Admin;
+  return User;
 };

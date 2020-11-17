@@ -1,5 +1,5 @@
 const {verifyToken} = require('../helpers/jwt')
-const {Admin} = require('../models/index')
+const {User} = require('../models/index')
 
 function authentication (req, res, next) {
     const { access_token } = req.headers
@@ -11,13 +11,13 @@ function authentication (req, res, next) {
     }
     else{
         const decoded = verifyToken(access_token)
-        Admin.findOne({
+        User.findOne({
             where: {
                 email: decoded.email
             }
         })
-        .then(Admin => {
-            if(!Admin){
+        .then(user => {
+            if(!user){
                 let err = {
                     name: 'Authentication failed'
                 }
