@@ -23,7 +23,6 @@ class CartController {
       gty: +req.body.qty,
       status: 'pending'
     }
-    console.log(addCart);
     try {
       const insert = await Cart.create(addCart);
       res.status(201).json(insert);
@@ -33,17 +32,53 @@ class CartController {
     }
   }
 
-  static async cartCheckout(req, res, next) {
+  static async deleteCart(req, res, next) {
     try {
-      const changeStatus = await Cart.update({
-        data: {
-          status: 'checkout'
-        },
+      const deleteCart = await Cart.destroy({
+        where: {
+          id: req.params.id
+        }
+      })
+      res.status(200).json(deleteCart);
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+
+  static patchCart(req, res, next) {
+    Cart.findOne({
+      where: {
+        ProductId: +req.params.id
+      }
+    })
+      .then(find => {
+        return find.update({
+          gty: find.gty + +req.body.qty
+        })
+      })
+      .then(result => {
+        if (result) {
+          res.status(200).json(result)
+        } else {
+          res.json({
+            message: 'failed update'
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err)
+      })
+  }
+
+  static async findCartId(req, res, next) {
+    try {
+      const find = await Cart.findOne({
         where: {
           ProductId: +req.params.id
         }
-      });
-      res.status(200).json(changeStatus);
+      })
+      res.status(200).json(find);
     } catch (error) {
       next(error);
     }
