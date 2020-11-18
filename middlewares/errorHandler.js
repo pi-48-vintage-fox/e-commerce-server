@@ -22,6 +22,10 @@ module.exports = errorHandler = (err, req,res,next)=>{
       status = 404
       msg = err.name
   }
-  console.log(err)
+  if (err.name == 'Product is unavailable at the moment'){
+    status = 400
+    msg = err.name
+}
+
   res.status(status).json({msg})
 }

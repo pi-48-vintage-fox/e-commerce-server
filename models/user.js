@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      
+      User.belongsToMany(models.Product, {through: models.Cart})
     }
   };
   User.init({

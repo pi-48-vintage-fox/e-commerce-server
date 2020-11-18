@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const authentication = (req,res,next)=>{
   const access_token = req.headers.access_token
   if(access_token){
-    console.log(access_token)
+
     const decode = jwt.verify(access_token,process.env.SECRET)
     req.userData = decode
     User.findByPk(req.userData.id)
@@ -12,9 +12,9 @@ const authentication = (req,res,next)=>{
         if(!user){
           return res.status(400).json({msg:'You dont have valid authentication'})
         }
-        else if (user && decode.role == 'user'){
-          return res.status(400).json({msg:'You cannot do this action'})
-        }
+        // else if (user && decode.role == 'user'){
+        //   return res.status(400).json({msg:'You cannot do this action'})
+        // }
         else{
           next()
         }

@@ -22,4 +22,20 @@ module.exports = class userController{
       next (error)
     }
   }
+
+  static async registerUser (req,res,next){
+    try {
+      let params = {
+        email: req.body.email,
+        name: req.body.name,
+        password: req.body.password,
+        role: 'user'
+      }
+      let registerUser = await User.create(params)
+      let access_token = jwt.sign({id:registerUser.id, email:registerUser.email, role:registerUser.role}, process.env.SECRET)
+      res.status(201).json({access_token, name:registerUser.name, profpic:registerUser.profpic,role:registerUser.role})
+    } catch (error) {
+      next (error)
+    }
+  }
 }
