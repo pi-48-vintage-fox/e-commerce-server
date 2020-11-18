@@ -40,7 +40,6 @@ class CartController {
         } catch (error) {
           console.log(error, '<><><><><><><> error updating cart');
         }
-
       }
       else { 
         try {
@@ -64,7 +63,6 @@ class CartController {
 
   // ini buat nambah/kurangin quantity didalam halaman cart nya,
   // nanti di halaman cart nya dibikin 2 tombol, kalo + berarti quantity +1.
-  // kalo - berarti quantity -1
   static async updateTambahCart(req, res, next) {
     try {
       let dataCart = await Cart.findByPk(req.params.id)
@@ -89,8 +87,7 @@ class CartController {
   }
 
   // ini buat nambah/kurangin quantity didalam halaman cart nya,
-  // nanti di halaman cart nya dibikin 2 tombol, kalo + berarti quantity +1.
-  // kalo - berarti quantity -1
+  // nanti di halaman cart nya dibikin 2 tombol, kalo - berarti quantity -1.
   static async updateKurangCart(req, res, next) {
     try {
       let dataCart = await Cart.findByPk(req.params.id)
