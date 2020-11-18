@@ -9,6 +9,10 @@ module.exports = function (err, req, res, next) {
     status = 400
     msg = err.errors[0].message
   }
+  else if (err.name === 'SequelizeUniqueConstraintError') {
+    status = 400
+    msg = 'Email must be unique'
+  }
   res.status(status).json({
     msg
   })
