@@ -77,14 +77,15 @@ module.exports = class productController {
   static async addToCart(req,res,next){
     try {
       let {id} = req.params
+      
+      let updateProductDB = await Product.findByPk(id)
       let params = {
         ProductId: +id,
         UserId: +req.userData.id,
         quantity: +req.body.quantity,
-        price: +req.body.price,
+        price: updateProductDB.price,
         status:'booked'
       }
-      let updateProductDB = await Product.findByPk(id)
 
       if(updateProductDB.stock >= params.quantity){
         let stockUpdate = updateProductDB.stock - params.quantity
@@ -106,7 +107,7 @@ module.exports = class productController {
             let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
             res.status(200).json({updateCart})
             
-          }else{
+          }else if(!userCart[i].Cart.ProductId){
             let cart = await Cart.create(params)
             let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
             res.status(201).json({cart})
@@ -128,6 +129,63 @@ module.exports = class productController {
       res.status(200).json({showCart:showCart.Products})
     } catch (error) {
       next(error)
+    }
+  }
+
+  static async cartUpdate (req, res, next) {
+    try {
+      let ProductId = req.params.id
+      let params = {
+        quantity: +req.body.quantity
+      }
+
+      let cartFind = await Cart.findOne({where:{ProductId}})
+      if (cartFind.UserId === req.userData.id){
+        let searchProductDB = await Product.findOne({where:{id:ProductId}})
+        if(searchProductDB.stock - params.quantity < 0){
+          next ({name:'Product is unavailable at the moment'})
+        }else{
+          let updateProductDB = searchProductDB.stock - params.quantity
+      
+          let updateProductCart = cartFind.quantity + params.quantity
+          let updateTotalPriceCart = updateProductCart * cartFind.price
+          let cartUpdateParams = {
+            quantity: +updateProductCart,
+            totalPrice: +updateTotalPriceCart
+          }
+
+          let dbProductUpdate = {
+            stock: updateProductDB
+          }
+          let recentCart= await Cart.update(cartUpdateParams,{where:{ProductId}, returning:true})
+          let updateDBProduct = await Product.update(dbProductUpdate,{where:{id:ProductId}})
+          res.status(200).json(recentCart[1])
+        }
+      }else{
+        res.status(200).json([])
+      }
+
+    } catch (error) {
+      next (error)
+    }
+  }
+
+  static async deleteCart (req, res, next) {
+    try {
+      let {id} = req.params
+
+      let findCart = await Cart.findOne({where:{ProductId:id}})
+      let findProductDB = await Product.findOne({where:{id}})
+      let updateDBProduct = findCart.quantity + findProductDB.stock
+  
+      let paramsDB = {
+        stock:updateDBProduct
+      }
+      let updateDB = await Product.update(paramsDB, {where:{id}})
+      let delCart = await Cart.destroy({where:{ProductId:id}})
+      res.status(200).json({msg:'Sucessfully Delete the Product'})
+    } catch (error) {
+      next (error)
     }
   }
 }

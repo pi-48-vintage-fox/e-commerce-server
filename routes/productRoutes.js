@@ -10,5 +10,10 @@ routes.delete('/:id', authorization, productController.deleteProduct)
 routes.post('/addToCart/:id', productController.addToCart)
 routes.get('/filter/:id',authorization, productController.getById)
 routes.get('/cart', productController.showCart)
+routes.patch('/cart/:id', productController.cartUpdate)
+routes.delete('/cart/:id', productController.deleteCart)
+
+
+
 
 module.exports = routes
