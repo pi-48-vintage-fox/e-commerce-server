@@ -5,7 +5,6 @@ function authentication(req, res, next) {
     const access_token = req.headers.access_token;
 
     const decoded = verify(access_token);
-    console.log(decoded);
     User.findOne({
         where: {
             email: decoded.email

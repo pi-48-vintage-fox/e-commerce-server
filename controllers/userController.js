@@ -29,11 +29,15 @@ class UserController {
                 password: req.body.password
             }
 
+            console.log(userLogin);
+
             const find = await User.findOne({
                 where: {
                     email: userLogin.email
                 }
             })
+
+            console.log(find);
 
             const comparePassword = compare(userLogin.password, find.password);
 
@@ -50,6 +54,7 @@ class UserController {
                 res.status(200).json({access_token, role: find.role});
             }
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }

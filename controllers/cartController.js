@@ -6,7 +6,8 @@ class CartController {
       const getCart = await Cart.findAll({
         include: [Product],
         where: {
-          UserId: +req.userLogin.id
+          UserId: +req.userLogin.id,
+          status: 'pending'
         }
       });
       res.status(200).json(getCart);
@@ -36,7 +37,8 @@ class CartController {
     try {
       const deleteCart = await Cart.destroy({
         where: {
-          id: req.params.id
+          UserId: +req.userLogin.id,
+          ProductId: +req.params.id
         }
       })
       res.status(200).json(deleteCart);
@@ -48,12 +50,14 @@ class CartController {
   static patchCart(req, res, next) {
     Cart.findOne({
       where: {
+        UserId: +req.userLogin.id,
         ProductId: +req.params.id
       }
     })
       .then(find => {
+        find.gty += req.body.qty
         return find.update({
-          gty: find.gty + +req.body.qty
+          gty: find.gty
         })
       })
       .then(result => {
@@ -66,8 +70,7 @@ class CartController {
         }
       })
       .catch(err => {
-        console.log(err);
-        res.status(500).json(err)
+        next(err)
       })
   }
 
@@ -75,6 +78,7 @@ class CartController {
     try {
       const find = await Cart.findOne({
         where: {
+          UserId: +req.userLogin.id,
           ProductId: +req.params.id
         }
       })

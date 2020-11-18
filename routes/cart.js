@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const CartController = require('../controllers/cartController');
 const authentication = require('../middlewares/authentication');
+const {authorizationCart} = require('../middlewares/authorization')
 
 router.use(authentication);
 router.get('/', CartController.getCart);
