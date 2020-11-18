@@ -1,14 +1,26 @@
 const router = require('express').Router()
 const Controller = require('../controllers/controller')
 const authentication = require('../middlewares/authentication')
+const authenticationCustomer = require('../middlewares/authenticationCustomer')
 
 router.post('/login', Controller.login)
+router.post('/register', Controller.register)
 
-router.get('/products', Controller.show)
+//admin
+router.get('/products', authentication, Controller.show)
+router.post('/products', authentication, Controller.create)
+router.put('/products/:id', authentication, Controller.update)
+router.delete('/products/:id', authentication, Controller.delete)
 
-router.use(authentication)
-router.post('/products', Controller.create)
-router.put('/products/:id', Controller.update)
-router.delete('/products/:id', Controller.delete)
+//customer
+router.get('/custProducts', authenticationCustomer, Controller.show)
+router.get('/carts', authenticationCustomer, Controller.showCart)
+router.post('/carts/:id', authenticationCustomer, Controller.addCart)
+router.patch('/carts/:id', authenticationCustomer, Controller.updateCart)
+router.delete('/carts/:id', authenticationCustomer, Controller.deleteCart)
+router.post('/checkout', authenticationCustomer, Controller.checkout)
+
+//transaction
+router.get('/transactions', authenticationCustomer, Controller.showTransactions)
 
 module.exports = router

@@ -1,14 +1,14 @@
 const { verifyToken } = require("../helpers/jwt")
 const { Admin } = require('../models/index')
 
-async function authentication(req, res, next) {
+async function authenticationCustomer(req, res, next) {
     const { access_token } = req.headers
     try {   
         if(!access_token) {
             throw { message: 'Authentication Failed', status: 401 }
         } else {
             const decoded = verifyToken(access_token)
-            if(decoded.role !== 'admin') {
+            if(decoded.role !== 'customer') {
                 throw { message: `You don't have an access`, status: 403 }
             } else {
                 const user = await Admin.findOne({
@@ -31,4 +31,4 @@ async function authentication(req, res, next) {
     }
 }
 
-module.exports = authentication
+module.exports = authenticationCustomer
