@@ -5,6 +5,7 @@ const {
 class ProductController {
 
   static createProduct(req, res, next) {
+    console.log(' ini di create products');
     const productData = {
       name: req.body.name,
       price: +req.body.price,

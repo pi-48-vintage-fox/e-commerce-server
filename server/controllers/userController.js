@@ -16,7 +16,7 @@ class UserController {
       email: req.body.email,
       password: req.body.password
     }
-    
+
     if (!userData.email || !userData.password) {
       return next({
         name: "BadRequest",
@@ -28,7 +28,7 @@ class UserController {
         where: {
           email: userData.email
         }
-    })
+      })
 
       .then((data) => {
         if (!data) {
@@ -52,6 +52,37 @@ class UserController {
               message: "Wrong Email/ Password"
             })
           }
+        }
+      })
+      .catch((err) => {
+        next(err)
+      })
+  }
+
+  static register(req, res, next) {
+    const userData = {
+      email: req.body.email,
+      password: req.body.password,
+      full_name: req.body.full_name
+    }
+
+    User.create(userData)
+      .then((result) => {
+        if (!result) {
+          next({
+            name: "BadRequest"
+          })
+        } else {
+          const {
+            id,
+            email,
+            full_name
+          } = result
+          res.status(201).json({
+            id,
+            email,
+            full_name
+          })
         }
       })
       .catch((err) => {
