@@ -3,7 +3,7 @@ const { Product, Category } = require('../models/index');
 class ProductController {
   static async getProducts(req, res, next) {
     try {
-      const products = await Product.findAll({order: [['createdAt', 'DESC']]});
+      const products = await Product.findAll();
       res.status(200).json(products);
     } catch(err) {
       next(err)
