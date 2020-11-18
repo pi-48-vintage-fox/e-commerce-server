@@ -8,8 +8,9 @@ const authentication = require('../middlewares/authentication')
 
 
 router.post('/login', UserController.login)
-router.use(authentication)
+router.post('/register', UserController.register)
 router.get('/products', ProductController.show)
+router.use(authentication)
 router.post('/products', authorization, ProductController.add)
 router.put('/products/:id', authorization, ProductController.edit)
 router.delete('/products/:id', authorization, ProductController.delete)

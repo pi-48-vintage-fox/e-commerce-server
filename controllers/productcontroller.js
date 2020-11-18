@@ -70,20 +70,28 @@ class ProductController {
           productId
         }
       })
-      // console.log(cart);
+      const barang = await Product.findOne({
+        where: {
+          id: productId
+        }
+      })
+      console.log(barang.price);
       if(!cart){
         const data = await Cart.create({
           userId,
           productId,
-          quantity: 1
+          quantity: 1,
+          totalPrice: barang.price*1
         })
         res.status(201).json(data)
       }else if(cart){
         console.log(cart);
         const temp = cart.quantity+1
         const input = {
-          quantity: temp
+          quantity: temp,
+          totalPrice: temp*barang.price
         }
+        console.log(input);
         const product = await Product.findOne({
           where: {
             id: productId
@@ -129,17 +137,11 @@ class ProductController {
           image_url: el.Product.image_url, 
           name: el.Product.name, 
           category: el.Product.category, 
-          quantity: el.quantity})
+          quantity: el.quantity,
+          totalPrice: el.totalPrice
+        })
       });
       console.log(result);
-      // let result = []
-      // data.forEach(el => {
-      //     el.Users.forEach(i=>{
-      //         if(i.id==req.loggedInUser.id){
-      //             result.push(el)
-      //         }
-      //     })
-      // });
       res.status(200).json(result)
     }catch (err) {
       next(err)
@@ -170,11 +172,15 @@ class ProductController {
         }
       })
       const input = {
-        quantity: req.body.quantity
+        quantity: req.body.quantity,
+        totalPrice: req.body.quantity*product.price
       }
       if(req.body.quantity > product.stock){
-        throw { msg: "Cannot add more than stock", status: 401 }
-      }else{
+        throw { name: 'Cannot Do That', msg: "Cannot add more than stock", status: 401 }
+      }else if (req.body.quantity<=0){
+        throw { name: 'Cannot Do That', msg: "Item Quantity cannot below zero", status: 401 }
+      }
+      else{
         const data = await Cart.update(input,{
           where:{
             userId,
