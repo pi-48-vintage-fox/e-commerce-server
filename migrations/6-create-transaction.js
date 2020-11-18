@@ -18,7 +18,7 @@ module.exports = {
         onUpdate: 'CASCADE'
       },
       total: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       status: {
         type: Sequelize.STRING

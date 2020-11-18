@@ -72,6 +72,13 @@ class ProductController {
       next(err)
     }
   }
+  static async updateCategory (req, res, next){
+    try {
+      
+    } catch (error) {
+      next (error)
+    }
+  }
 
 }
 
