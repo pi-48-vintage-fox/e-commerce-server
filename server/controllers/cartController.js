@@ -18,9 +18,15 @@ class CartController {
   }
 
   static showCart(req, res, next) {
-    Cart.findAll({include: Product})
+    console.log(req.userLogin)
+    Cart.findAll({
+      where: {
+        UserId: req.userLogin.id
+      },
+      include: Product
+    })
     .then(data => {
-      console.log('Cart shown!')
+      console.log(data)
       res.status(200).json(data)
     })
     .catch(err => {
