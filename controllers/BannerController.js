@@ -20,6 +20,9 @@ class BannerController {
         name: req.body.name,
         image_url: req.body.image_url,
         is_active: req.body.is_active,
+        caption: req.body.caption,
+        sub_caption: req.body.sub_caption,
+        link: req.body.link
       };
       let banner = await Banner.create(data);
       res.status(200).json({
