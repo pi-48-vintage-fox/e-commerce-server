@@ -1,6 +1,6 @@
 const ProductController = require('../controllers/productController')
 const authentication = require('../middlewares/authentication')
-const authorization = require('../middlewares/authorization')
+const { authorization } = require('../middlewares/authorization')
 const router = require('express').Router()
 
 router.get('/', ProductController.fetch)

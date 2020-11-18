@@ -10,14 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Cart.belongsTo(models.User)
+      Cart.belongsTo(models.Product)
     }
   };
   Cart.init({
-    UserId: {
-      type: DataTypes.INTEGER
-    },
-    ProductId: DataTypes.INTEGER,
     quantity: {
       type: DataTypes.INTEGER,
       validate: {
@@ -33,8 +30,29 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Status cannot be empty!"
         }
       }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "UserId cannot be empty!"
+        }
+      }
+    },
+    ProductId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: "ProductId cannot be empty!"
+        }
+      }
     }
   }, {
+    hooks: {
+      beforeCreate(cart) {
+        cart.status = 'Waiting for payment'
+      }
+    },
     sequelize,
     modelName: 'Cart',
   });

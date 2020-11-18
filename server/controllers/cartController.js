@@ -1,15 +1,15 @@
-const { User, Product, Cart } = require('../models/index')
+const { Product, Cart } = require('../models/index')
 
 class CartController {
   static addToCart(req, res, next) {
     const obj = {
-      UserId: req.body.userId,
-      ProductId: req.params.id,
-      quantity: req.body.quantity,
-      status: 'Waiting for payment'
+      UserId: req.userLogin.id,
+      ProductId: req.body.ProductId,
+      quantity: req.body.quantity
     }
     Cart.create(obj)
-    .then(({data}) => {
+    .then(data => {
+      console.log(data)
       res.status(201).json(data)
     })
     .catch(err => {
@@ -18,24 +18,27 @@ class CartController {
   }
 
   static showCart(req, res, next) {
-    Cart.findAll({ include: User, Product })
-    .then(({data}) => {
+    Cart.findAll({include: Product})
+    .then(data => {
+      console.log('Cart shown!')
       res.status(200).json(data)
     })
     .catch(err => {
+      console.log(err)
       next(err)
     })
   }
 
-  static changeStatus(req, res, next) {
+  static changeQuantity(req, res, next) {
     const id = req.params.id
-    Cart.update({ status: req.body.status }, {
+    Cart.update({ quantity: req.body.quantity }, {
       where: {
         id: id
       }
     })
     .then(() => {
-      console.log('Cart status successfully updated!')
+      console.log('Cart quantity successfully updated!')
+      res.status(200).json({msg: 'Cart quantity successfully updated!'})
     })
     .catch(err => {
       next(err)
@@ -50,7 +53,8 @@ class CartController {
       }
     })
     .then(() => {
-      console.log('Order has been completed!')
+      console.log('Item has been removed from cart!')
+      res.status(200).json({msg: 'Item has been removed from cart!'})
     })
     .catch(err => {
       next(err)

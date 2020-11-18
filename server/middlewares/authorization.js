@@ -1,4 +1,4 @@
-const { User } = require('../models/index')
+const { User, Cart } = require('../models/index')
 
 function authorization(req, res, next) {
   const id = req.userLogin.id
@@ -17,4 +17,32 @@ function authorization(req, res, next) {
   })
 }
 
-module.exports = authorization
+function customerAuth(req, res, next) {
+  const UserId = req.userLogin.id
+
+  Cart.findOne({
+    where: {UserId: UserId}
+  })
+  .then(data => {
+    console.log(data)
+    console.log(UserId, 'ini userid')
+    if(!data) {
+      throw { msg: 'Cart not found!', status: 404}
+    }
+    else if(data.UserId === UserId) {
+      next()
+    }
+    else {
+      throw { msg: 'You are not authorized!', status: 401 }
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    next(err)
+  })
+}
+
+module.exports = {
+  authorization,
+  customerAuth
+}
