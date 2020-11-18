@@ -20,15 +20,43 @@ class CartController {
 
   static async addCart(req, res, next) {
     try {
-      console.log(req.params.id, '<<<<<<<<< ini req.params.id')
-      let params = {
-        UserId: req.loginUser.id,
-        ProductId: req.params.id,
-        quantity: req.body.quantity,
+      const UserId = req.loginUser.id
+      const ProductId = +req.params.id
+      const quantity = +req.body.quantity
+      console.log({UserId, ProductId, quantity}, '<<<<<<<<<<<bismillah');
+      const cart = await Cart.findOne({ where: {
+        UserId,
+        ProductId,
         status: false
       }
-      const data = await Cart.create(params, {include: Product})
-      res.status(200).json(data)
+      
+      })
+      if (cart) {
+        console.log(cart.toJSON(),'<<<<<<<<<<< cart sudah ada');
+        let newQuantity = cart.quantity + quantity
+        try {
+          await cart.update({quantity:newQuantity})
+          res.status(200).json(cart)
+        } catch (error) {
+          console.log(error, '<><><><><><><> error updating cart');
+        }
+
+      }
+      else { 
+        try {
+          const newCart = await Cart.create({
+            UserId,
+            ProductId,
+            quantity: 1,
+            status: false
+          })
+          console.log(newCart.toJSON());
+          res.status(201).json(newCart)
+        } catch (error) {
+          console.log(error, '<><><><><><><><><> error creating cart');
+        }
+
+      }
     } catch (error) {
       next(error)
     }
@@ -57,13 +85,13 @@ class CartController {
   static async deleteCart(req, res, next) {
     try {
       const data = await Cart.destroy({
-        where : {
+        where: {
           id: req.params.id
         }
       })
-      res.status(200).json({msg: 'berhasil dihapus!'})
+      res.status(200).json({ msg: 'berhasil dihapus!' })
     } catch (error) {
-      next(error) 
+      next(error)
     }
 
   }
@@ -76,20 +104,20 @@ class CartController {
           UserId: req.loginUser.id,
         }
       })
-      for(const key of dataCart) {
-        let sisaStock = {stock: key.Product.stock - key.quantity}
+      for (const key of dataCart) {
+        let sisaStock = { stock: key.Product.stock - key.quantity }
         await Product.update(sisaStock, {
-          where : {
+          where: {
             id: key.Product.id
           }
         })
-        let params = {status: true}
+        let params = { status: true }
         await Cart.update(params, {
           where: {
             id: key.id
           }
         })
-        res.status(200).json({msg: 'checkout berhasil'})
+        res.status(200).json({ msg: 'checkout berhasil' })
       }
     } catch (error) {
       console.log(error)
