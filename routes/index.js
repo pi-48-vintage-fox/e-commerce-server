@@ -19,7 +19,8 @@ router.delete('/products/:id', authentication, authorization, ProductController.
 router.get('/productCustomers', authenticationCustomer, ProductController.show)
 router.get('/carts', authenticationCustomer, CartController.showCart)
 router.post('/carts/:id', authenticationCustomer, CartController.addCart)
-router.patch('/carts/:id', authenticationCustomer, CartController.updateCart)
+router.patch('/cartsTambah/:id', authenticationCustomer, CartController.updateTambahCart)
+router.patch('/cartsKurang/:id', authenticationCustomer, CartController.updateKurangCart)
 router.delete('/carts/:id', authenticationCustomer, CartController.deleteCart)
 router.post('/checkout', authenticationCustomer, CartController.checkOut)
 

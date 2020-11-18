@@ -65,17 +65,49 @@ class CartController {
   // ini buat nambah/kurangin quantity didalam halaman cart nya,
   // nanti di halaman cart nya dibikin 2 tombol, kalo + berarti quantity +1.
   // kalo - berarti quantity -1
-  static async updateCart(req, res, next) {
+  static async updateTambahCart(req, res, next) {
     try {
-      let params = {
-        quantity: req.body.quantity
+      let dataCart = await Cart.findByPk(req.params.id)
+      let dataProduct = await Product.findByPk(dataCart.ProductId)
+      if(dataCart.quantity >= dataProduct.stock){
+        throw error
       }
-      const data = await Cart.update(params, {
-        where: {
-          id: req.params.id,
+      else{
+        let params = {
+          quantity: req.body.quantity
         }
-      })
-      res.status(200).json(data)
+        const data = await Cart.update(params, {
+          where: {
+            id: req.params.id,
+          }
+        })
+        res.status(200).json(data)
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // ini buat nambah/kurangin quantity didalam halaman cart nya,
+  // nanti di halaman cart nya dibikin 2 tombol, kalo + berarti quantity +1.
+  // kalo - berarti quantity -1
+  static async updateKurangCart(req, res, next) {
+    try {
+      let dataCart = await Cart.findByPk(req.params.id)
+      if(dataCart.quantity <= 0){
+        throw error
+      }
+      else{
+        let params = {
+          quantity: req.body.quantity
+        }
+        const data = await Cart.update(params, {
+          where: {
+            id: req.params.id,
+          }
+        })
+        res.status(200).json(data)
+      }
     } catch (error) {
       next(error)
     }
