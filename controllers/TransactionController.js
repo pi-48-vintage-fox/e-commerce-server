@@ -107,7 +107,7 @@ class TransactionController {
           ProductId: data.ProductId
         }
       })
-      cart.delete()
+      cart.destroy()
       cart.save()
       res.status(200).json({
         msg: 'Item removed from cart'

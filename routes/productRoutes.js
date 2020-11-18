@@ -10,4 +10,5 @@ productRoutes.put("/products/:id",authentication, ProductController.update)
 productRoutes.delete("/products/:id",authentication, ProductController.delete)
 productRoutes.patch("/products/:id/updatecategory",authentication, ProductController.updateCategory)
 
+
 module.exports = productRoutes
