@@ -9,7 +9,7 @@ function errorHandler (err, req, res, next) {
     }
     else if(err.name === 'Bad Request'){
         status = 400
-        msg = err.errors[0].message
+        msg = err.msg
     }
     else if(err.name === 'SequelizeUniqueConstraintError'){
         status = 400

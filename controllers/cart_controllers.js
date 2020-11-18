@@ -6,7 +6,7 @@ class CartController {
         Cart.findAll({
             where: {
                 UserId: req.loggedInUser.id
-            }
+            }, include:Product
         })
         .then(data => {
             res.status(200).json(data)
@@ -19,58 +19,96 @@ class CartController {
     static addToCard (req, res, next) {
         const payload = {
             ProductId: req.body.ProductId,
-            quantity: req.body.quantity,
+            quantity: +req.body.quantity,
             total_price: req.body.quantity * req.body.product_price,
             UserId: req.loggedInUser.id
         }
-        console.log(payload)
-        Cart.create(payload)
+        let stock 
+        Product.findByPk(payload.ProductId)
+        .then(product => {
+            stock = product.stock
+            return Cart.findOne({
+                where: {
+                    UserId: payload.UserId,
+                    ProductId: payload.ProductId
+                }
+            })
+        })
         .then(data => {
+            if(data) {
+                let cart = {
+                    quantity: (data.quantity + payload.quantity),
+                    total_price: (data.total_price + payload.total_price)
+                }
+                if(cart.quantity > stock || cart.quantity == 0) {
+                    let err = {
+                        name: 'Bad Request',
+                        msg: 'Error, quantity must be greater than 0 and less than stock'
+                    }
+                    throw next(err)
+                }
+                return Cart.update(cart, { //// 1, 2, 3, 4
+                    where: {
+                        UserId: payload.UserId,
+                        ProductId: payload.ProductId
+                    }
+                })
+            }
+            else {
+                if(payload.quantity > stock || payload.quantity === 0) {
+                    let err = {
+                        name: 'Bad Request',
+                        msg: 'Error, quantity must be greater than 0 and less than stock'
+                    }
+                    throw next(err)
+                }
+                return Cart.create(payload) //ProductId , UserId, quantity, total price
+            }
+        })
+        .then(data => {
+            if(data[0] === 1) {
+                res.status(200).json({msg: 'Sucessfully update from cart'})
+            }
             res.status(201).json(data)
         })
         .catch(err => {
             next(err)
         })
-
     }
 
     static updateCart (req, res, next) {
-        const id = req.params.id
+        const id = +req.params.id
         const payload = {
             quantity: req.body.quantity
         }
-        Product.findByPk(id)
+        Cart.findByPk(id)
         .then(product => {
-            if(!product) {
+            return Product.findByPk(product.ProductId)
+        })
+        .then(data => {
+            if(!data) {
                 let err = {
                     name: 'Not Found'
                 }
                 throw next(err)
             }
-            else if (payload.quantity > product.quantity) {
+            else if (payload.quantity > data.stock || payload.quantity === 0) {
                 let err = {
-                    name: 'Bad Request'
+                    name: 'Bad Request',
+                    msg: 'Error, quantity must be greater than 0 and less than stock'
                 }
                 throw next(err)
             }
-            else if(product.quantity > payload.quantity) {
+            else if(data.stock > payload.quantity) {
                 return Cart.update(payload, {
                     where: {
-                        ProductId: id
+                        id: id
                     }
                 })
             }
         })
         .then(data => {
-            if(data == 0) {
-                let err = {
-                    name: 'Not Found'
-                }
-                throw next(err)
-            }
-            if(data){
-                res.status(200).json({msg: 'Sucessfully update from cart'})
-            }
+            res.status(201).json({msg: 'Sucessfully update from cart'})
         })
         .catch(err => {
             next(err)

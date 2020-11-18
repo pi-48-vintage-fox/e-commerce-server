@@ -8,6 +8,6 @@ router.get('/', authorization, CartController.viewCart)
 router.post('/', authorization, CartController.addToCard)
 router.patch('/:id', authorization, CartController.updateCart)
 router.delete('/:id', authorization, CartController.deleteFromCart)
-router.delete('/checkout', authorization, CartController.checkOut)
+router.post('/checkout', authorization, CartController.checkOut)
 
 module.exports = router
