@@ -4,13 +4,15 @@ const banners = [
   {
     title: 'diskon1',
     status: 'active',
-    imageUrl: 'http://plant.engotheme.com/wp-content/uploads/2018/09/11.jpg',
+    imageUrl:
+      'https://res.cloudinary.com/rey-h8/image/upload/v1605786386/e-commerce%20gardenbyte/plant_banner1_by2agj.jpg',
     imageId: '',
   },
   {
     title: 'diskon2',
     status: 'active',
-    imageUrl: 'http://plant.engotheme.com/wp-content/uploads/2018/09/10.jpg',
+    imageUrl:
+      'https://res.cloudinary.com/rey-h8/image/upload/v1605786384/e-commerce%20gardenbyte/plant_banner2_odvtwz.jpg',
     imageId: '',
   },
 ]
