@@ -70,7 +70,8 @@ class UserController {
       .then((result) => {
         if (!result) {
           next({
-            name: "BadRequest"
+            name: "BadRequest",
+            message: "You can't register with this format"
           })
         } else {
           const {

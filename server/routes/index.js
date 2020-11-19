@@ -6,6 +6,7 @@ const CartController = require('../controllers/cartController')
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
+router.get('/showProducts', ProductController.showProduct)
 router.use(authentication)
 router.post('/products', authorization, ProductController.createProduct)
 router.get('/products', ProductController.showProduct)
