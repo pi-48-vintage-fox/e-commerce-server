@@ -54,6 +54,9 @@ class BannerController {
         name: req.body.name,
         image_url: req.body.image_url,
         is_active: req.body.is_active,
+        caption: req.body.caption,
+        sub_caption: req.body.sub_caption,
+        link: req.body.link
       };
       console.log(data);
       let banner = await Banner.update(data, {

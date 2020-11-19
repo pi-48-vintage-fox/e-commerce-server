@@ -29,11 +29,19 @@ class WishlistController {
         ProductId : req.body.ProductId
       }
 
-      let wishlist = await Wishlist.create(data)
+      let wishlist = await Wishlist.findOne({
+        where:{
+          UserId: data.UserId,
+          ProductId: data.ProductId
+        }
+      })
+      if(wishlist) throw { msg: "You already wishing this product", status: 400 }
+
+      let newWish = await Wishlist.create(data)
 
       res.status(200).json({
         msg: 'Wishlist added',
-        wishlist
+        newWish
       })
     } catch (error) {
       next(error)

@@ -45,7 +45,7 @@ class UserController {
         email: req.body.email,
         password: req.body.password,
         name: req.body.name,
-        role: "user"
+        role: "customer"
       }
 
       let user = await User.create(data)

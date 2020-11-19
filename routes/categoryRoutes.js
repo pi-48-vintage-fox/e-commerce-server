@@ -6,9 +6,9 @@ const categoryRoutes = express.Router()
 
 
 // Category
-categoryRoutes.get('/product/categories', authentication, CategoryController.index)
-categoryRoutes.post('/product/categories', authentication, CategoryController.insert)
-categoryRoutes.put('/product/categories/:id', authentication, CategoryController.update)
-categoryRoutes.delete('/product/categories/:id', authentication, CategoryController.delete)
+categoryRoutes.get('/categories', CategoryController.index)
+categoryRoutes.post('/categories', authentication, CategoryController.insert)
+categoryRoutes.put('/categories/:id', authentication, CategoryController.update)
+categoryRoutes.delete('/categories/:id', authentication, CategoryController.delete)
 
 module.exports = categoryRoutes

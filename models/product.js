@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
     }
   };
   Product.init({
@@ -55,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Stock must be a number"
         },
         min:{
-          args:[1],
+          args:[0],
           msg : "Stock must be greater than 0"
         },  
         notEmpty:{
@@ -74,6 +73,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Product',
+    
   });
   return Product;
 };
