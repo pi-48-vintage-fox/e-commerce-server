@@ -51,7 +51,9 @@ module.exports = (sequelize, DataTypes) => {
     const hash = hashPassword(user.password)
 
     user.password = hash
-    user.role = 'guest'
+    if (user.role !== 'admin') {
+      user.role = 'guest'
+    }
     user.email = user.email.toLowerCase()
     if (!user.imageUrl) {
       user.imageUrl = `https://avatars.dicebear.com/api/initials/${user.email}.svg`

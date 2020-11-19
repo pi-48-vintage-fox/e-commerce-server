@@ -18,18 +18,8 @@ router.patch(
   isCartOwner,
   CartProductController.updateQuantity
 )
-router.put(
-  '/:ProductId',
-  authentication,
-  isCartOwner,
-  CartProductController.update
-)
-router.delete(
-  '/:ProductId',
-  authentication,
-  isCartOwner,
-  CartProductController.delete
-)
+router.put('/', authentication, isCartOwner, CartProductController.update)
+router.delete('/', authentication, isCartOwner, CartProductController.delete)
 
 router.get(
   '/:ProductId/:CartId',

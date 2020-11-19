@@ -291,11 +291,11 @@ class CartProductController {
     try {
       console.log('remove item from cart')
       console.log(req.params, 'req.params')
+      console.log(req.body, 'req.body')
 
       await CartProduct.destroy({
         where: {
-          CartId: req.params.CartId,
-          ProductId: req.params.ProductId,
+          id: req.body.CartProductId,
         },
       })
 
