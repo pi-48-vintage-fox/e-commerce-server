@@ -6,7 +6,7 @@ const authorization = require('../middleware/authorization')
 
 router.use(authentication)
 
-router.post('/', productController.createProduct)
+router.post('/', authorization, productController.createProduct)
 router.get('/', productController.showProduct)
 router.get('/:id', productController.showProductById)
 router.delete('/:id', authorization, productController.deleteProduct)

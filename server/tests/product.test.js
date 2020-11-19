@@ -84,9 +84,23 @@ describe('Testing Add Product /POST', () => {
     })
   })
 
-  // it('Fail add product, Role not admin', (done) => {
-  //   // Not role admin
-  // })
+  // it('add product failed dont have token', (done) => {
+  //   request(app)
+  //   .post('/products')
+  //   .send({ name: 'sweater gakUnik', 
+  //           image_url: 'https://d15udtvdbbfasl.cloudfront.net/catalog/product/large_image/69_412960.jpg',
+  //           price: 100000, 
+  //           stock: 100})
+  //   .then(response => {
+  //     const { body, status } = response
+     
+  //     expect(status).toEqual(401)
+  //     expect(body).toHaveProperty('msg', `You have to login first`)
+  //     done()
+  //   })
+  //   .catch(err => {
+  //     done(err)
+  //   })
 
   it('Fail add product, required cannot be empty', (done) => {
     request(app)
