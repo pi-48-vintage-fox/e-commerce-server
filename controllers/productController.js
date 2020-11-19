@@ -82,7 +82,7 @@ module.exports = class productController {
       let params = {
         ProductId: +id,
         UserId: +req.userData.id,
-        quantity: +req.body.quantity,
+        quantity: 1,
         price: updateProductDB.price,
         status:'booked'
       }
@@ -93,26 +93,34 @@ module.exports = class productController {
         //mencari apakah produk ini ada di dalam cart user yang dimaksud
         let showCart = await User.findOne({where:{id:req.userData.id}, include: Product})
         let userCart = showCart.Products
-        for (let i = 0 ; i <= userCart.length; i ++){
-          if(userCart[i].Cart.ProductId === +req.params.id){
-            let updateQuantity = userCart[i].Cart.quantity + params.quantity
-            let updateTotalPrice = updateQuantity * userCart[i].Cart.price
-
-            let updateParams = {
-              quantity: updateQuantity,
-              totalPrice: updateTotalPrice
+        console.log(userCart.length)
+        if (userCart.length !==0){
+          for (let i = 0 ; i <= userCart.length; i ++){
+            if(userCart[i].Cart.ProductId === +req.params.id){
+              let updateQuantity = userCart[i].Cart.quantity + params.quantity
+              let updateTotalPrice = updateQuantity * userCart[i].Cart.price
+  
+              let updateParams = {
+                quantity: updateQuantity,
+                totalPrice: updateTotalPrice
+              }
+  
+              let updateCart = await Cart.update(updateParams, {where:{ProductId:params.ProductId}})
+              let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
+              res.status(200).json({updateCart})
+              
+            }else if(!userCart[i].Cart.ProductId){
+              let cart = await Cart.create(params)
+              let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
+              res.status(201).json({cart})
             }
-
-            let updateCart = await Cart.update(updateParams, {where:{ProductId:params.ProductId}})
-            let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
-            res.status(200).json({updateCart})
-            
-          }else if(!userCart[i].Cart.ProductId){
-            let cart = await Cart.create(params)
-            let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
-            res.status(201).json({cart})
           }
+        }else {
+          let cart = await Cart.create(params)
+          let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
+          res.status(201).json({cart})
         }
+        
 
       }else{
         next ({name:'Product is unavailable at the moment'})
