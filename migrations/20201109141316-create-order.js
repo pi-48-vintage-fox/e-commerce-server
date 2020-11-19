@@ -33,6 +33,24 @@ module.exports = {
       status: {
         type: Sequelize.BOOLEAN,
       },
+      size: {
+        type: Sequelize.STRING
+      },
+      totalPrice: {
+        type: Sequelize.INTEGER
+      },
+      quantity: {
+        type: Sequelize.INTEGER
+      },
+      address: {
+        type: Sequelize.STRING
+      },
+      tracking: {
+        type: Sequelize.STRING
+      },
+      wishlist: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

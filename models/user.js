@@ -49,9 +49,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        // beforeCreate: (user, opt) => {
-        //   user.password = generateToken(user.password)
-        // }
+        beforeCreate: (user, opt) => {
+          if(!user.role) {
+            return user.role = 'customer'
+          }
+        }
       },
       sequelize,
       modelName: "User",

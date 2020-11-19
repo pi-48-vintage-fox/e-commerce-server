@@ -22,7 +22,7 @@ class ProductController {
         XL: req.body.XL,
         price: req.body.price,
       };
-      console.log(dataProduct)
+      // console.log(dataProduct)
       const product = await Product.create(dataProduct, { returning: true });
       res.status(201).json(product);
     } catch (err) {

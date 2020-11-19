@@ -168,7 +168,7 @@ price: 150000
 
   **Required:**
 
-    `id=[integer]`
+  `id=[integer]`
 
 - **Data Params**
 
@@ -211,7 +211,7 @@ price: 150000
 
   **Required:**
 
-    `id=[integer]`
+  `id=[integer]`
 
 - **Success Response:**
 
@@ -253,14 +253,13 @@ price: 150000
   - **Code:** 401 <br />
     **Content:** `{ errorMsg : "Token tidak ditemukan" }`
 
-
 ## **Update Status**
 
     Update status order product
 
 - **URL**
 
-  /order/:id
+  /orders/:id
 
 - **Method:**
 
@@ -274,7 +273,7 @@ price: 150000
 
   **Required:**
 
-    `id=[integer]`
+  `id=[integer]`
 
 - **Data Params**
 
@@ -289,3 +288,117 @@ price: 150000
 
   - **Code:** 500 <br />
     **Content:** `{ error : "Server Internal Error" }`
+
+## **Add Orders**
+
+    Add Orders
+
+- **URL**
+
+  /orders
+
+- **Method:**
+
+  `POST`
+
+- **Headers:**
+
+  `{ access_token }`
+
+- **URL Params**
+
+  **Required:**
+
+**Data Params**
+
+{
+UserId: 1,
+ProductId: 2,
+status: false,
+size: S,
+quantity: 2,
+address: 'Jl raya condet',
+totalPrice: 150000,
+tracking: 'waiting for payment'
+}
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:** `{ id: 1, UserId: 1, ProductId: 2, status: false, size: S, quantity: 2, address: 'Jl raya condet', totalPrice: 150000, tracking: 'waiting for payment', "updatedAt": "2020-11-03T09:42:05.042Z", "createdAt": "2020-11-03T09:42:05.042Z" }`
+
+- **Error Response:**
+
+  - **Code:** 500 <br />
+    **Content:** `{ errorMsg : "Server Internal Error" }`
+
+## **Edit Order**
+
+    Edit Order
+
+- **URL**
+
+  /orders/:id
+
+- **Method:**
+
+  `PUT`
+
+- **Headers:**
+
+  `{ access_token }`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[integer]`
+
+- **Data Params**
+
+  {
+  address: 'Jl raya condet, rt 40/20 no 80', 
+  }
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:** `{ id: 1, UserId: 1, ProductId: 2, status: false, size: S, quantity: 2, address: 'Jl raya condet, rt 40/20 no 80', totalPrice: 150000, tracking: 'waiting for payment', "updatedAt": "2020-11-03T09:42:05.042Z", "createdAt": "2020-11-03T09:42:05.042Z" }`
+
+- **Error Response:**
+
+  - **Code:** 500 <br />
+    **Content:** `{ errorMsg : "Server Internal Error" }`
+
+
+## **Delete Order**
+
+    Delete Order
+
+- **URL**
+
+  /orders/:id
+
+- **Method:**
+
+  `DELETE`
+
+- **Headers:**
+
+  `{ access_token }`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[integer]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:** `{ msg: "Success delete" }`
+
+- **Error Response:**
+
+  - **Code:** 404 <br />
+    **Content:** `{ error : "Not Found" }`

@@ -8,11 +8,11 @@ async function authentication(req, res, next){
         const decoded = verifyToken(access_token)
         const user = await User.findOne({
             where: {
-                email: decoded.email
+                email: decoded.email,
             }
         })
-        // console.log(decoded, "<<<<")
-        if(!user) return next({name: "Unauthorized", msg: "Token tidak ditemukan"})
+        // console.log(user, 'ini user')
+        if(user == null) return next({name: "Unauthorized", msg: "Tidak memiliki akses"})
         req.decoded = decoded
         next()
     } catch (err) {
@@ -21,7 +21,6 @@ async function authentication(req, res, next){
 
 }
 
-// perlu revisi **
 async function authorization(req, res, next){
     try {
         console.log(req.decoded.role, "<<<<<")
@@ -34,25 +33,41 @@ async function authorization(req, res, next){
                 email: req.decoded.email
             }
         })
+        console.log(user.role, '<< user.role')
         if(!user) {
             next({name: "Unauthorized", msg: "Data tidak ditemukan, tidak memiliki akses"})
-        } else if (user.role !== role) {
+        } else if (user.role.toLowerCase() == 'customer') {
             next({name: "Unauthorized", msg: " tidak memiliki akses"})
         } else {
             next()
         }
-
-        // if(!taskConj) {
-        //     next({name: "Unauthorized", msg: "Data tidak ditemukan, tidak memiliki akses"})
-        // } 
-        // else if(taskConj.UserId !== userId) {
-        //     next({name: "Unauthorized", msg: " tidak memiliki akses"})
-        // } else {
-        //     next()
-        // }
     } catch (err) {
         next(err)
     }
 }
 
-module.exports = {authentication, authorization}
+async function authorizationClient(req, res, next){
+    try {
+        const UserId = req.decoded.id
+        const id = +req.params.id
+        const role = req.decoded.role
+
+        const user = await User.findOne({
+            where: {
+                email: req.decoded.email
+            }
+        })
+
+        if(!user) {
+            next({name: "Unauthorized", msg: "Data tidak ditemukan, tidak memiliki akses"})
+        } else if (user.role.toLowerCase() == 'admin') {
+            next({name: "Unauthorized", msg: " tidak memiliki akses"})
+        } else {
+            next()
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
+module.exports = {authentication, authorization, authorizationClient}
