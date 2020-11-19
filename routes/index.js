@@ -13,10 +13,11 @@ router.put('/products/:id', authentication, Controller.update)
 router.delete('/products/:id', authentication, Controller.delete)
 
 //customer
-router.get('/custProducts', authenticationCustomer, Controller.show)
+router.get('/custProducts', Controller.show)
 router.get('/carts', authenticationCustomer, Controller.showCart)
 router.post('/carts/:id', authenticationCustomer, Controller.addCart)
-router.patch('/carts/:id', authenticationCustomer, Controller.updateCart)
+router.patch('/carts/increment/:id', authenticationCustomer, Controller.updatePlusCart)
+router.patch('/carts/decrement/:id', authenticationCustomer, Controller.updateMinusCart)
 router.delete('/carts/:id', authenticationCustomer, Controller.deleteCart)
 router.post('/checkout', authenticationCustomer, Controller.checkout)
 

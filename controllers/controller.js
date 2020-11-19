@@ -138,35 +138,91 @@ class Controller {
 
     static async addCart (req, res, next) {
         try {
+            let UserId = req.loggedIn.id
+            let ProductId = +req.params.id
+            let quantityInput = 1
             const product = await Product.findByPk(+req.params.id)
-            let payloud = {
-                UserId: req.loggedIn.id,
-                ProductId: +req.params.id,
-                quantity: +req.body.quantity,
-                status: "cart",
-                total_price: +req.body.quantity * product.price
+            const dataCart = await Cart.findOne({
+                where: {
+                    UserId,
+                    ProductId,
+                    status: 'cart'
+                }
+            })
+            if(dataCart) {
+                let qty = dataCart.quantity + quantityInput
+                if(qty > product.stock) {
+                    throw err
+                } else {
+                    let payload = {
+                        quantity: qty,
+                        total_price: qty * product.price
+                    }
+                    const data = await Cart.update(payload, {
+                        where: {
+                            id: dataCart.id
+                        }
+                    })
+                    res.status(200).json(data)
+                }
+            } else {
+                const qty = 1
+                const data = await Cart.create({
+                    UserId,
+                    ProductId,
+                    quantity: 1,
+                    status: 'cart',
+                    total_price: qty * product.price
+                })
+                res.status(201).json(data)
             }
-            const data = await Cart.create(payloud)
-            res.status(200).json(data)
         } catch (err) {
             next(err)
         }
     }
 
-    static async updateCart (req, res, next) {
+    static async updatePlusCart (req, res, next) {
         try {
             const cart = await Cart.findByPk(req.params.id)
             const product = await Product.findByPk(cart.ProductId)
-            let payload = {
-                quantity: +req.body.quantity,
-                total_price: +req.body.quantity * product.price
-            }
-            const data = await Cart.update(payload, {
-                where: {
-                    id: req.params.id
+            if(cart.quantity >= product.stock) {
+                next(err)
+            } else {
+                let payload = {
+                    quantity: +req.body.quantity,
+                    total_price: +req.body.quantity * product.price
                 }
-            })
-            res.status(200).json({ message: 'Your cart has been updated'})
+                const data = await Cart.update(payload, {
+                    where: {
+                        id: req.params.id
+                    }
+                })
+                res.status(200).json({ message: 'Your cart has been updated'})
+            }
+        } catch (err) {
+            console.log(err);
+            next(err)
+        }
+    }
+
+    static async updateMinusCart (req, res, next) {
+        try {
+            const cart = await Cart.findByPk(req.params.id)
+            const product = await Product.findByPk(cart.ProductId)
+            if(cart.quantity <= 1) {
+                next(err)
+            } else {
+                let payload = {
+                    quantity: +req.body.quantity,
+                    total_price: +req.body.quantity * product.price
+                }
+                const data = await Cart.update(payload, {
+                    where: {
+                        id: req.params.id
+                    }
+                })
+                res.status(200).json({ message: 'Your cart has been updated'})
+            }
         } catch (err) {
             console.log(err);
             next(err)
@@ -191,7 +247,8 @@ class Controller {
             const cart = await Cart.findAll({
                 include: Product,
                 where: {
-                    UserId: req.loggedIn.id
+                    UserId: req.loggedIn.id,
+                    status: "cart"
                 }
             })
             for(const key of cart) {
