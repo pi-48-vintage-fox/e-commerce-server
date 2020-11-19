@@ -2,11 +2,17 @@
 
 | Method | Routes       | Description                      |
 |--------|--------------|----------------------------------|
-| GET    | /product     | Show list product                |
-| POST   | /login       | login user to access application |
-| POST   | /product     | add new product                  |
-| PUT    | /product/:id | Edit data product with Id        |
-| DELETE | /product/:id | Delete product with Id           |
+| GET    | /products    | Show list product                |
+| POST   | /login       | Login user to access application |
+| POST   | /register    | Login user to access application |
+| POST   | /products    | Add new product                  |
+| PUT    | /products/:id| Edit data product with Id        |
+| DELETE | /products/:id| Delete product with Id           |
+| GET    | /carts       | Show list carts                  |
+| POST   | /carts       | Add new carts                    |
+| PATCH  | /carts/:id   | Update new quantity cart         |
+| GET    | /carts/:id   | Show cart by id                  |
+| DELETE | /carts/:id   | Delete product with Id           |
 
 
 #
@@ -47,6 +53,86 @@ Login atau masuk ke halaman web home
     {
       id: 1,
       email: 'admin@mail.com
+    }
+    ```
+ 
+* **Error Response:**
+
+  *  **Code:** 
+  ```
+  400 BadRequest
+  ```
+  * **Content:**  
+  ```
+  {
+    message: "Wrong Email/password"
+  }
+  ```
+
+  OR
+
+  * **Code:** 
+  ```
+  400 BadRequest
+  ```
+  * **Content:**  
+  ```
+  {
+    message: "Please required Email and password"
+  }
+  ```
+
+  OR
+  
+  * **Code:** 
+  ```
+  500 InternalServerError
+  ```
+  * **Content:** 
+  ```
+  {
+    message: "Internal server error"
+  }  
+  ```
+
+  #
+
+## POST /register
+
+Daftar account untuk login ke dalam web application
+
+* **URL**
+
+  /register
+
+* **Method:**
+
+  `POST`
+ 
+
+* **Data Params**
+
+  ```
+  email:[string],
+  password:[string]
+  ```
+
+* **Header Params:**
+  ```
+  -
+  ```
+
+* **Success Response:**
+
+  * **Code:** 
+  ``` 
+  200 OK
+  ```
+  *  **Content:** 
+    ```
+    {
+      id: 2,
+      email: 'yaya@mail.com
     }
     ```
  
@@ -399,7 +485,7 @@ Mengupdate data product
   * **Content:**  
   ```
   {
-    message: "Wrong Email/password"
+    message: "You dont't have authorization"
   }
   ```
 
@@ -415,3 +501,270 @@ Mengupdate data product
     message: "Internal server error"
   }  
   ```
+
+  #
+
+## GET /carts
+
+Menampilkan semua list cart
+
+* **URL**
+
+  /carts
+
+* **Method:**
+
+  `GET`
+ 
+
+* **Data Params**
+
+  ```
+  -
+  ```
+
+* **Header Params:**
+  ```
+  access_token: erwur3r23r32xxxxxxxxxxxxxxxxxxxxxxxx
+  ```
+
+* **Success Response:**
+
+  * **Code:** 
+  ``` 
+  200 OK
+  ```
+  *  **Content:** 
+    ```
+    [
+      {
+        "id": 18,
+        "UserId": 2,
+        "ProductId": 1,
+        "quantity": 22,
+        "status": true,
+        "createdAt": "2020-11-19T00:52:46.807Z",
+        "updatedAt": "2020-11-19T01:18:02.942Z",
+        "Product": {
+            "id": 1,
+            "name": "iPhone 12 Pro",
+            "image_url": "https://cd.dxomark.com/blue-hero.jpg",
+            "price": 20000000,
+            "stock": 300,
+            "createdAt": "2020-11-18T19:04:07.373Z",
+            "updatedAt": "2020-11-18T19:04:07.373Z"
+        } 
+      },
+    ]
+    ```
+ 
+* **Error Response:**
+  
+  * **Code:** 
+  ```
+  500 InternalServerError
+  ```
+  * **Content:** 
+  ```
+  {
+    message: "Internal server error"
+  }
+
+#
+
+## PATCH /carts
+
+Menghapus daftar cart berdasarkan id
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `PATCH`
+ 
+
+* **Data Params**
+
+  ```
+  quantity: [integer]
+  ```
+
+* **Header Params:**
+  ```
+  access_token: erwur3r23r32xxxxxxxxxxxxxxxxxxxxxxxx
+  ```
+
+* **Success Response:**
+
+  * **Code:** 
+  ``` 
+  200 OK
+  ```
+  *  **Content:** 
+    ```
+    {
+      message: 'Success update quantity.'
+    }
+    ```
+ 
+* **Error Response:**
+  
+  *  **Code:** 
+  ```
+  400 BadRequest
+  ```
+  * **Content:**  
+  ```
+  {
+    message: "You dont't have authorization"
+  }
+  ```
+
+  OR
+
+  * **Code:** 
+  ```
+  500 InternalServerError
+  ```
+  * **Content:** 
+  ```
+  {
+    message: "Internal server error"
+  }  
+  ```
+
+#
+
+## GET /carts
+
+Menampilkan carts berdasarkan id dari product
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `GET`
+ 
+
+* **Data Params**
+
+  ```
+  -
+  ```
+
+* **Header Params:**
+  ```
+  access_token: erwur3r23r32xxxxxxxxxxxxxxxxxxxxxxxx
+  ```
+
+* **Success Response:**
+
+  * **Code:** 
+  ``` 
+  200 OK
+  ```
+  *  **Content:** 
+    ```
+    [
+      {
+        "id": 18,
+        "UserId": 2,
+        "ProductId": 1,
+        "quantity": 22,
+        "status": true,
+        "createdAt": "2020-11-19T00:52:46.807Z",
+        "updatedAt": "2020-11-19T01:18:02.942Z",
+        "Product": {
+            "id": 1,
+            "name": "iPhone 12 Pro",
+            "image_url": "https://cd.dxomark.com/blue-hero.jpg",
+            "price": 20000000,
+            "stock": 300,
+            "createdAt": "2020-11-18T19:04:07.373Z",
+            "updatedAt": "2020-11-18T19:04:07.373Z"
+        } 
+      },
+    ]
+    ```
+ 
+* **Error Response:**
+  
+  * **Code:** 
+  ```
+  500 InternalServerError
+  ```
+  * **Content:** 
+  ```
+  {
+    message: "Internal server error"
+  }  
+  ```
+
+#
+
+## DELETE /carts
+
+Menghapus daftar cart berdasarkan id
+
+* **URL**
+
+  /carts/:id
+
+* **Method:**
+
+  `DELETE`
+ 
+
+* **Data Params**
+
+  ```
+  -
+  ```
+
+* **Header Params:**
+  ```
+  access_token: erwur3r23r32xxxxxxxxxxxxxxxxxxxxxxxx
+  ```
+
+* **Success Response:**
+
+  * **Code:** 
+  ``` 
+  200 OK
+  ```
+  *  **Content:** 
+    ```
+    {
+      message: 'Item has been deleted form the cart.'
+    }
+    ```
+ 
+* **Error Response:**
+  
+  *  **Code:** 
+  ```
+  400 BadRequest
+  ```
+  * **Content:**  
+  ```
+  {
+    message: "You dont't have authorization"
+  }
+  ```
+
+  OR
+
+  * **Code:** 
+  ```
+  500 InternalServerError
+  ```
+  * **Content:** 
+  ```
+  {
+    message: "Internal server error"
+  }  
+  ```  
