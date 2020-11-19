@@ -7,11 +7,10 @@ class Controller{
                 where:{
                     UserId:req.decoded.id,
                     ProductId:+req.params.id,
-                    qty:+req.body.qty
+                    status:'unpaid'
                 }
             })
             if(cart){
-                console.log('<<<<<<, 1')
                 try{
                     await cart.update({
                         qty: cart.qty + 1
@@ -71,11 +70,10 @@ class Controller{
     }
 
     static async delete(req,res,next){
-        const id = req.params.id
         try{
             let cart = await Cart.destroy({
                 where:{
-                    id
+                    ProductId: req.params.id
                 }
             })
             res.status(200).json({message:"delete succes"})
