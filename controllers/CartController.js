@@ -37,6 +37,7 @@ class CartController {
       const cart = await Cart.findOne({
         where: {
           status: 'new',
+          UserId: req.user.id,
         },
         include: [
           {
