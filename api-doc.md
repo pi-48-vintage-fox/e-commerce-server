@@ -189,3 +189,139 @@ Response:
     "msg": "Successfully deleted product!"
 }
 ```
+
+
+### POST /carts
+
+description: 
+  add new cart to the list
+
+Request:
+
+- headers: access_token
+- data: 
+```json
+{
+  "ProductId": "integer"
+}
+```
+
+Response:
+
+- status: 201
+- body:
+
+```json
+{
+    "quantity": 1,
+    "status": "Waiting for payment",
+    "ProductId": 3,
+    "UserId": 2
+}
+```
+
+
+### GET /carts
+
+description: 
+  get all carts
+
+Request:
+
+- headers: access_token
+
+Response:
+
+- status: 200
+- body:
+  ​
+
+```json
+[
+    {
+        "quantity": 2,
+        "status": "Waiting for payment",
+        "UserId": 2,
+        "ProductId": 4,
+        "createdAt": "2020-11-19T04:23:31.389Z",
+        "updatedAt": "2020-11-19T04:23:33.932Z",
+        "Product": {
+            "id": 4,
+            "name": "Nike Tiempo Legend Elite",
+            "image_url": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/9e5326b2-ad04-4726-9c34-1a5a0cf40046/tiempo-legend-8-elite-fg-firm-ground-soccer-cleat-dvVX1D.jpg",
+            "price": 3299000,
+            "stock": 100,
+            "createdAt": "2020-11-19T01:43:38.574Z",
+            "updatedAt": "2020-11-19T01:43:38.574Z"
+        }
+    },
+    {
+        "quantity": 2,
+        "status": "Waiting for payment",
+        "UserId": 2,
+        "ProductId": 3,
+        "createdAt": "2020-11-19T04:23:14.263Z",
+        "updatedAt": "2020-11-19T04:23:17.884Z",
+        "Product": {
+            "id": 3,
+            "name": "Nike Phantom VSN GT",
+            "image_url": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/7dfcb3c7-8633-46d5-be00-b06b7b558907/phantom-gt-academy-dynamic-fit-mg-multi-ground-football-boot-5mMjvK.jpg",
+            "price": 3299000,
+            "stock": 100,
+            "createdAt": "2020-11-19T01:43:02.552Z",
+            "updatedAt": "2020-11-19T01:43:02.552Z"
+        }
+    }
+  ]
+```
+
+
+
+### PATCH /carts
+
+description: 
+  change cart quantity
+
+Request:
+
+- headers: access_token
+- body: 
+```json
+{
+    "ProductId": "integer",
+    "quantity": "integer"
+}
+```
+
+Response:
+
+- status: 200
+- body:
+
+```json
+{
+    "msg": "Cart quantity successfully updated!"
+}
+```
+
+
+### DELETE /carts
+
+description: 
+  remove cart
+
+Request:
+
+- headers: access_token
+- body: ProductId
+
+Response:
+
+- status: 200
+- body:
+
+```json
+{
+    "msg": "Item has been removed from cart!"
+}
+```

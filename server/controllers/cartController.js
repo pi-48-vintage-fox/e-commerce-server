@@ -18,7 +18,6 @@ class CartController {
         return Cart.create(obj)
       }
       else {
-        console.log('BENER NIH!!')
         return Cart.update({
           quantity: Sequelize.literal('quantity + 1')
         }, {
