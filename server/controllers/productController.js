@@ -28,6 +28,16 @@ class ProductController {
       })
   }
 
+  static getProductPublic(req, res, next) {
+    Product.findAll()
+      .then(data => {
+        res.status(200).json(data)
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+
   static putProduct(req, res, next) {
     const id = +req.params.id
     const payload = {

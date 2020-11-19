@@ -7,7 +7,7 @@ const { queryInterface } = sequelize
 
 let access_token = ''
 const Product = {
-  name: 'backpack v1',
+  name: 'backpack',
   image_url: 'https://imgur.com/gallery/TVIMJX8',
   price: 12000,
   stock: 20,
@@ -15,7 +15,7 @@ const Product = {
 
 let Product2 = {
   id: '',
-  name: 'backpack v2',
+  name: 'backpack',
   image_url: 'https://imgur.com/gallery/TVIMJX8',
   price: 15000,
   stock: 10,
@@ -33,14 +33,14 @@ let ProductEmpty = {
   stock: '',
 }
 let ProductWrongFormat = {
-  name: 'backpack v1',
+  name: 'backpack',
   image_url: 'https://imgur.com/gallery/TVIMJX8',
   price: 'a12000',
   stock: 'a20',
 }
 const userData = {
   email: 'admin@mail.com',
-  password: '1234',
+  password: 'qwerty',
 }
 
 beforeAll(done => {
