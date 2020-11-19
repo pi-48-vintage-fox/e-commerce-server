@@ -127,7 +127,8 @@ class CartController {
             image_url: el.Products[0].image_url,
             price: el.Products[0].price,
             quantity: el.Products[0].CartProduct.quantity,
-            total: el.Products[0].CartProduct.total
+            total: el.Products[0].CartProduct.total,
+            stock: el.Products[0].stock
           }
           return obj
         })
