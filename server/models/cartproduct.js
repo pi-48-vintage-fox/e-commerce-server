@@ -17,8 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     CartId: DataTypes.INTEGER,
     ProductId: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
-    total: DataTypes.INTEGER
+    total: DataTypes.INTEGER,
+    status: DataTypes.STRING
   }, {
+    hooks: {
+      beforeCreate(instance) {
+        instance.status = 'unpaid'
+      }
+    },
     sequelize,
     modelName: 'CartProduct',
   });

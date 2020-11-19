@@ -3,9 +3,8 @@ const { User, Cart } = require('../models')
 
 module.exports = {
   authentication:  async (req, res, next) => {
-    
+   
     const {access_token} = req.headers
-
     try {
       if(access_token){
           const decoded = verifyToken(access_token)
@@ -25,16 +24,14 @@ module.exports = {
 
           }
       } else {
-
         throw {name: 'Authentication failed', msg: 'You have to login first', status: 401}
-       
       }
 
     } catch (err) {
         next(err)
     }
   },
-  authorization: async (req, res, next) => {
+    authorization: async (req, res, next) => {
 
     const id = req.loggedInUser.id
     
@@ -52,9 +49,8 @@ module.exports = {
     }
   },
   authorizationCustomer: async (req, res, next) => {
-
     const id = +req.loggedInUser.id
-    console.log(req.loggedInUser, 'dsfsdfd')
+  
    try {
       const user = await User.findByPk(id)
       const cart = await Cart.findOne({

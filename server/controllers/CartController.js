@@ -1,7 +1,8 @@
 const {
   Cart,
   CartProduct,
-  Product
+  Product,
+  sequelize, Sequelize
 } = require('../models')
 
 
@@ -24,81 +25,41 @@ class CartController {
       const cartprod = await CartProduct.findOne({
         where: {
           ProductId: objCartProd.ProductId,
+          status: 'unpaid'
         },
         attributes: {
           include: ['id']
         }
       })
-      if (cartprod) {
-        const objCart = await Cart.findOne({
+      console.log(cartprod, 'ini');
+      if(cartprod) {
+        const product = await Product.findByPk(objCartProd.ProductId)
+        const newQuanity = cartprod.quantity + objCartProd.quantity
+        const newTotal = quantity * product.price
+        const updateObj = {
+          quantity: newQuanity,
+          total: newTotal
+        } 
+        const updateCartProd = await CartProduct.update(updateObj,{
           where: {
-            status: 'unpaid',
-            id: cartprod.CartId
-          }
+            id: cartprod.id
+          },
+          returning: true
         })
-        if (objCart) {
-          console.log('masuk true');
-          const product = await Product.findByPk(objCartProd.ProductId)
-          console.log(product, 'ini product');
-          const quantity = cartprod.quantity + objCartProd.quantity
-          const newTotal = quantity * product.price
-          const newQuantity = {
-            quantity,
-            total: newTotal
-          }
-          console.log('ini di line 42 <<<<,');
-          const updateCartProd = await CartProduct.update(newQuantity, {
-            where: {
-              id: cartprod.id
-            },
-            returning: true
-          })
-          console.log(updateCartProd);
-          res.status(200).json({
-            cartProd: updateCartProd[1][0]
-          });
-
-        } else {
-          const cart = await Cart.create(newCart)
-          console.log(cart.id)
-          const product = await Product.findOne({
-            where: {
-              id: productId
-            }
-          })
-          console.log(product.id, product.price, '<<<<<<');
-
-          const newCartProdOBj = {
-            CartId: cart.id,
-            ProductId: objCartProd.ProductId,
-            quantity: objCartProd.quantity,
-            total: product.price * objCartProd.quantity,
-          }
-          const newCartProd = await CartProduct.create(newCartProdOBj)
-          res.status(201).json({
-            newCartProd
-          })
-        }
+        res.status(200).json({cartProd: updateCartProd[1][0]});
       } else {
+        const product = await Product.findByPk(objCartProd.ProductId)
         const cart = await Cart.create(newCart)
-        console.log(cart)
-        const product = await Product.findOne({
-          where: {
-            id: productId
-          }
-        })
-        console.log(product.id, product.price, '<<<<<<');
-
         const newCartProdOBj = {
-          CartId: cart.id,
-          ProductId: objCartProd.ProductId,
-          quantity: objCartProd.quantity,
-          total: product.price * objCartProd.quantity,
-        }
-        const newCartProd = await CartProduct.create(newCartProdOBj)
-        res.status(201).json({
-          newCartProd
-        })
+                CartId: cart.id,
+                ProductId: objCartProd.ProductId,
+                quantity: objCartProd.quantity,
+                total: product.price * objCartProd.quantity,
+              }
+              const newCartProd = await CartProduct.create(newCartProdOBj)
+              res.status(201).json({
+                newCartProd
+              })
       }
     } catch (error) {
       console.log(error)
@@ -206,11 +167,16 @@ class CartController {
         },
         returning: true
       })
-      .then(data => {
-        console.log('sukses', data);
-        res.status(200).json({
-          data
+      .then(() => {
+        CartProduct.update({
+          status: 'paid'
+        },{
+          where: {
+            CartId: cartId
+          }
         })
+      })
+      .then(data => {
         return Product.findAll({
           where: {
             id: productId
