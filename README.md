@@ -441,7 +441,7 @@ _Response (500 - Internal Server error)_
 }
 ```
 
-- ### DELETE carts/:ProductId
+- ### DELETE /carts/:ProductId
 
 _Request Header_
 
