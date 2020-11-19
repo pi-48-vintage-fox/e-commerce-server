@@ -10,6 +10,7 @@ class CartProductController {
         where: {
           CartId: req.params.CartId,
         },
+        order: [['id']],
       })
 
       res.status(200).json(items)
@@ -185,58 +186,72 @@ class CartProductController {
         throw { status: 404, msg: 'Product not found' }
       }
 
-      console.log(product.toJSON())
+      console.log(product.toJSON(), '<<<< product')
 
       if (product.stock < quantity) {
         throw { status: 400, msg: 'Stock is not enough' }
       }
 
       try {
-        const updatedCartitem = await CartProduct.update(
-          {
-            quantity,
-          },
-          {
-            where: {
-              // CartId,
-              // ProductId,
-              id: CartProductId,
-            },
-          }
-        )
+        const cartitem = await CartProduct.findByPk(CartProductId)
 
-        console.log(updatedCartItem.toJSON(), '<<< updated cart item')
-
-        let price
-
+        if (!cartitem) {
+          throw { status: 404, msg: 'Cart item not found' }
+        }
         try {
-          const product = await Product.findByPk(req.params.ProductId)
-          price = product.price
+          console.log(cartitem.toJSON(), '<<<<cart item')
 
-          console.log({ price })
+          console.log({ quantity, CartProductId })
 
-          try {
-            console.log('updating total price of cartitem')
-            console.log('total', updatedCartitem.quantity * price)
-            await CartProduct.update(
-              {
-                totalPrice: updatedCartitem.quantity * price,
+          const updatedCartitem = await CartProduct.update(
+            {
+              quantity,
+            },
+            {
+              where: {
+                id: CartProductId,
               },
-              {
-                where: {
-                  // CartId: req.body.CartId,
-                  // ProductId: req.body.ProductId,
-                  id: CartProductId,
-                },
-              }
-            )
-          } catch (error) {
-            next(error)
-          }
+              returning: true,
+            }
+          )
 
-          res.status(200).json({
-            msg: "Cart item's quantity was modified succesfully",
-          })
+          console.log(updatedCartitem.toJSON(), '<<< updated cart item')
+
+          res.status(200).json(updatedCartItem)
+
+          // let price
+
+          // try {
+          //   const product = await Product.findByPk(req.params.ProductId)
+          //   price = product.price
+
+          //   console.log({ price })
+
+          //   try {
+          //     console.log('updating total price of cartitem')
+          //     console.log('total', updatedCartitem.quantity * price)
+          //     await CartProduct.update(
+          //       {
+          //         totalPrice: updatedCartitem.quantity * price,
+          //       },
+          //       {
+          //         where: {
+          //           // CartId: req.body.CartId,
+          //           // ProductId: req.body.ProductId,
+          //           id: CartProductId,
+          //         },
+          //       }
+          //     )
+          //   } catch (error) {
+          //     next(error)
+          //   }
+
+          //   res.status(200).json({
+          //     msg: "Cart item's quantity was modified succesfully",
+          //   })
+          // } catch (error) {
+          //   next(error)
+          // }
         } catch (error) {
           next(error)
         }
