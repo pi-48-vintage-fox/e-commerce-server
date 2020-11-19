@@ -1,0 +1,10 @@
+[
+  {
+    "first_name": "Musa",
+    "last_name": "Bagja",
+    "gender": "male",
+    "email": "admin@gmail.com",
+    "password": "password",
+    "role": "admin"
+  }
+]
