@@ -357,7 +357,7 @@ User
   get failed because server error
     * **Code:** 500 Internal server error <br />
 
-Cart 
+ 
 
 8. GET  `/customers`
 
