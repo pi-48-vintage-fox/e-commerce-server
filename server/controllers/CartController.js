@@ -129,8 +129,8 @@ class CartController {
                         id: iterator.id
                     }
                 })
-                res.status(200).json({ msg: 'Checkout Completed' })
             }
+            res.status(200).json({ msg: 'Checkout Completed' })
         } catch (error) {
             next(error)
         }
