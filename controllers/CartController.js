@@ -152,7 +152,6 @@ class CartController {
       console.log(error)
       next(error)
     }
-
   }
 
 }

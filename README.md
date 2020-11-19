@@ -125,7 +125,7 @@ Add a product list
 
   
 
-		/tasks
+		/products
 
   
 
