@@ -4,13 +4,15 @@ const { Op } = require("sequelize");
 class OrderController {
   static async getAllOrders(req, res, next) {
     try {
+      const UserId = +req.decoded.id;
       const order = await Order.findAll({
         include: [User, Product],
         order: [["id", "ASC"]],
         where: {
           quantity: {
             [Op.gt]: 0
-          }
+          },
+          UserId 
         }
       });
       res.status(200).json(order);
