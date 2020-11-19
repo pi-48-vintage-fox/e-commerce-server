@@ -37,7 +37,7 @@ class CartController {
       const t = await sequelize.transaction();
       const cart = await Cart.findAll({
         where: {
-          user_id, status: 'unpaid'
+          user_id, status: 'Unpaid'
         }
       }, {
         transaction: t
@@ -49,8 +49,8 @@ class CartController {
           throw {name: 'MaximumAmountExceeded'}
         } else {
           let stock = product.stock - item.amount
-          await product.update({stock})
-          await item.update({status: 'Paid'})
+          await Product.update({stock}, {where: {id: item.product_id}})
+          await Cart.update({status: 'Paid'}, {where: {user_id, product_id: item.product_id}})
         }
       }
       console.log('sampe <<<<<<<<<')
@@ -101,12 +101,29 @@ class CartController {
       const product_id = req.params.id;
       await Cart.destroy({
         where: {
-          user_id, product_id
+          user_id, product_id, status: 'Unpaid'
         }
       })
       res.status(200).json({message: 'Delete cart successful'})
     } catch(err) {
       next(err);
+    }
+  }
+
+  static async history (req, res, next) {
+    try {
+      const user_id = req.loggedIn.id;
+      const carts = await Cart.findAll({
+        where: {
+          user_id,
+          status: 'Paid'
+        },
+        include: Product,
+        order: [['updatedAt', 'DESC']]
+      })
+      res.status(200).json(carts)
+    } catch(err) {
+      next(err)
     }
   }
 }
