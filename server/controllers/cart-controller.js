@@ -110,7 +110,7 @@ class CartController {
             if (qty > result.stock ) {
                 throw { message: 'Stock tidak cukup', status: 400}
             } else {
-                Cart.update({quantity: qty}, {
+                return Cart.update({quantity: qty}, {
                     where: {
                         UserId: userId,
                         ProductId: productId

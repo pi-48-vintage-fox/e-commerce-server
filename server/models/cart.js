@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Qty must be input'
         },
         min: {
-          args: 1,
+          args: [1],
           msg: "input must be greater than 1"
         }
       }
