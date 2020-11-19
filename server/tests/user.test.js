@@ -21,7 +21,7 @@ describe(" Testing Login ", () => {
           body
         } = res
         expect(status).toEqual(200)
-        console.log(body);
+        // console.log(body);
         expect(body).toHaveProperty("access_token", expect.any(String))
         expect(body).toHaveProperty("full_name", expect.any(String))
         done()

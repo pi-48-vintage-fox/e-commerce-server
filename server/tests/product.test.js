@@ -53,18 +53,18 @@ beforeAll((done) => {
     })
 })
 
-afterAll((done) => {
-  queryInterface.bulkDelete("Products")
-    .then(() => {
-      return queryInterface.bulkDelete("Users")
-    })
-    .then(() => {
-      done()
-    })
-    .catch((err) => {
-      done(err)
-    })
-})
+// afterAll((done) => {
+//   queryInterface.bulkDelete("Products")
+//     .then(() => {
+//       return queryInterface.bulkDelete("Users")
+//     })
+//     .then(() => {
+//       done()
+//     })
+//     .catch((err) => {
+//       done(err)
+//     })
+// })
 
 
 describe("Testing Create an product", () => {

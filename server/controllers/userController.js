@@ -45,10 +45,10 @@ class UserController {
               full_name: data.full_name
             })
           } else {
-            return next({
-              name: "Unauthorized",
-              message: "Wrong Email/ Password"
-            })
+              res.status(401).json({
+                message: "Wrong Email/ Password"
+              })
+            
           }
         }
       })

@@ -13,11 +13,10 @@ const errorHandler = (err, req, res, next) => {
       message = err.errors[0].message;
     case "BadRequest":
       status = 400
-      messsage = "Invalid account"
       break;
     case "Unauthorized":
       status = 401
-      message = "Wrong Email/ Password"
+      message = "You don't have an access"
       break;
      case "JsonWebTokenError":
       status = 401
