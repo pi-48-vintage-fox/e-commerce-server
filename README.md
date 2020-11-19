@@ -1,6 +1,6 @@
 # E-Commerce Server 
 
-###### 
+
 
 ## Api Documentation
 
@@ -16,6 +16,13 @@
 | POST       | /products     | { access_token : **required**}  | { name : **required**, image_url : **required** , price: **required** , stock : **required** , descriptions : **required**} |
 | PUT        | /products/:id | { access_token : **required** } | { name : **required**, image_url : **required** , price: **required** , stock : **required** , descriptions : **required**} |
 | DELETE     | /products/:id | { access_token : **required**}  | *none*                                                       |
+| GET        | /cart         | { access_token : **required**}  | none                                                         |
+| POST       | /cart         | { access_token : **required**}  | { ProductId: required }                                      |
+| PUT        | /cart         | { access_token : **required**}  | { ProductId: required, qty: required }                       |
+| DELETE     | /cart         | { access_token : **required**}  | { ProductId:required }                                       |
+| GET        | /banners      |                                 | none                                                         |
+| POST       | /banners      | { access_token : **required**}  | { name: required, image_url: required, caption:required, sub_caption:required} |
+| PUT        | /banners      | { access_token : **required**}  | { is_active: required}                                       |
 
 
 
