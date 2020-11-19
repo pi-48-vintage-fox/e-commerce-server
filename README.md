@@ -1,17 +1,38 @@
-## e-commerce-server
-Membuat product list dan menampilkan product list yang telah dibuat
+# e-commerce-server
+
+
+### Admin Endpoint
 
 | method | routes | description |
 |--------|--------|-------------|
-| GET | /products | Menampilkan list product dalam bentuk array of object |
+| GET | /products | Menampilkan list product dalam bentuk array of object untuk user dengan role Admin |
 | POST | /products | Menambah product baru |
 | PUT | /products/:id | Mengupdate product berdasarkan id |
 | DELETE | /products/:id | Menghapus product berdasarkan id |
-| POST | /login | Login Menggunakan Email & Password |
 
+
+### Customer Endpoint
+
+| method | routes | description |
+|--------|--------|-------------|
+| GET | /cust/products | Menampilkan list product dalam bentuk array of object untuk user dengan role Customer |
+| POST | /cust/addcart | Menambah cart baru berdasarkan UserId dan ProductId |
+| GET | /cust/checkout | Menampilkan list cart dengan status 'paid' dalam bentuk array of object |
+| PUT | /cust/checkout | Merubah status cart yang 'pending' menjadi 'paid' dan mengurangi stock Product berdasarkan qty di cart |
+| GET | /cust/cart | Menampilkan list cart dengan status 'pending' dalam bentuk array of object |
+| PATCH | /cust/cart/:id | Menambah / mengurangi qty dalam cart |
+| DELETE | /cust/cart/:id | Menghapus cart dari cart list berdasarkan cart id |
+
+
+### User Endpoint
+
+| method | routes | description |
+|--------|--------|-------------|
+| POST | /login | Login Menggunakan Email & Password |
+| POST | /register | Register Menggunakan Email & Password |
 
 ## GET /products
-  Menampilkan list product dalam bentuk array of object
+  Menampilkan list product dalam bentuk array of object untuk user dengan role Admin
 
 * **URL**
 
@@ -21,6 +42,9 @@ Membuat product list dan menampilkan product list yang telah dibuat
 
   `GET`
 
+* **Header Params**
+
+   `accessToken: 'eyJhbXXXXXXXX.ayaXXXX'`
 
 * **Success Response:**
 
@@ -208,6 +232,10 @@ Mengupdate products berdasarkan parameter id
    }
    ```
 
+* **Header Params**
+
+   `accessToken: 'eyJhbXXXXXXXX.ayaXXXX'`
+
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -317,6 +345,10 @@ Mengupdate products berdasarkan parameter id
     }
 	 ```
 
+* **Header Params**
+
+   `accessToken: 'eyJhbXXXXXXXX.ayaXXXX'`
+
 * **Error Response:**
 
   * **Code:** 403 FORBIDEN <br />
@@ -386,3 +418,114 @@ Mengupdate products berdasarkan parameter id
         }
     })
   ```
+
+
+## **POST /register**
+---
+  Mengembalikan JSON email setelah berhasil register.
+
+* **URL**
+
+  /register
+
+* **Method:**
+
+  `POST`
+
+* **Success Response:**
+
+  * **Code:** 201 **CREATED** <br />
+    **Content:** 
+    ```json
+    {
+    "email": "admin@admin.com"
+}
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 400 **BAD REQUEST** <br />
+    **Content:**`{ msg: "Email already exist"}`
+  OR
+
+  * **Code:** 400 **BAD REQUEST** <br />
+    **Content:**`{ msg: "Check your email format"}`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+        method: 'POST',
+        url: '/register',
+        data : {
+            email,
+            password
+        }
+    })
+  ```
+
+## GET /cust/products
+  Menampilkan list product dalam bentuk array of object untuk user dengan role Customer
+
+* **URL**
+
+  /cust/products
+
+* **Method:**
+
+  `GET`
+
+* **Header Params**
+
+   `accessToken: 'eyJhbXXXXXXXX.ayaXXXX'`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**
+	```javascript
+	[
+    {
+        "id": 2,
+        "name": "Keripik Singkong",
+        "image_url": "https://www.rumahmesin.com/wp-content/uploads/2016/05/cara-membuat-keripik-singkong-renyah-asin.png",
+        "price": 30000,
+        "stock": 10,
+        "createdAt": "2020-11-11T07:30:47.334Z",
+        "updatedAt": "2020-11-11T07:30:47.334Z"
+    },
+    {
+        "id": 3,
+        "name": "Keripik Singkong Spesial",
+        "image_url": "https://www.rumahmesin.com/wp-content/uploads/2016/05/cara-membuat-keripik-singkong-renyah-asin.png",
+        "price": 40000,
+        "stock": 10,
+        "createdAt": "2020-11-11T07:32:48.149Z",
+        "updatedAt": "2020-11-11T07:32:48.149Z"
+    }
+  ]
+	 ```
+
+* **Error Response:**
+
+  * **Code:** 403 FORBIDEN <br />
+    **Content:** `{ msg : "You dont have access" }`
+
+  OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ msg : "Internal Server Error." }`
+
+* **Sample Call:**
+  ```js
+  axios({
+        url : '/products',
+        method : 'GET',
+        headers : {access_token}
+    })
+  ```
+

@@ -14,13 +14,15 @@ module.exports = (err, req, res, next) => {
     const loginErr = `Invalid email or password`
     const loginEmpty = 'Email and Password cannot be empty'
     const productEmpty = 'Please fill all form'
+    const outStock = 'Out of Stock'
+    const minStock = 'You have reach minimum ammount to checkout'
     //Custom Auth Error Message
     const authErr = 'You dont have access'
 
     //Not Found
     const notFound = "Data Not Found"
 
-    switch(errName) {
+    switch (errName) {
         case uniqueErr:
             message = errJoin(errErrors)
             status = 400
@@ -39,6 +41,14 @@ module.exports = (err, req, res, next) => {
             break
         case productEmpty:
             message = productEmpty
+            status = 400
+            break
+        case outStock:
+            message = outStock
+            status = 400
+            break
+        case minStock:
+            message = minStock
             status = 400
             break
         case authErr:
