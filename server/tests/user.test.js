@@ -1,32 +1,33 @@
 const request = require("supertest")
 const app = require("../app")
 
+
+
+
 describe(" Testing Login ", () => {
 
   // in case when login success
   test("Login Success", (done) => {
-
-    const userData = {
-      email: "yeska@mail.com",
-      password: "yeska"
-    } 
-
     request(app)
-      .post("/login") 
-      .send(userData) 
+      .post("/login")
+      .send({
+        email: "yeska@mail.com",
+        password: "yeska"
+      })
       .set("Accept", "application/json")
-      .then((res) => {
+      .then(res => {
         const {
           status,
           body
         } = res
-        expect(status).toBe(200) 
-        expect(body).toHaveProperty("access_token", expect.any(String)) 
-        expect(body).toHaveProperty("full_name", expect.any(String)) 
+        expect(status).toEqual(200)
+        console.log(body);
+        expect(body).toHaveProperty("access_token", expect.any(String))
+        expect(body).toHaveProperty("full_name", expect.any(String))
         done()
       })
       .catch((err) => {
-        console.log(err)
+        console.log("<><<><><", err)
         done(err)
       })
   })
@@ -84,7 +85,7 @@ describe(" Testing Login ", () => {
       })
   })
 
-  // // in case when email and password are empty
+  // in case when email and password are empty
   test("Login Failed, email and password are empty", (done) => {
     const userData = {
       email: "",
@@ -100,7 +101,7 @@ describe(" Testing Login ", () => {
           status,
           body
         } = res
-        expect(status).toBe(400)
+        expect(status).toBe(401)
         expect(body).toHaveProperty("message", "Please input email and password!")
         done()
       })

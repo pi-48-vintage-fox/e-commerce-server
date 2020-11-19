@@ -18,8 +18,7 @@ class UserController {
     }
 
     if (!userData.email || !userData.password) {
-      return next({
-        name: "BadRequest",
+      res.status(401).json({
         message: "Please input email and password!"
       })
     }
@@ -32,8 +31,7 @@ class UserController {
 
       .then((data) => {
         if (!data) {
-          return next({
-            name: "BadRequest",
+          res.status(400).json({
             message: "Invalid account!"
           })
         } else {

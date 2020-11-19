@@ -13,17 +13,21 @@ function authentication(req, res, next) {
     req.userData = verifyToken(access_token)
     User.findByPk(req.userData.id)
       .then((result) => {
-        if(!result) {
+        if (!result) {
           next({})
         } else {
           next()
         }
       })
       .catch((err) => {
-        res.status(500).json({message: err.message})
+        res.status(500).json({
+          message: err.message
+        })
       })
   } else {
-    res.status(401).json({message: "Failed to Authenticate"})
+    res.status(401).json({
+      message: "Failed to Authenticate"
+    })
   }
 }
 
@@ -31,7 +35,7 @@ function authentication(req, res, next) {
 function authorization(req, res, next) {
   User.findByPk(req.userData.id)
     .then((user) => {
-      if(user.role == 'admin'){
+      if (user.role == 'admin') {
         next()
       } else {
         next({
