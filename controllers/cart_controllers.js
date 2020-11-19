@@ -16,11 +16,11 @@ class CartController {
         })
     }
 
-    static addToCard (req, res, next) {
+    static addToCart (req, res, next) {
         const payload = {
             ProductId: req.body.ProductId,
             quantity: +req.body.quantity,
-            total_price: req.body.quantity * req.body.product_price,
+            total_price: +(req.body.quantity * req.body.product_price),
             UserId: req.loggedInUser.id
         }
         let stock 
@@ -62,14 +62,18 @@ class CartController {
                     }
                     throw next(err)
                 }
-                return Cart.create(payload) //ProductId , UserId, quantity, total price
+                else {
+                    return Cart.create(payload) //ProductId , UserId, quantity, total price
+                }
             }
         })
         .then(data => {
             if(data[0] === 1) {
                 res.status(200).json({msg: 'Sucessfully update from cart'})
             }
-            res.status(201).json(data)
+            else {
+                res.status(201).json(data)
+            }
         })
         .catch(err => {
             next(err)
@@ -77,13 +81,19 @@ class CartController {
     }
 
     static updateCart (req, res, next) {
-        const id = +req.params.id
+        const id = +req.params.id //product id
         const payload = {
-            quantity: req.body.quantity
+            quantity: req.body.quantity,
+            total_price: req.body.total_price
         }
-        Cart.findByPk(id)
+        Cart.findOne({
+            where:{
+                ProductId: id,
+                UserId: req.loggedInUser.id
+            }
+        })
         .then(product => {
-            return Product.findByPk(product.ProductId)
+            return Product.findByPk(id)
         })
         .then(data => {
             if(!data) {
@@ -99,10 +109,11 @@ class CartController {
                 }
                 throw next(err)
             }
-            else if(data.stock > payload.quantity) {
+            else if(data.stock >= payload.quantity) {
                 return Cart.update(payload, {
                     where: {
-                        id: id
+                        ProductId: id,
+                        UserId: req.loggedInUser.id
                     }
                 })
             }
@@ -119,7 +130,8 @@ class CartController {
         const id = req.params.id
         Cart.destroy({
             where: {
-                id: id
+                ProductId: id,
+                UserId: req.loggedInUser.id
             }
         })
         .then(data => {
@@ -149,7 +161,7 @@ class CartController {
             updatedStock = data
             let products = []
             for(let i = 0; i<data.length; i++) {
-                products.push({id: data[i].ProductId, stock: data[i].quantity})
+                products.push({id: data[i].ProductId})
             }
             return Product.findAll({
                 where: {
@@ -157,12 +169,12 @@ class CartController {
                 }
             })
         })
-        .then(data => {
-            for(let i = 0; i<data.length; i++) {
+        .then(dataProduct => {
+            for(let i = 0; i<dataProduct.length; i++) {
                 for(let j = 0; j<updatedStock.length; j++){
-                    if(data[i].id === updatedStock[j].ProductId){
-                        data[i].stock -= updatedStock[j].quantity
-                        data[i].save()
+                    if(dataProduct[i].id === updatedStock[j].ProductId){
+                        dataProduct[i].stock -= updatedStock[j].quantity
+                        dataProduct[i].save()
                     }
                 }
             }
@@ -173,7 +185,7 @@ class CartController {
             })
         })
         .then(data => {
-            res.status(200).json('Your puchase has been made')
+            res.status(200).json({msg: 'Your puchase has been made'})
         })
         .catch(err => {
             next(err)

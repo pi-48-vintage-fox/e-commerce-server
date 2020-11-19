@@ -1,12 +1,12 @@
 # e-commerce-server
 
-## **Register Admin**
+## **Register User**
 
-    Administrator register
+    User register
 
 -   **URL**
     
-    /admin/register
+    /user/register
     
 -   **Method:**
     
@@ -21,7 +21,7 @@
     
 -   **Success Response:**
     
-    Return data from Task list
+    Return data user
     
     -   **Code:**  201  **Content:**  `{id: 1, email: admin@mail.com}`
         
@@ -31,13 +31,13 @@
 
 
 
-## **Login Admin**
+## **Login User**
 
-    Administrator log in
+    User log in
 
 -   **URL**
     
-    /admin/login
+    /user/login
     
 -   **Method:**
     
@@ -370,5 +370,165 @@
     -   **Code:**  401  **Content:**  `{ error : "User unauthorized" }`
 
     -   **Code:**  404  **Content:**  `{ error : "Not Found" }`
+    
+    -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
+
+
+## **View Cart**
+
+    View user's cart
+
+-   **URL**
+    
+    /cart
+
+-   **Method:**
+    
+    `GET`
+    
+-   **Success Response:**
+    
+    -   **Code:**  200   **Content:**   `[{'quantity': 2, 'total_price': 230000, 'UserId': 5, 'ProductId': 5, 'Product': {'id': 5, 'name': 'Peace Lily Green', 'image_url': "http://image_url.com", 'price': 100000, 'stock': 10}}] (array of objects)`
+    
+-   **Error Response:**
+    
+    -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
+
+
+## **Add To Cart**
+
+    Add item to cart
+
+-   **URL**
+    
+    /cart
+
+    
+-   **Method:**
+    
+    `POST`
+
+
+   **Data Params**
+    
+    {
+      ProductId: Integer,
+      quantity: Integer,
+      total_price: Integer,
+      UserId: integer
+    }
+    
+-   **Success Response:**
+
+    -   **Code:**  200   **Content:**   `{msg: 'Sucessfully update from cart'}`
+    
+    -   **Code:**  201   **Content:**   `{'quantity': 2, 'total_price': 230000, 'UserId': 5, 'ProductId': 5}`
+    
+-   **Error Response:**
+
+    -   **Code:**  400  **Content:**  `{ error : "Bad Request" }`
+
+    -   **Code:**  401  **Content:**  `{ error : "User unauthorized" }`
+    
+    -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
+
+
+## **Update Cart**
+
+    Update quantity product to cart
+
+-   **URL**
+    
+    /cart/:id
+
+    
+- **URL Params**
+
+	**Required:**
+
+		`id=[integer]`
+    
+-   **Method:**
+    
+     `PATCH`  
+
+
+   **Data Params**
+    
+    {
+      quantity: Integer,
+      total_price: Integer
+    }
+    
+-   **Success Response:**
+
+    -   **Code:**  200   **Content:**   `{msg: 'Sucessfully update from cart'}`
+
+    
+-   **Error Response:**
+
+    -   **Code:**  400  **Content:**  `{ error : "Bad Request" }`
+
+    -   **Code:**  401  **Content:**  `{ error : "User unauthorized" }`
+
+    -   **Code:**  404  **Content:**  `{ error : "Error Not Found" }`
+    
+    -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
+
+
+## **Delete Cart**
+
+    Delete item from cart
+
+-   **URL**
+    
+    /cart/:id
+
+    
+- **URL Params**
+
+	**Required:**
+
+		`id=[integer]`
+    
+-   **Method:**
+    
+     `DELETE`  
+
+    
+-   **Success Response:**
+    
+    -   **Code:**  200   **Content:**   `{msg: 'Sucessfully delete from cart'}`
+    
+-   **Error Response:**
+
+    -   **Code:**  401  **Content:**  `{ error : "User unauthorized" }`
+
+    -   **Code:**  404  **Content:**  `{ error : "Not Found" }`
+    
+    -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
+
+
+## **Checkout**
+
+    Checkout items from cart
+
+-   **URL**
+    
+    /cart/checkout
+
+    
+-   **Method:**
+    
+    `POST`
+
+    
+-   **Success Response:**
+
+    -   **Code:**  200   **Content:**  `{msg: 'Your puchase has been made'}`
+    
+-   **Error Response:**
+
+    -   **Code:**  401  **Content:**  `{ error : "User unauthorized" }`
     
     -   **Code:**  500  **Content:**  `{ error : "Internal Server Error" }`
