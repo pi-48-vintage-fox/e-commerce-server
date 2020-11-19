@@ -15,7 +15,7 @@ app.use(router)
 app.use(errorHandler)
 
 app.get('/', (req, res) => {
-  res.send({ message: 'Halooooooooooooo' })
+  res.send({ message: 'Coba' })
 })
 
 app.listen(port, () => {
