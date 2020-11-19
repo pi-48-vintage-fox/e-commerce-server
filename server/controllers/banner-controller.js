@@ -1,10 +1,22 @@
-const { Banner } = require("../models/index")
+const { Banner, Category } = require("../models/index")
 
 class BannerController {
     static getBanner(req, res, next) {
         Banner.findAll({
-            include: [Category]
+            where: {
+                status: 'active'
+            }
         })
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+
+    static getBannerCustomer(req, res, next) {
+        Banner.findAll()
         .then(result => {
             res.status(200).json(result)
         })

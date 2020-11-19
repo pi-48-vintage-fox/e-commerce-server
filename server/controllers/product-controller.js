@@ -14,6 +14,18 @@ class ProductController {
         })
     }
 
+    static getProductCustomer(req, res, next) {
+        Product.findAll({
+            include: [Category]
+        })
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
     static getProductById(req, res, next) {
         let newId = req.params.id
         Product.findOne({
