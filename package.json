@@ -1,0 +1,35 @@
+{
+  "name": "e-commercee-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "reset-db": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "reset-db-test": "sequelize-cli db:migrate:undo:all --env test && sequelize-cli db:migrate --env test",
+    "seed-test": "sequelize-cli db:seed:all --env test",
+    "seed": "sequelize-cli db:seed",
+    "test": "jest --forceExit --runInBand --verbose --detectOpenHandles --watch",
+    "dev": "nodemon ./bin/www",
+    "start": "node ./bin/www"
+  },
+  "keywords": [],
+  "author": "Mochamad Zulfikar",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.4.2",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5",
+    "validatorjs": "^3.20.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^6.0.1"
+  }
+}
