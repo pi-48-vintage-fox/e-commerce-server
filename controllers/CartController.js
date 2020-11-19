@@ -49,14 +49,19 @@ class CartController {
 
       if (!cart) {
         try {
-          const newCart = await Cart.create({
-            include: [
-              {
-                model: CartProduct,
-                include: Product,
-              },
-            ],
-          })
+          const newCart = await Cart.create(
+            {
+              UserId: req.user.id,
+            },
+            {
+              include: [
+                {
+                  model: CartProduct,
+                  include: Product,
+                },
+              ],
+            }
+          )
 
           res.status(200).json(newCart)
         } catch (error) {
@@ -107,13 +112,14 @@ class CartController {
     console.log(req.body, '<<<<< req.body')
     console.log(req.params, '<<<<< req.params')
     try {
-      await Cart.update(req.body, {
+      const updatedCart = await Cart.update(req.body, {
         where: {
-          id: req.params.CartId,
+          id: req.body.CartId,
         },
+        returning: true,
       })
 
-      res.status(200).json({ msg: 'Cart status was modified successfully' })
+      res.status(200).json(updatedCart)
     } catch (error) {
       next(error)
     }
