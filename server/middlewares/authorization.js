@@ -19,7 +19,6 @@ function authorization(req, res, next) {
 
 function customerAuth(req, res, next) {
   const UserId = req.userLogin.id
-
   Cart.findOne({
     where: {UserId: UserId}
   })
@@ -37,7 +36,6 @@ function customerAuth(req, res, next) {
     }
   })
   .catch(err => {
-    console.log(err)
     next(err)
   })
 }

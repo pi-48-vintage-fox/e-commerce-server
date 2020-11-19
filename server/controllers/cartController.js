@@ -1,4 +1,4 @@
-const { Product, Cart } = require('../models/index')
+const { Product, Cart, Sequelize } = require('../models/index')
 
 class CartController {
   static addToCart(req, res, next) {
@@ -7,7 +7,28 @@ class CartController {
       ProductId: req.body.ProductId,
       quantity: req.body.quantity
     }
-    Cart.create(obj)
+    Cart.findOne({
+      where: {
+        ProductId: obj.ProductId,
+        UserId: obj.UserId
+      }
+    })
+    .then(data => {
+      if(!data) {
+        return Cart.create(obj)
+      }
+      else {
+        console.log('BENER NIH!!')
+        return Cart.update({
+          quantity: Sequelize.literal('quantity + 1')
+        }, {
+          where: {
+            ProductId: obj.ProductId,
+            UserId: obj.UserId
+          }
+        })
+      }
+    })
     .then(data => {
       console.log(data)
       res.status(201).json(data)
@@ -23,6 +44,7 @@ class CartController {
       where: {
         UserId: req.userLogin.id
       },
+      order: [['updatedAt', 'DESC']],
       include: Product
     })
     .then(data => {
@@ -36,10 +58,12 @@ class CartController {
   }
 
   static changeQuantity(req, res, next) {
-    const id = req.params.id
+    const ProductId = +req.body.ProductId
+    const UserId = req.userLogin.id
     Cart.update({ quantity: req.body.quantity }, {
       where: {
-        id: id
+        UserId: UserId,
+        ProductId: ProductId
       }
     })
     .then(() => {
@@ -52,10 +76,14 @@ class CartController {
   }
 
   static deleteCart(req, res, next) {
-    const id = req.params.id
-    Cart.delete({
+    console.log("DALAM DELETE CART!!!")
+    const ProductId = +req.body.ProductId
+    const UserId = req.userLogin.id
+    console.log(ProductId, UserId)
+    Cart.destroy({
       where: {
-        id: id
+        UserId: UserId,
+        ProductId: ProductId
       }
     })
     .then(() => {
@@ -63,6 +91,8 @@ class CartController {
       res.status(200).json({msg: 'Item has been removed from cart!'})
     })
     .catch(err => {
+      console.log("error cuk")
+      console.log(err)
       next(err)
     })
   }

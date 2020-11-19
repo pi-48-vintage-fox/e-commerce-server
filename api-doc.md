@@ -8,7 +8,10 @@ List of available endpoints:
 - `POST /products`
 - `GET /products/:id`
 - `PUT /products/:id`
-- `DELETE /products/:id`
+- `POST /carts`
+- `GET /carts`
+- `PATCH /carts`
+- `DELETE /carts`
 
 ### POST /login
 

@@ -6,7 +6,7 @@ const authentication = require('../middlewares/authentication')
 router.use(authentication)
 router.post('/', CartController.addToCart)
 router.get('/', customerAuth, CartController.showCart)
-router.patch('/:id', customerAuth, CartController.changeQuantity)
-router.delete('/:id', customerAuth, CartController.deleteCart)
+router.patch('/', customerAuth, CartController.changeQuantity)
+router.delete('/', customerAuth, CartController.deleteCart)
 
 module.exports = router
