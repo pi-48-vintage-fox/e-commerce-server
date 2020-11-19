@@ -1,41 +1,21 @@
-'use strict';
+'use strict'
 
 const banners = [
   {
-    title: "advan g9pro",
+    title: 'diskon1',
     status: 'active',
-    imageUrl: "https://ecs7-p.tokopedia.net/img/cache/1208/NsjrJu/2020/11/13/5efbf040-2b7c-4f90-91d2-5e0e7cb9dfb1.jpg.webp",
-    imageId: "",
+    imageUrl: 'http://plant.engotheme.com/wp-content/uploads/2018/09/11.jpg',
+    imageId: '',
   },
   {
-    title: "tokomember daftar",
+    title: 'diskon2',
     status: 'active',
-    imageUrl: "https://ecs7-p.tokopedia.net/img/cache/1208/NsjrJu/2020/10/6/c6564441-232f-44cd-a9af-1d1a999edad0.jpg.webp",
-    imageId: "",
+    imageUrl: 'http://plant.engotheme.com/wp-content/uploads/2018/09/10.jpg',
+    imageId: '',
   },
-  {
-    title: "promo sabtu minggu",
-    status: 'inactive',
-    imageUrl: "https://ecs7-p.tokopedia.net/img/cache/1208/NsjrJu/2020/11/13/88a5825d-3631-4476-806b-42000abfdf52.jpg.webp",
-    imageId: "",
-  },
-  {
-    title: "perkakas jitu",
-    status: 'inactive',
-    imageUrl: "https://ecs7-p.tokopedia.net/img/cache/1208/NsjrJu/2020/11/12/f852ae7d-1c10-4c85-ad26-cb9353fff9fe.jpg.webp",
-    imageId: "",
-  },
-  {
-    title: "cashback 80 persen",
-    status: 'active',
-    imageUrl: "https://ecs7-p.tokopedia.net/img/cache/1208/NsjrJu/2020/9/24/a5a5c297-f765-4925-bda3-97240efdf844.jpg.webp",
-    imageId: "",
-  },
-  
-
 ]
 
-banners.forEach(banner => {
+banners.forEach((banner) => {
   banner.createdAt = new Date()
   banner.updatedAt = new Date()
 })
@@ -50,9 +30,9 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
+     */
 
-   await queryInterface.bulkInsert('Banners', banners, {})
+    await queryInterface.bulkInsert('Banners', banners, {})
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -63,6 +43,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-     await queryInterface.bulkDelete('Banners', null, {})
-  }
-};
+    await queryInterface.bulkDelete('Banners', null, {})
+  },
+}
