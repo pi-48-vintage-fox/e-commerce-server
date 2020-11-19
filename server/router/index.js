@@ -11,8 +11,6 @@ router.post("/login", UserController.login)
 router.get("/productCustomer", ProductController.getProductCustomer)
 router.get("/bannerCustomer", BannerController.getBannerCustomer)
 
-
-
 router.use(authentication)
 
 router.get('/cart', CartController.getCart)
