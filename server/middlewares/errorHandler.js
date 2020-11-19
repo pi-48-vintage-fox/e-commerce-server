@@ -1,4 +1,5 @@
 function errorHandler (err, req, res, next){
+    console.log(err,'ini errornya error handler')
     let status = 500
     let msg = err.name || 'Internal Server Error'
 
