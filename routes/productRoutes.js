@@ -3,8 +3,8 @@ const ProductController = require('../controllers/ProductController')
 const authentication = require('../middlewares/authentication')
 const { isAdmin } = require('../middlewares/authorization')
 
-router.get('/', authentication, ProductController.products)
-router.get('/:ProductId', authentication, ProductController.findProductById)
+router.get('/', ProductController.products)
+router.get('/:ProductId', ProductController.findProductById)
 router.post('/', authentication, isAdmin, ProductController.addProduct)
 router.put('/:ProductId', authentication, isAdmin, ProductController.putProduct)
 router.delete(

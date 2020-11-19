@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
-          notNull: 'Status is required',
-          notEmpty: 'Status is required',
-          isIn: [['new', 'paid', 'checkout', 'complete']],
+          isIn: {
+            args: [['new', 'checkout', 'paid', 'complete']],
+            msg: "Valid status: 'new', 'checkout','paid','complete'",
+          },
         },
       },
     },
@@ -37,5 +37,9 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Cart',
     }
   )
+
+  Cart.beforeCreate((cart) => {
+    cart.status = 'new'
+  })
   return Cart
 }

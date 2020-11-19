@@ -17,7 +17,7 @@ Restful API server for e-commerce
 | POST | /register | Create a user account |
 | POST | /login | Logs user into the system |
 | POST | /googleLogin | Logs user in using Google SignIn|
-| GET | /users/:id | Fetch a user's data |
+| GET | /user | Fetch logged in user's data |
 
 **PRODUCT CATEGORIES**
 
@@ -30,13 +30,14 @@ Restful API server for e-commerce
 
 **PRODUCTS**
 
-| Method | Route                | Description               |
-| ------ | -------------------- | ------------------------- |
-| GET    | /products            | Fetch all products data   |
-| POST   | /products            | Create a product          |
-| GET    | /products/:ProductId | Fetch a product's details |
-| PUT    | /products/:ProductId | Modify a product          |
-| DELETE | /products/:ProductId | Delete a product          |
+| Method | Route                          | Description               |
+| ------ | ------------------------------ | ------------------------- |
+| GET    | /products                      | Fetch all products data   |
+| POST   | /products                      | Create a product          |
+| POST   | /products/:ProductId/addToCart | Add product to cart       |
+| GET    | /products/:ProductId           | Fetch a product's details |
+| PUT    | /products/:ProductId           | Modify a product          |
+| DELETE | /products/:ProductId           | Delete a product          |
 
 **BANNERS**
 
@@ -50,23 +51,24 @@ Restful API server for e-commerce
 
 **CART ITEMS**
 
-| Method | Route                           | Description                   |
-| ------ | ------------------------------- | ----------------------------- |
-| GET    | /carts/:CartId/items            | Fetch all cart items data     |
-| POST   | /carts/:CartId/items            | Create a cart item            |
-| GET    | /carts/:CartId/items/:ItemId    | Get a cart item's details     |
-| PATCH  | /carts/:CartId/items/:ProductId | Modify a cart item's quantity |
-| DELETE | /carts/:CartId/items/:ProductId | Remove an item from cart      |
+| Method | Route                 | Description                   |
+| ------ | --------------------- | ----------------------------- |
+| GET    | /cartitems            | Fetch all cart items data     |
+| POST   | /cartitems            | Create a cart item            |
+| GET    | /cartitems/:ProductId | Get a cart item's details     |
+| PATCH  | /cartitems/:ProductId | Modify a cart item's quantity |
+| DELETE | /cartitems/:ProductId | Remove an item from cart      |
 
 **CARTS**
 
-| Method | Route      | Description            |
-| ------ | ---------- | ---------------------- |
-| GET    | /carts     | Fetch all carts data   |
-| POST   | /carts     | Create a cart          |
-| GET    | /carts/:id | Fetch a cart's data    |
-| PATCH  | /carts/:id | Modify a cart's status |
-| DELETE | /carts/:id | Delete a cart          |
+| Method | Route          | Description                    |
+| ------ | -------------- | ------------------------------ |
+| GET    | /carts         | Fetch all carts data           |
+| GET    | /carts/current | Fetch current active cart data |
+| POST   | /carts         | Create a cart                  |
+| GET    | /carts/:id     | Fetch a cart's data            |
+| PATCH  | /carts/:id     | Modify a cart's status         |
+| DELETE | /carts/:id     | Delete a cart                  |
 
 ## USERS
 
@@ -192,9 +194,9 @@ $.post('/login', { user: 'test', password: 'Hacktiv8' }).done((result) => {
 
 ### Fetch A User's Details
 
-| METHOD | URL        |
-| ------ | ---------- |
-| GET    | /users/:id |
+| METHOD | URL   |
+| ------ | ----- |
+| GET    | /user |
 
 **PARAMETERS**
 
@@ -271,7 +273,7 @@ $.get('/users/1').done((result) => {
   | 200  | Successful operation | An array of category objects |
 
   ```js
-  [
+  ;[
     {
       id: 1,
       name: 'Men',
@@ -556,7 +558,7 @@ $.ajax({
   | 200  | Successful operation | An array of product objects |
 
   ```js
-  [
+  ;[
     {
       id: 5,
       name: 'Product 1',
@@ -1281,6 +1283,344 @@ $.ajax({
 })
 ```
 
+## CART ITEMS
+
+### Fetch All Cart Items Data
+
+| METHOD | URL        |
+| ------ | ---------- |
+| GET    | /cartitems |
+
+**PARAMETERS**
+
+- **URL Parameters**
+
+  _None_
+
+- **Data Parameters**
+
+  _None_
+
+**RESPONSES**
+
+- **Success Response**
+
+  | Code | Description          | Returns                       |
+  | ---- | -------------------- | ----------------------------- |
+  | 200  | Successful operation | An array of cart item objects |
+
+  ```js
+  ;[
+    {
+      id: 1,
+      CartId: 1,
+      ProductId: 1,
+      quantity: 5,
+    },
+    {
+      id: 2,
+      CartId: 1,
+      ProductId: 2,
+      quantity: 15,
+    },
+  ]
+  ```
+
+- **Error Response**
+
+  | Code | Description  | Returns                            |
+  | ---- | ------------ | ---------------------------------- |
+  | 500  | Server error | An object containing error message |
+
+  ```js
+  {
+    status: 500,
+    msg: 'Internal server error'
+  }
+  ```
+
+**SAMPLE CALL**
+
+```js
+$.get('/cartitems').done((result) => {
+  console.log(result)
+})
+```
+
+### Add A New Cart Item
+
+| METHOD | URL        |
+| ------ | ---------- |
+| POST   | /cartitems |
+
+**PARAMETERS**
+
+- **URL Parameters**
+
+  _None_
+
+- **Data Parameters**
+
+  | Fields                     | Type    | Description          | Notes                 |
+  | -------------------------- | ------- | :------------------- | --------------------- |
+  | ProductId **_(required)_** | integer | Product's ID         |                       |
+  | quantity **_(required)_**  | integer | Cart item's quantity | Cannot be less than 1 |
+
+  ```js
+  {
+    ProductId: 2,
+    quantity: 10
+  }
+  ```
+
+**RESPONSES**
+
+- **Success Response**
+
+  | Code | Description                          | Returns                                             |
+  | ---- | ------------------------------------ | --------------------------------------------------- |
+  | 201  | Successfully created a new cart item | An object containing successfully created cart item |
+
+  ```js
+  {
+    id: 3,
+    CartId: 3,
+    ProductId: 5,
+    quantity: 10,
+    createdAt: '2020-11-03T16:43:42.135Z',
+    updatedAt: '2020-11-03T16:43:42.135Z',
+  }
+  ```
+
+- **Error Response**
+
+  | Code | Description           | Returns                            |
+  | ---- | --------------------- | ---------------------------------- |
+  | 500  | Internal server error | An object containing error message |
+
+  ```js
+  {
+    status: 500,
+    msg: 'Internal server error'
+  }
+  ```
+
+**SAMPLE CALL**
+
+```js
+$.post('/cartitems', { ProductId: 2, quantity: 5 }).done((result) => {
+  console.log(result)
+})
+```
+
+### Find A Cart Item's Details
+
+| METHOD | URL                   |
+| ------ | --------------------- |
+| GET    | /cartitems/:ProductId |
+
+**PARAMETERS**
+
+- **URL Parameters**
+
+  | Name                         | Type    | Description  |
+  | ---------------------------- | ------- | :----------- |
+  | `ProductId` **_(required)_** | integer | Product's ID |
+
+- **Data Parameters**
+
+  _None_
+
+**RESPONSES**
+
+- **Success Response**
+
+  | Code | Description                      | Returns                        |
+  | ---- | -------------------------------- | ------------------------------ |
+  | 200  | Successfully found the cart item | An object containing cart item |
+
+  ```js
+  {
+    id: 3,
+    CartId: 3,
+    ProductId: 5,
+    quantity: 10,
+    createdAt: '2020-11-03T16:43:42.135Z',
+    updatedAt: '2020-11-03T16:43:42.135Z',
+  }
+  ```
+
+- **Error Response**
+
+  | Code | Description             | Returns                            |
+  | ---- | ----------------------- | ---------------------------------- |
+  | 404  | Cart item was not found | An object containing error message |
+
+  ```js
+  {
+    status: 404,
+    msg: 'Cart was not found'
+  }
+  ```
+
+**SAMPLE CALL**
+
+```js
+$.get('/cartitems/2').done((result) => {
+  console.log(result)
+})
+```
+
+### Change A Cart Item's Quantity
+
+| METHOD | URL                   |
+| ------ | --------------------- |
+| PATCH  | /cartitems/:ProductId |
+
+**PARAMETERS**
+
+- **URL Parameters**
+
+  | Name                         | Type    | Description  |
+  | ---------------------------- | ------- | :----------- |
+  | `ProductId` **_(required)_** | integer | Product's ID |
+
+- **Data Parameters**
+
+  | Fields                    | Type    | Description          | Notes |
+  | ------------------------- | ------- | :------------------- | ----- |
+  | quantity **_(required)_** | integer | Card item's quantity |       |
+
+  ```js
+  {
+    quantity: 30,
+  }
+  ```
+
+**RESPONSES**
+
+- **Success Response**
+
+  | Code | Description                         | Returns                                 |
+  | ---- | ----------------------------------- | --------------------------------------- |
+  | 200  | Successfully modified the cart item | An object containing modified cart item |
+
+  ```js
+  {
+    id: 3,
+    CartId: 3,
+    ProductId: 5,
+    quantity: 30,
+    createdAt: '2020-11-03T16:43:42.135Z',
+    updatedAt: '2020-11-03T17:43:42.135Z',
+  }
+  ```
+
+- **Error Response**
+
+  | Code | Description             | Returns                            |
+  | ---- | ----------------------- | ---------------------------------- |
+  | 404  | Cart item was not found | An object containing error message |
+
+  ```js
+  {
+    status: 404,
+    msg: 'Cart item was not found'
+  }
+  ```
+
+  | Code | Description  | Returns                            |
+  | ---- | ------------ | ---------------------------------- |
+  | 500  | Server error | An object containing error message |
+
+  ```js
+  {
+    status: 500,
+    msg: 'Internal server error'
+  }
+  ```
+
+**SAMPLE CALL**
+
+```js
+$.ajax({
+  url: '/cartitems/2',
+  type: 'PATCH',
+  data: { quantity: 30 },
+  success: (result) => {
+    console.log(result)
+  },
+})
+```
+
+### Delete A Cart Item
+
+| METHOD | URL                   |
+| ------ | --------------------- |
+| DELETE | /cartitems/:ProductId |
+
+**PARAMETERS**
+
+- **URL Parameters**
+
+  | Name                         | Type    | Description  |
+  | ---------------------------- | ------- | :----------- |
+  | `ProductId` **_(required)_** | integer | Product's ID |
+
+- **Data Parameters**
+
+  _None_
+
+**RESPONSES**
+
+- **Success Response**
+
+  | Code | Description                        | Returns                              |
+  | ---- | ---------------------------------- | ------------------------------------ |
+  | 200  | Successfully deleted the cart item | An object containing success message |
+
+  ```js
+  {
+    msg: 'Cart item was removed successfully'
+  }
+  ```
+
+- **Error Response**
+
+  | Code | Description     | Returns                            |
+  | ---- | --------------- | ---------------------------------- |
+  | 404  | Not found error | An object containing error message |
+
+  ```js
+  {
+    status: 404,
+    msg: 'Cart was not found'
+  }
+  ```
+
+  | Code | Description  | Returns                            |
+  | ---- | ------------ | ---------------------------------- |
+  | 500  | Server error | An object containing error message |
+
+  ```js
+  {
+    status: 500,
+    msg: 'Internal server error'
+  }
+  ```
+
+**SAMPLE CALL**
+
+```js
+$.ajax({
+  url: '/cartitems/3',
+  type: 'DELETE',
+  success: (result) => {
+    console.log(result)
+  },
+})
+```
+
 ## CARTS
 
 ### Fetch All Carts Data
@@ -1308,7 +1648,7 @@ $.ajax({
   | 200  | Successful operation | An array of cart objects |
 
   ```js
-  [
+  ;[
     {
       id: 1,
       UserId: 1,
@@ -1393,7 +1733,7 @@ $.get('/carts').done((result) => {
 **SAMPLE CALL**
 
 ```js
-$.post('/carts', { UserId: 2 }).done((result) => {
+$.post('/carts').done((result) => {
   console.log(result)
 })
 ```
@@ -1602,347 +1942,6 @@ $.ajax({
 ```js
 $.ajax({
   url: '/carts/1',
-  type: 'DELETE',
-  success: (result) => {
-    console.log(result)
-  },
-})
-```
-
-## CART ITEMS
-
-### Fetch All Cart Items Data
-
-| METHOD | URL                  |
-| ------ | -------------------- |
-| GET    | /carts/:CartId/items |
-
-**PARAMETERS**
-
-- **URL Parameters**
-
-  _None_
-
-- **Data Parameters**
-
-  _None_
-
-**RESPONSES**
-
-- **Success Response**
-
-  | Code | Description          | Returns                       |
-  | ---- | -------------------- | ----------------------------- |
-  | 200  | Successful operation | An array of cart item objects |
-
-  ```js
-  [
-    {
-      id: 1,
-      CartId: 1,
-      ItemId: 1,
-      quantity: 5,
-    },
-    {
-      id: 2,
-      CartId: 1,
-      ItemId: 2,
-      quantity: 15,
-    },
-  ]
-  ```
-
-- **Error Response**
-
-  | Code | Description  | Returns                            |
-  | ---- | ------------ | ---------------------------------- |
-  | 500  | Server error | An object containing error message |
-
-  ```js
-  {
-    status: 500,
-    msg: 'Internal server error'
-  }
-  ```
-
-**SAMPLE CALL**
-
-```js
-$.get('/carts/1/products').done((result) => {
-  console.log(result)
-})
-```
-
-### Add A New Cart Product
-
-| METHOD | URL                          |
-| ------ | ---------------------------- |
-| POST   | /carts/:CartId/items/:ItemId |
-
-**PARAMETERS**
-
-- **URL Parameters**
-  | Name | Type | Description |
-  | --------------------- | ------- | :----------------- |
-  | CartId **_(required)_** | integer | Cart's ID |
-  | ItemId **_(required)_** | integer | Product's ID |
-
-- **Data Parameters**
-
-  | Fields                    | Type    | Description          | Notes                 |
-  | ------------------------- | ------- | :------------------- | --------------------- |
-  | quantity **_(required)_** | integer | Cart item's quantity | Cannot be less than 1 |
-
-  ```js
-  {
-    quantity: 10
-  }
-  ```
-
-**RESPONSES**
-
-- **Success Response**
-
-  | Code | Description                          | Returns                                             |
-  | ---- | ------------------------------------ | --------------------------------------------------- |
-  | 201  | Successfully created a new cart item | An object containing successfully created cart item |
-
-  ```js
-  {
-    id: 3,
-    CartId: 3,
-    ItemId: 5,
-    quantity: 10,
-    createdAt: '2020-11-03T16:43:42.135Z',
-    updatedAt: '2020-11-03T16:43:42.135Z',
-  }
-  ```
-
-- **Error Response**
-
-  | Code | Description           | Returns                            |
-  | ---- | --------------------- | ---------------------------------- |
-  | 500  | Internal server error | An object containing error message |
-
-  ```js
-  {
-    status: 500,
-    msg: 'Internal server error'
-  }
-  ```
-
-**SAMPLE CALL**
-
-```js
-$.post('/carts/3/products/5', { quantity: 5 }).done((result) => {
-  console.log(result)
-})
-```
-
-### Find A Cart Item's Details
-
-| METHOD | URL                          |
-| ------ | ---------------------------- |
-| GET    | /carts/:CartId/items/:ItemId |
-
-**PARAMETERS**
-
-- **URL Parameters**
-
-  | Name                      | Type    | Description  |
-  | ------------------------- | ------- | :----------- |
-  | `CartId` **_(required)_** | integer | Cart's ID    |
-  | `ItemId` **_(required)_** | integer | Product's ID |
-
-- **Data Parameters**
-
-  _None_
-
-**RESPONSES**
-
-- **Success Response**
-
-  | Code | Description                      | Returns                        |
-  | ---- | -------------------------------- | ------------------------------ |
-  | 200  | Successfully found the cart item | An object containing cart item |
-
-  ```js
-  {
-    id: 3,
-    CartId: 3,
-    ItemId: 5,
-    quantity: 10,
-    createdAt: '2020-11-03T16:43:42.135Z',
-    updatedAt: '2020-11-03T16:43:42.135Z',
-  }
-  ```
-
-- **Error Response**
-
-  | Code | Description             | Returns                            |
-  | ---- | ----------------------- | ---------------------------------- |
-  | 404  | Cart item was not found | An object containing error message |
-
-  ```js
-  {
-    status: 404,
-    msg: 'Cart was not found'
-  }
-  ```
-
-**SAMPLE CALL**
-
-```js
-$.get('/carts/3/products/2').done((result) => {
-  console.log(result)
-})
-```
-
-### Modify A Cart
-
-| METHOD | URL                          |
-| ------ | ---------------------------- |
-| PUT    | /carts/:CartId/items/:ItemId |
-
-**PARAMETERS**
-
-- **URL Parameters**
-
-  | Name                      | Type    | Description  |
-  | ------------------------- | ------- | :----------- |
-  | `CartId` **_(required)_** | integer | Cart's ID    |
-  | `ItemId` **_(required)_** | integer | Product's ID |
-
-- **Data Parameters**
-
-  | Fields                    | Type    | Description          | Notes |
-  | ------------------------- | ------- | :------------------- | ----- |
-  | quantity **_(required)_** | integer | Card item's quantity |       |
-
-  ```js
-  {
-    id: 3,
-    CartId: 3,
-    ItemId: 5,
-    quantity: 30,
-    createdAt: '2020-11-03T16:43:42.135Z',
-    updatedAt: '2020-11-03T16:43:42.135Z',
-  }
-  ```
-
-**RESPONSES**
-
-- **Success Response**
-
-  | Code | Description                         | Returns                              |
-  | ---- | ----------------------------------- | ------------------------------------ |
-  | 200  | Successfully modified the cart item | An object containing success message |
-
-  ```js
-  {
-    msg: "Cart item's quantity was modified successfully"
-  }
-  ```
-
-- **Error Response**
-
-  | Code | Description             | Returns                            |
-  | ---- | ----------------------- | ---------------------------------- |
-  | 404  | Cart item was not found | An object containing error message |
-
-  ```js
-  {
-    status: 404,
-    msg: 'Cart item was not found'
-  }
-  ```
-
-  | Code | Description  | Returns                            |
-  | ---- | ------------ | ---------------------------------- |
-  | 500  | Server error | An object containing error message |
-
-  ```js
-  {
-    status: 500,
-    msg: 'Internal server error'
-  }
-  ```
-
-**SAMPLE CALL**
-
-```js
-$.ajax({
-  url: '/carts/4/products/1',
-  type: 'PUT',
-  data: { quantity: 30 },
-  success: (result) => {
-    console.log(result)
-  },
-})
-```
-
-### Delete A Cart
-
-| METHOD | URL                          |
-| ------ | ---------------------------- |
-| DELETE | /carts/:CartId/items/:ItemId |
-
-**PARAMETERS**
-
-- **URL Parameters**
-
-  | Name                      | Type    | Description  |
-  | ------------------------- | ------- | :----------- |
-  | `CartId` **_(required)_** | integer | Cart's ID    |
-  | `ItemId` **_(required)_** | integer | Product's ID |
-
-- **Data Parameters**
-
-  _None_
-
-**RESPONSES**
-
-- **Success Response**
-
-  | Code | Description                        | Returns                              |
-  | ---- | ---------------------------------- | ------------------------------------ |
-  | 200  | Successfully deleted the cart item | An object containing success message |
-
-  ```js
-  {
-    msg: 'Cart item was removed successfully'
-  }
-  ```
-
-- **Error Response**
-
-  | Code | Description     | Returns                            |
-  | ---- | --------------- | ---------------------------------- |
-  | 404  | Not found error | An object containing error message |
-
-  ```js
-  {
-    status: 404,
-    msg: 'Cart was not found'
-  }
-  ```
-
-  | Code | Description  | Returns                            |
-  | ---- | ------------ | ---------------------------------- |
-  | 500  | Server error | An object containing error message |
-
-  ```js
-  {
-    status: 500,
-    msg: 'Internal server error'
-  }
-  ```
-
-**SAMPLE CALL**
-
-```js
-$.ajax({
-  url: '/carts/10/products/1',
   type: 'DELETE',
   success: (result) => {
     console.log(result)

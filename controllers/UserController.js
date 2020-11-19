@@ -1,10 +1,13 @@
+const { OAuth2Client } = require('google-auth-library')
+const client = new OAuth2Client(process.env.CLIENT_ID)
 const { User } = require('../models')
 const { comparePassword, signToken } = require('../helpers/auth')
 
 class UserController {
   static async googleLogin(req, res, next) {
+    console.log('google login')
     const token = req.body.token
-    // console.log({token})
+    console.log({ token })
 
     try {
       const ticket = await client.verifyIdToken({
@@ -30,10 +33,8 @@ class UserController {
       })
 
       if (userData) {
-        // console.log(userData.toJSON())
-        // console.log('^----- user sdh ada di database')
-
-        let { id } = userData
+        console.log(userData.toJSON())
+        console.log('^----- user sdh ada di database')
 
         const access_token = signToken({
           id: userData.id,
@@ -42,11 +43,13 @@ class UserController {
       } else {
         console.log('user belum ada di database, bikin sekarang')
 
+        console.log({ user })
+
         const newUser = await User.create(user)
 
-        // console.log(newUser.toJSON())
-        // console.log({id: newUser.id, email: newUser.email})
-        // console.log('^----- data user yang akan dikasi access token')
+        console.log(newUser.toJSON())
+        console.log({ id: newUser.id, email: newUser.email })
+        console.log('^----- data user yang akan dikasi access token')
 
         const access_token = signToken({
           id: newUser.id,
@@ -84,6 +87,12 @@ class UserController {
       } else {
         // User is found using his/her email address
         console.log(JSON.stringify(user, null, 2))
+
+        // Check if user is not an admin
+        if (user.role.toLowerCase() != 'admin') {
+          throw { status: 403, msg: 'Not authorized' }
+        }
+
         const access_token = signToken({
           id: user.id,
           email: user.email,
@@ -105,8 +114,8 @@ class UserController {
       const { email, password } = req.body
 
       const payload = {
-        email: req.body.email,
-        password: req.body.password,
+        email,
+        password,
       }
 
       console.log({ payload })
@@ -124,6 +133,12 @@ class UserController {
       } else {
         // User is found using his/her email address
         console.log(JSON.stringify(user, null, 2))
+
+        // Check if user is an admin
+        if (user.role.toLowerCase() === 'admin') {
+          throw { status: 403, msg: 'Not authorized' }
+        }
+
         const access_token = signToken({
           id: user.id,
           email: user.email,
@@ -184,6 +199,7 @@ class UserController {
 
   static async register(req, res, next) {
     console.log('register')
+    console.log(User)
     console.log(req.body)
 
     try {
@@ -196,9 +212,11 @@ class UserController {
 
       console.log({ user })
 
-      res.status(201).json({
-        msg: 'Account registration successful',
-      })
+      const { id, email, role, imageUrl, ImageId, createdAt, updatedAt } = user
+
+      res
+        .status(201)
+        .json({ id, email, role, imageUrl, ImageId, createdAt, updatedAt })
     } catch (error) {
       console.log(error, '\n^----- error registering user')
       next(error)

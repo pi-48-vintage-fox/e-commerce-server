@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
+          isEmail: true,
           notNull: 'Email cannot be empty',
           notEmpty: 'Email cannot be empty',
         },
@@ -36,12 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
-        allowNull: false,
-
-        validate: {
-          notNull: 'Role cannot be empty',
-          notEmpty: 'Role cannot be empty',
-        },
       },
       imageUrl: DataTypes.STRING,
       imageId: DataTypes.STRING,
@@ -61,6 +56,21 @@ module.exports = (sequelize, DataTypes) => {
     if (!user.imageUrl) {
       user.imageUrl = `https://avatars.dicebear.com/api/initials/${user.email}.svg`
     }
+  })
+
+  User.afterCreate((user) => {
+    console.log('creating new cart for new user')
+    user.sequelize.models.Cart.create({
+      UserId: user.id,
+      status: 'new',
+    })
+      .then(
+        (cart) => console.log(cart.toJSON()),
+        '<<<<<< new cart for new user'
+      )
+      .catch((err) =>
+        console.log(err, '<<<< error creating new cart for new user')
+      )
   })
 
   User.beforeUpdate(async (user) => {

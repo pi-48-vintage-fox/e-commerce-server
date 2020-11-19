@@ -5,23 +5,37 @@ const { isCartOwner } = require('../middlewares/authorization')
 
 router.get('/', authentication, isCartOwner, CartProductController.findAll)
 router.get(
-  '/:CartId',
+  '/:ProductId',
   authentication,
   isCartOwner,
-  CartProductController.findById
+  CartProductController.findByProduct
 )
+
 router.post('/', authentication, isCartOwner, CartProductController.add)
 router.patch(
-  '/:CartId',
+  '/',
   authentication,
   isCartOwner,
   CartProductController.updateQuantity
 )
+router.put(
+  '/:ProductId',
+  authentication,
+  isCartOwner,
+  CartProductController.update
+)
 router.delete(
-  '/:CartId',
+  '/:ProductId',
   authentication,
   isCartOwner,
   CartProductController.delete
+)
+
+router.get(
+  '/:ProductId/:CartId',
+  authentication,
+  isCartOwner,
+  CartProductController.findByCartAndProduct
 )
 
 module.exports = router

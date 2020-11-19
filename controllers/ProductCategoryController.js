@@ -3,7 +3,9 @@ const { ProductCategory, Product } = require('../models')
 class ProductCategoryController {
   static categories(req, res, next) {
     console.log('getting categories')
-    ProductCategory.findAll()
+    ProductCategory.findAll({
+      include: Product,
+    })
       .then((categories) => {
         res.status(200).json(categories)
       })
@@ -16,7 +18,9 @@ class ProductCategoryController {
 
   static findById(req, res, next) {
     console.log('getting category details:', req.params.id)
-    ProductCategory.findByPk(req.params.id)
+    ProductCategory.findByPk(req.params.id, {
+      include: Product,
+    })
       .then((category) => {
         res.status(200).json(category)
       })

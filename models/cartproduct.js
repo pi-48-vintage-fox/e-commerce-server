@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      CartProduct.belongsTo(models.Cart)
+      CartProduct.belongsTo(models.Product)
     }
   }
   CartProduct.init(
@@ -33,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-          notNull: 'Cart product quantity is required',
-          notEmpty: 'Cart product quantity is required',
+          notNull: 'Cart item quantity is required',
+          notEmpty: 'Cart item quantity is required',
           min: {
             args: [1],
             msg:
-              'Quantity cannot be less than 1, use DELETE if you are trying to remove the product from the cart',
+              'Quantity cannot be less than 1, use DELETE if you are trying to remove the item from the cart',
           },
         },
       },
