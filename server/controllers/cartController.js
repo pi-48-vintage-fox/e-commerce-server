@@ -58,11 +58,14 @@ class Controller{
             let obj = {
                 qty: +req.body.qty
             }
+            console.log(obj)
             let cart = await Cart.update(obj,{
                 where:{
-                    id
+                    UserId: req.decoded.id,
+                    ProductId: id
                 }
             })
+            console.log(cart)
             res.status(200).json({message: 'update succes'})
         }catch(err){
             next(err)
