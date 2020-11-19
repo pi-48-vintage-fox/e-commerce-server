@@ -74,81 +74,23 @@ module.exports = class productController {
     }
   }
 
-  // static async addToCart(req,res,next){
-  //   try {
-  //     let {id} = req.params
-      
-  //     let updateProductDB = await Product.findByPk(id)
-  //     let params = {
-  //       ProductId: +id,
-  //       UserId: +req.userData.id,
-  //       quantity: 1,
-  //       price: updateProductDB.price,
-  //       status:'booked'
-  //     }
-
-  //     if(updateProductDB.stock >= params.quantity){
-  //       let stockUpdate = updateProductDB.stock - params.quantity
-        
-  //       //mencari apakah produk ini ada di dalam cart user yang dimaksud
-  //       let showCart = await User.findOne({where:{id:req.userData.id}, include: Product})
-  //       let userCart = showCart.Products
-  //       console.log(userCart.length)
-  //       if (userCart.length !==0){
-  //         for (let i = 0 ; i <= userCart.length; i ++){
-  //           if(userCart[i].Cart.ProductId === +req.params.id){
-  //             let updateQuantity = userCart[i].Cart.quantity + params.quantity
-  //             let updateTotalPrice = updateQuantity * userCart[i].Cart.price
-  
-  //             let updateParams = {
-  //               quantity: updateQuantity,
-  //               totalPrice: updateTotalPrice
-  //             }
-  
-  //             let updateCart = await Cart.update(updateParams, {where:{ProductId:params.ProductId}})
-  //             let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
-  //             res.status(200).json({updateCart})
-              
-  //           }else if(!userCart[i].Cart.ProductId){
-  //             let cart = await Cart.create(params)
-  //             let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
-  //             res.status(201).json({cart})
-  //           }
-  //         }
-  //       }else {
-  //         let cart = await Cart.create(params)
-  //         let dbUpdate = await Product.update({stock: stockUpdate}, {where:{id}})
-  //         res.status(201).json({cart})
-  //       }
-        
-
-  //     }else{
-  //       next ({name:'Product is unavailable at the moment'})
-  //     }  
-  //   } catch (error) {
-  //     next (error)
-  //   }
-  // }
-
   static async addToCart (req,res,next){
     try {
       let ProductId = req.params.id
     
       let cekProduct = await Product.findOne({where:{id:ProductId}})
-      
       if(cekProduct.stock > 0){
         let cekCart = await Cart.findOne({where:{UserId:req.userData.id, ProductId}})
-        console.log(cekProduct.stock, cekCart.quantity+1)
+
         if (cekCart && (cekProduct.stock >= cekCart.quantity+1) ){
-          console.log(cekCart.quantity,'cart')
-          console.log('stok1')
+          
           let params = {
             quantity:cekCart.quantity+1
           }
           let updateCart = await Cart.update(params,{where:{ProductId,UserId:req.userData.id}})
           res.status(200).json({updateCart})
-        }else if (!cekCart &&(cekProduct.stock >= cekCart.quantity+1) ){
-          console.log('stok2')
+
+        }else if (!cekCart){
           let params = {
             ProductId: +ProductId,
             UserId: +req.userData.id,
@@ -159,7 +101,6 @@ module.exports = class productController {
           let createCart = await Cart.create(params)
           res.status(201).json({createCart})
         }else {
-          console.log('stok3')
           next({name:'Product is unavailable at the moment'})
         }
       }else {
@@ -184,6 +125,7 @@ module.exports = class productController {
   static async cartUpdate (req, res, next) {
     try {
       let ProductId = req.params.id
+
       let params = {
         quantity: +req.body.quantity
       }
@@ -194,45 +136,39 @@ module.exports = class productController {
         if(searchProductDB.stock - params.quantity < 0){
           next ({name:'Product is unavailable at the moment'})
         }else{
-          let updateProductDB = searchProductDB.stock - params.quantity
+          // let updateProductDB = searchProductDB.stock - params.quantity
       
           let updateProductCart = params.quantity
           let updateTotalPriceCart = updateProductCart * cartFind.price
+          console.log(params.quantity,'a')
           let cartUpdateParams = {
             quantity: +updateProductCart,
             totalPrice: +updateTotalPriceCart
           }
+          console.log(cartUpdateParams,'server')
 
-          let dbProductUpdate = {
-            stock: updateProductDB
-          }
-          let recentCart= await Cart.update(cartUpdateParams,{where:{ProductId}, returning:true})
-          let updateDBProduct = await Product.update(dbProductUpdate,{where:{id:ProductId}})
-          res.status(200).json(recentCart[1])
+          // let dbProductUpdate = {
+          //   stock: updateProductDB
+          // }
+          let recentCart= await Cart.update(cartUpdateParams,{where:{ProductId, UserId:req.userData.id}})
+          // let updateDBProduct = await Product.update(dbProductUpdate,{where:{id:ProductId}})
+          res.status(200).json(recentCart)
         }
       }else{
         res.status(200).json([])
       }
-
     } catch (error) {
+      console.log(error)
       next (error)
     }
   }
 
-  static async deleteCart (req, res, next) {
+  static async deleteCart (req,res,next){
     try {
-      let {id} = req.params
-
-      let findCart = await Cart.findOne({where:{ProductId:id}})
-      let findProductDB = await Product.findOne({where:{id}})
-      let updateDBProduct = findCart.quantity + findProductDB.stock
-  
-      let paramsDB = {
-        stock:updateDBProduct
-      }
-      let updateDB = await Product.update(paramsDB, {where:{id}})
-      let delCart = await Cart.destroy({where:{ProductId:id}})
-      res.status(200).json({msg:'Sucessfully Delete the Product'})
+      let ProductId = req.params.id
+      console.log(ProductId, req.userData.id)
+      let deleteCart = await Cart.destroy({where:{UserId: req. userData.id, ProductId}})
+      res.status(200).json({msg:'succesfully delete the product'})
     } catch (error) {
       next (error)
     }
