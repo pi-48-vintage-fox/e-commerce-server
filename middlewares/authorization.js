@@ -1,4 +1,4 @@
-const { User, Cart } = require('../models')
+const { User, Cart, CartProduct } = require('../models')
 
 async function isAdmin(req, res, next) {
   console.log('authorization: is admin')
@@ -42,25 +42,61 @@ async function isCartOwner(req, res, next) {
   console.log(req.body, '<<< req.body')
   console.log(req.user, '<<< req.user')
 
-  const { CartId } = req.body
   const { id } = req.user
 
-  try {
-    const cart = await Cart.findByPk(CartId)
+  let CartId
 
-    if (!cart) {
-      throw { status: 404, msg: 'Cart was not found' }
+  if (!req.body.CartId && req.body.CartProductId) {
+    try {
+      const cartitem = await CartProduct.findByPk(req.body.CartProductId)
+      if (!cartitem) {
+        throw { status: 404, msg: 'Cart was not found' }
+      }
+
+      console.log(cartitem.toJSON(), '<<<< carti item, authorization')
+      CartId = cartitem.CartId
+      try {
+        console.log({ CartId }, '<<<<< CartId, authorization')
+        const cart = await Cart.findByPk(CartId)
+
+        if (!cart) {
+          throw { status: 404, msg: 'Cart was not found' }
+        }
+
+        console.log(cart.toJSON(), '<<<<<< authorization, cart')
+
+        if (cart.UserId != id) {
+          throw { status: 403, msg: 'Not authorized' }
+        }
+
+        next()
+      } catch (error) {
+        next(error)
+      }
+    } catch (error) {
+      next(error)
     }
+  } else {
+    CartId = req.body.CartId
+    try {
+      console.log({ CartId }, '<<<<< CartId, authorization')
 
-    console.log(cart.toJSON(), '<<<<<< authorization, cart')
+      const cart = await Cart.findByPk(CartId)
 
-    if (cart.UserId != id) {
-      throw { status: 403, msg: 'Not authorized' }
+      if (!cart) {
+        throw { status: 404, msg: 'Cart was not found' }
+      }
+
+      console.log(cart.toJSON(), '<<<<<< authorization, cart')
+
+      if (cart.UserId != id) {
+        throw { status: 403, msg: 'Not authorized' }
+      }
+
+      next()
+    } catch (error) {
+      next(error)
     }
-
-    next()
-  } catch (error) {
-    next(error)
   }
 }
 
