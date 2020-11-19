@@ -37,6 +37,8 @@ function errorHandler (err, req, res, next) {
       status = err.status
       break
   }
+  console.log(err);
+  
   res.status(status).json({msg: msg})
 }
 module.exports = errorHandler

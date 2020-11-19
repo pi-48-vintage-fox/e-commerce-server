@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const productController = require('../controllers/productController')
-const { authentication, authorization } = require('../middlewares/auth')
+const { authorization } = require('../middlewares/auth')
 
-router.use(authentication)
+
 router.post('/products', authorization, productController.addProduct)
 router.get('/products', authorization, productController.showProduct)
 router.get('/products/:id', authorization, productController.showProductById)
