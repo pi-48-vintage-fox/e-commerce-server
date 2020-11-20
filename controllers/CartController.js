@@ -1,4 +1,6 @@
-const { Cart, CartProduct, Product } = require('../models')
+const { Cart, CartProduct, Product, sequelize } = require('../models')
+const Sequelize = require('sequelize')
+const { QueryTypes } = require('sequelize')
 
 class CartController {
   static async findAll(req, res, next) {
@@ -30,10 +32,9 @@ class CartController {
   }
 
   static async current(req, res, next) {
-    console.log('find currently active cart')
-    console.log(req.params, '<<< req.params')
-
     try {
+      console.log('find currently active cart')
+
       const cart = await Cart.findOne({
         where: {
           status: 'new',
@@ -42,9 +43,14 @@ class CartController {
         include: [
           {
             model: CartProduct,
-            include: Product,
+            include: [
+              {
+                model: Product,
+              },
+            ],
           },
         ],
+        order: [[CartProduct, 'createdAt', 'ASC']],
       })
 
       if (!cart) {
@@ -63,11 +69,27 @@ class CartController {
             }
           )
 
+          // console.log(newCart.toJSON(), '<<<<< new cart')
+
           res.status(200).json(newCart)
         } catch (error) {
           next(error)
         }
       } else {
+        console.log(cart.toJSON(), ',<<< cart')
+
+        if (cart.CartProducts.length > 0) {
+          console.log('cartitem > 0')
+
+          const grandTotalPrice = await CartProduct.sum('totalPrice', {
+            where: {
+              CartId: cart.id,
+            },
+          })
+
+          await cart.update({ grandTotalPrice })
+        }
+
         res.status(200).json(cart)
       }
     } catch (error) {

@@ -44,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      name: {
+        type: DataTypes.STRING,
+      },
+      totalPrice: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

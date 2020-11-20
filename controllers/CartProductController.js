@@ -19,6 +19,23 @@ class CartProductController {
     }
   }
 
+  static async current(req, res, next) {
+    console.log('find currently active cartitems')
+
+    try {
+      const cartitems = await CartProduct.findAll({
+        where: {
+          id: req.cart.id,
+        },
+        order: [['createdAt', 'ASC']],
+      })
+
+      res.status(200).json(cartitems)
+    } catch (err) {
+      next(err)
+    }
+  }
+
   static async findById(req, res, next) {
     try {
       console.log('find cart item by id')
@@ -82,7 +99,8 @@ class CartProductController {
       console.log('add cart item')
       console.log(req.body, 'req.body')
 
-      const { CartId, ProductId, quantity } = req.body
+      const { CartId } = req
+      const { ProductId, quantity } = req.body
 
       // Check if product exists
       try {
@@ -115,15 +133,17 @@ class CartProductController {
 
           if (cartitem) {
             // Product is already added into cart -> update quantity
-            console.log('produk sudah ada di cart -> update quantity')
+            // console.log('produk sudah ada di cart -> update quantity')
             try {
               const updatedCartItem = await cartitem.update(
                 {
                   quantity: cartitem.quantity + quantity,
+                  name: product.name,
+                  totalPrice: quantity * product.price,
                 },
                 {
                   returning: true,
-                  plain: true,
+                  raw: true,
                 }
               )
 
@@ -145,9 +165,19 @@ class CartProductController {
                 ProductId,
                 quantity,
                 CartId,
+                name: product.name,
+                totalPrice: quantity * product.price,
               })
 
               console.log(newCartItem.toJSON(), '<<<<<<<<<< new cart item')
+
+              const total = await CartProduct.sum('totalPrice', {
+                where: {
+                  CartId,
+                },
+              })
+
+              console.log({ total })
 
               res.status(201).json(newCartItem)
             } catch (error) {
@@ -170,14 +200,7 @@ class CartProductController {
     console.log(req.body, 'req.body')
     console.log(req.params, 'req.params')
 
-    const { CartId, ProductId, quantity, CartProductId } = req.body
-
-    if (!quantity || !ProductId || !CartId || !CartProductId) {
-      throw {
-        status: 400,
-        msg: 'CartId, ProductId, CartProductId, and quantity is required',
-      }
-    }
+    const { ProductId, quantity, CartProductId } = req.body
 
     try {
       const product = await Product.findByPk(ProductId)
@@ -192,75 +215,45 @@ class CartProductController {
         throw { status: 400, msg: 'Stock is not enough' }
       }
 
-      try {
-        const cartitem = await CartProduct.findByPk(CartProductId)
+      // try {
+      const cartitem = await CartProduct.findByPk(CartProductId)
 
-        if (!cartitem) {
-          throw { status: 404, msg: 'Cart item not found' }
-        }
-        try {
-          console.log(cartitem.toJSON(), '<<<<cart item')
-
-          console.log({ quantity, CartProductId })
-
-          const updatedCartitem = await CartProduct.update(
-            {
-              quantity,
-            },
-            {
-              where: {
-                id: CartProductId,
-              },
-              returning: true,
-            }
-          )
-
-          console.log(updatedCartitem.toJSON(), '<<< updated cart item')
-
-          res.status(200).json(updatedCartItem)
-
-          // let price
-
-          // try {
-          //   const product = await Product.findByPk(req.params.ProductId)
-          //   price = product.price
-
-          //   console.log({ price })
-
-          //   try {
-          //     console.log('updating total price of cartitem')
-          //     console.log('total', updatedCartitem.quantity * price)
-          //     await CartProduct.update(
-          //       {
-          //         totalPrice: updatedCartitem.quantity * price,
-          //       },
-          //       {
-          //         where: {
-          //           // CartId: req.body.CartId,
-          //           // ProductId: req.body.ProductId,
-          //           id: CartProductId,
-          //         },
-          //       }
-          //     )
-          //   } catch (error) {
-          //     next(error)
-          //   }
-
-          //   res.status(200).json({
-          //     msg: "Cart item's quantity was modified succesfully",
-          //   })
-          // } catch (error) {
-          //   next(error)
-          // }
-        } catch (error) {
-          next(error)
-        }
-      } catch (error) {
-        next(error)
+      if (!cartitem) {
+        throw { status: 404, msg: 'Cart item not found' }
       }
+
+      // try {
+      // const product = await Product.findByPk(ProductId)
+
+      // try {
+      console.log('updating total price of cartitem')
+
+      const updatedCartItem = await CartProduct.update(
+        {
+          quantity,
+          name: product.name,
+          totalPrice: quantity * product.price,
+        },
+        {
+          where: {
+            id: CartProductId,
+          },
+          returning: true,
+        }
+      )
+      res.status(200).json(updatedCartItem)
     } catch (error) {
       next(error)
     }
+    //     } catch (error) {
+    //       next(error)
+    //     }
+    //   } catch (error) {
+    //     next(error)
+    //   }
+    // } catch (error) {
+    //   next(error)
+    // }
   }
 
   static async update(req, res, next) {
@@ -270,7 +263,7 @@ class CartProductController {
     const { totalPrice, name, quantity } = req.body
 
     try {
-      const updatedCartitem = await CartProduct.update(
+      const updatedCartItem = await CartProduct.update(
         { totalPrice, name, quantity },
         {
           where: {
@@ -281,7 +274,7 @@ class CartProductController {
         }
       )
 
-      res.status(200).json(updatedCartitem, '<<<<< updated cartitem')
+      res.status(200).json(updatedCartItem, '<<<<< updated cartitem')
     } catch (error) {
       next(error)
     }

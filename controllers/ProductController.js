@@ -1,16 +1,20 @@
+const { Op } = require('sequelize')
 const { Product } = require('../models')
 
 class ProductController {
   static products(req, res, next) {
     console.log('getting products')
-    console.log(req.query, '<<< product query')
+    console.log(req.query, '<<<<<< req query get products')
 
-    if (req.query.category) {
+    if (req.query.category > 0) {
       Product.findAll({
         order: [['id']],
         include: 'ProductCategory',
         where: {
-          ProductCategoryId: req.query.category,
+          [Op.and]: [
+            { ProductCategoryId: req.query.category },
+            { ProductCategoryId: { [Op.gt]: 1 } },
+          ],
         },
       })
         .then((products) => {
@@ -25,6 +29,9 @@ class ProductController {
       Product.findAll({
         order: [['id']],
         include: 'ProductCategory',
+        where: {
+          ProductCategoryId: { [Op.gt]: 1 },
+        },
       })
         .then((products) => {
           res.status(200).json(products)

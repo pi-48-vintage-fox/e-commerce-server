@@ -5,6 +5,12 @@ const { isCartOwner } = require('../middlewares/authorization')
 
 router.get('/', authentication, isCartOwner, CartProductController.findAll)
 router.get(
+  '/current',
+  authentication,
+  isCartOwner,
+  CartProductController.current
+)
+router.get(
   '/:ProductId',
   authentication,
   isCartOwner,

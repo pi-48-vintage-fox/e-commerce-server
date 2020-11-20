@@ -1,10 +1,18 @@
 const { ProductCategory, Product } = require('../models')
+const { Op } = require('sequelize')
 
 class ProductCategoryController {
   static categories(req, res, next) {
     console.log('getting categories')
+    console.log(req.query, '<<<<< req.query')
+
     ProductCategory.findAll({
       include: Product,
+      where: {
+        id: {
+          [Op.gt]: 1,
+        },
+      },
     })
       .then((categories) => {
         res.status(200).json(categories)
