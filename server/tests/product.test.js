@@ -7,8 +7,7 @@ const {
   queryInterface
 } = sequelize
 const {
-  User,
-  Product
+  User
 } = require('../models/')
 const {
   hashPassword
@@ -23,18 +22,20 @@ let id
 
 beforeAll((done) => {
   let admin = {
-    email: "yeska@mail.com",
-    password: hashPassword("yeska", 10),
+    email: "peter@mail.com",
+    password: hashPassword("peter", 10),
+    full_name: "Gobreta Peter",
     role: "admin",
   }
   let customer = {
-    email: "frans@mail.com",
-    password: hashPassword("frans", 10),
-    role: "customer"
+    email: "mike@mail.com",
+    password: hashPassword("mike", 10),
+    full_name: "Michael Febrian",
   }
 
   User.create(admin)
     .then(data => {
+      console.log(data);
       access_token = generateToken({
         id: data.id,
         email: data.email
@@ -42,6 +43,7 @@ beforeAll((done) => {
       return User.create(customer)
     })
     .then(data => {
+      console.log(data);
       customer_token = generateToken({
         id: data.id,
         email: data.email
@@ -56,15 +58,25 @@ beforeAll((done) => {
 // afterAll((done) => {
 //   queryInterface.bulkDelete("Products")
 //     .then(() => {
-//       return queryInterface.bulkDelete("Users")
-//     })
-//     .then(() => {
 //       done()
 //     })
 //     .catch((err) => {
 //       done(err)
 //     })
 // })
+
+afterAll((done) => {
+  queryInterface.bulkDelete("Products")
+    .then(() => {
+      return queryInterface.bulkDelete("Users")
+    })
+    .then(() => {
+      done()
+    })
+    .catch((err) => {
+      done(err)
+    })
+})
 
 
 describe("Testing Create an product", () => {
@@ -86,6 +98,7 @@ describe("Testing Create an product", () => {
           status,
           body
         } = res
+        console.log(body);
         expect(status).toBe(201) // <--- DATA CREATED
         expect(body).toHaveProperty("id", expect.any(Number))
         id = body.id
@@ -98,7 +111,7 @@ describe("Testing Create an product", () => {
     request(app)
       .post("/products")
       .send({
-        name: "I-Phone Putin Version",
+        name: "I-Phone Putin Version 2",
         price: 55000000,
         stock: 5,
         image_url: 'https://caviar.global/images/detailed/5/caviar_Putin_gold_3_catalog.png'
@@ -227,7 +240,6 @@ describe("Testing Create an product", () => {
         done()
       })
       .catch(err => {
-        console.log(err, "<<< ini di error get");
         done(err)
       })
   })
@@ -245,7 +257,7 @@ describe("Testing Read all products", () => {
           body
         } = res
         expect(status).toBe(200)
-        expect(body.length).toEqual(1)
+        expect(body.length).toEqual(expect.any(Number))
         done()
       })
       .catch(err => {
@@ -291,6 +303,7 @@ describe("Testing Update Product Data", () => {
           status,
           body
         } = res
+        console.log(body);
         expect(status).toBe(200)
         expect(body).toHaveProperty('id', expect.any(Number))
         expect(body).toHaveProperty('name', 'I-Phone Putin Version')
@@ -428,6 +441,7 @@ describe("Testing Delete Product", () => {
           status,
           body
         } = res
+        console.log(body);
         expect(status).toBe(200)
         expect(body).toHaveProperty("message", expect.any(String))
         done()
