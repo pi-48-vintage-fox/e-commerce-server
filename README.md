@@ -347,7 +347,8 @@ _Response (500 - Internal Server error)_
   "message": "Internal server error"
 }
 ```
-* ### POSTS /carts/:ProductId
+
+- ### POSTS /carts/:ProductId
   _Request Header_
 
 ```
@@ -441,7 +442,7 @@ _Response (500 - Internal Server error)_
 }
 ```
 
-- ### DELETE /carts/:ProductId
+- ### DELETE /  carts/:ProductId
 
 _Request Header_
 
