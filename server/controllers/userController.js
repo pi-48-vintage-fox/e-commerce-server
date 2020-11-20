@@ -9,7 +9,7 @@ class UserController {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      role: "admin"
+      role: req.body.role
     }
     User.create(payload)
       .then(data => {

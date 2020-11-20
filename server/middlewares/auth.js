@@ -36,6 +36,39 @@ class Auth {
     }
   }
 
+  static authenticationUser(req, res, next) {
+    const { access_token } = req.headers
+    if (!access_token) {
+      res.status(401).json({
+        message: 'Authentication failed 0'
+      })
+    } else {
+      const decoded = verifyToken(access_token)
+      User.findOne({
+        where: {
+          role: "admin"
+        }
+      })
+        .then(data => {
+          if (!data) {
+            res.status(401).json({
+              message: 'Authentication failed 1'
+            })
+          } else if (data.role !== 'customer') {
+            res.status(401).json({
+              message: 'Authentication failed 2'
+            })
+          } else {
+            req.loggedInUser = decoded
+            next()
+          }
+        })
+        .catch(err => {
+          next(err)
+        })
+    }
+  }
+
   static authorization(req, res, next) {
     const { id } = req.params
     Product.findAll(id)
