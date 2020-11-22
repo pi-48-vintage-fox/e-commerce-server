@@ -4,6 +4,22 @@ const { User } = require('../models')
 const { comparePassword, signToken } = require('../helpers/auth')
 
 class UserController {
+  static async checkemail(req, res, next) {
+    console.log('check email availability')
+
+    try {
+      const user = await User.findOne({
+        where: {
+          email: req.body.email,
+        },
+      })
+
+      res.status(200).json({ msg: user ? 'not unique' : 'unique' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async googleLogin(req, res, next) {
     console.log('google login')
     const token = req.body.token

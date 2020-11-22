@@ -13,11 +13,16 @@ module.exports = (err, req, res, next) => {
 
   if (err.name) {
     if (err.name.includes('Sequelize')) {
-      status = 400
-      if (err.errors) {
-        // msg = err.name + ';' + err.errors.map(error => error.message).join(';')
-        // msg = err.errors.map((error) => error.message).join(';')
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        status = 409
         msg = err.errors.map((error) => error.message)
+      } else {
+        status = 400
+        if (err.errors) {
+          // msg = err.name + ';' + err.errors.map(error => error.message).join(';')
+          // msg = err.errors.map((error) => error.message).join(';')
+          msg = err.errors.map((error) => error.message)
+        }
       }
     }
 

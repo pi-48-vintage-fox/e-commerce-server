@@ -14,6 +14,7 @@ router.post('/adminlogin', UserController.adminlogin)
 router.post('/login', UserController.login)
 router.post('/googleLogin', UserController.googleLogin)
 router.post('/register', UserController.register)
+router.post('/checkemail', UserController.checkemail)
 router.get('/user', authentication, UserController.getUserDetails)
 
 router.use('/categories', productCategoryRoutes)
