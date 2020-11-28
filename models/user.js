@@ -91,7 +91,11 @@ module.exports = (sequelize, DataTypes) => {
       const hash = hashPassword(user.password)
 
       user.password = hash
-      user.role = 'guest'
+      if (user.email !== 'admin@mail.com') {
+        user.role = 'guest'
+      } else {
+        user.role = 'admin'
+      }
       user.email = user.email.toLowerCase()
 
       if (!user.imageUrl) {

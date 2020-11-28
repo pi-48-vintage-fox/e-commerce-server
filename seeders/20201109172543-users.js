@@ -8,6 +8,14 @@ let users = [
     password: '1234',
     role: 'admin',
   },
+  {
+    email: 'a@a.com',
+    password: '123',
+  },
+  {
+    email: 'b@b.com',
+    password: '123',
+  },
 ]
 
 users.forEach((user) => {
