@@ -1,4 +1,4 @@
-const { CartProduct, Product, Cart } = require('../models')
+const { CartProduct, Product, ProductCategory, Cart } = require('../models')
 
 class CartProductController {
   static async findAll(req, res, next) {
@@ -27,6 +27,8 @@ class CartProductController {
         where: {
           id: req.cart.id,
         },
+        include: [ProductCategory],
+
         order: [['createdAt', 'ASC']],
       })
 

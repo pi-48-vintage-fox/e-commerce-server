@@ -2,17 +2,24 @@
 
 const banners = [
   {
-    title: 'diskon1',
+    title: 'member-discount',
     status: 'active',
     imageUrl:
-      'https://res.cloudinary.com/rey-h8/image/upload/v1605786386/e-commerce%20gardenbyte/plant_banner1_by2agj.jpg',
+      'https://res.cloudinary.com/rey-h8/image/upload/v1606588483/e-commerce%20gardenbyte/banners/slider1-member-discount.jpg',
     imageId: '',
   },
   {
-    title: 'diskon2',
+    title: 'terrarium-week',
     status: 'active',
     imageUrl:
-      'https://res.cloudinary.com/rey-h8/image/upload/v1605786384/e-commerce%20gardenbyte/plant_banner2_odvtwz.jpg',
+      'https://res.cloudinary.com/rey-h8/image/upload/v1606588594/e-commerce%20gardenbyte/banners/slider2-terrarium-week.jpg',
+    imageId: '',
+  },
+  {
+    title: 'new-collections',
+    status: 'active',
+    imageUrl:
+      'https://res.cloudinary.com/rey-h8/image/upload/v1606588483/e-commerce%20gardenbyte/banners/slider3-new-collections.jpg',
     imageId: '',
   },
 ]

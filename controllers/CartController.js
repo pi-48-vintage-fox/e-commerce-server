@@ -1,6 +1,4 @@
-const { Cart, CartProduct, Product, sequelize } = require('../models')
-const Sequelize = require('sequelize')
-const { QueryTypes } = require('sequelize')
+const { Cart, CartProduct, Product, ProductCategory } = require('../models')
 
 class CartController {
   static async findAll(req, res, next) {
@@ -46,6 +44,7 @@ class CartController {
             include: [
               {
                 model: Product,
+                include: ProductCategory,
               },
             ],
           },
